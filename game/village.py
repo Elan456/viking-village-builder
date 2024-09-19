@@ -2,6 +2,7 @@ import pygame
 from config.defines import *
 import config.defines as defines 
 from buildings.building_panel import BuildingPanel
+from events.random_events import RandomEventHandler
 
 class Village:
     """
@@ -10,9 +11,11 @@ class Village:
     def __init__(self) -> None:
         self.buildings = []
         self.resources = {"food": 0, "wood": 0, "ore": 0, "people": 0, "weapons": 0}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
 
         self.river_top = RIVER_HEIGHT
         self.building_panel = BuildingPanel()
+        self.random_events = RandomEventHandler(self)
 
     def add_building(self, building):
         self.buildings.append(building)
@@ -24,6 +27,11 @@ class Village:
             building.update()
 
         self.building_panel.update(mouse_pos)
+
+        # Setting the production multipliers to 1 again
+        # The random events can then change them 
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
+        self.random_events.update()
 
     def draw_background(self, surface: pygame.Surface):
         pygame.draw.rect(surface, (0, 150, 0), (0 - camera_x, 0 - camera_y, DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -42,3 +50,4 @@ class Village:
             building.draw(surface)
 
         self.building_panel.draw(surface)
+        self.random_events.display(surface)

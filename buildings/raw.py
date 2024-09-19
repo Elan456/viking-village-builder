@@ -16,7 +16,9 @@ class RawBuilding(Building):
     def update(self):
         super().update()
 
-        self.village.resources[self.production] += self.production[item]
+        # Production
+        for resource, amount in self.production.items():
+            self.village.resources[resource] += amount * self.village.production_multipliers[resource]
 
 
 
@@ -39,7 +41,7 @@ class Mine(RawBuilding):
         super().__init__(village, x, y)
 
         self._set_image(Mine.image_path)
-        self._set_production("ore", 1)
+        self._set_production({"ore", 1})
         self._set_construction_cost({"wood": 10})
 
         self.name = "Mine"

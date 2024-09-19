@@ -13,3 +13,5 @@ camera_x = 0
 camera_y = 0
 
 CAMERA_SPEED = 10
+
+RANDOM_EVENT_CHANCE = 0.1
