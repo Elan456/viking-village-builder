@@ -3,6 +3,7 @@ import random
 
 from utils.button import Button 
 from config.defines import * 
+from events.random_event import RandomEvent, Effect, random_events
 
 class RandomEventHandler:
     """
@@ -16,14 +17,7 @@ class RandomEventHandler:
     def __init__(self, village) -> None:
         
         self.showing_event = False 
-
         self.font = pygame.font.Font(None, 64)
-
-        self.effects = []
-
-        # For testing
-        self.effects.append(Effect("Scumbag Steve", 5, None))
-        self.effects.append(Effect("Fell on my ass", 3, None))
 
 
     ####### 
@@ -38,7 +32,11 @@ class RandomEventHandler:
             text = self.font.render(effect.name + " " + str(effect.duration) + " turns left", True, (0, 0, 0))
             surface.blit(text, (10, 10 + i * 60))
 
-    def new_turn(self):
+    def on_new_turn(self):
+
+        # Apply all active effects
+        for effect in self.effects:
+            effect.apply(self.village)
 
 
         # Reduce the duration of all effects

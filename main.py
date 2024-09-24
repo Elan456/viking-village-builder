@@ -4,6 +4,7 @@ from game.village import Village
 from events.event_handler import EventHandler
 from config.defines import *
 import assets.buildings.generate_placeholders
+from events.announcements import announcement_handler
 
 pygame.init()
 pygame.font.init()
@@ -23,6 +24,9 @@ class Game:
 
             self.village.update()
             self.village.draw(self.screen)
+
+            announcement_handler.update()
+            announcement_handler.display(self.screen)
 
             pygame.display.flip()
             self.clock.tick(120)

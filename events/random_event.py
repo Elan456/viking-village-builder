@@ -1,21 +1,5 @@
+from effects.effect import Effect
 
-
-class Effect:
-    """
-    An effect which can be applied to the village 
-    """
-    def __init__(self, name, duration, func) -> None:
-        """
-        :param name: The name of the effect
-        :param duration: The duration of the effect in turns
-        :param func: The function which will be called when the effect is applied
-        """
-        self.name = name 
-        self.duration = duration 
-        self.func = func 
-
-    def apply(self, village):
-        self.func(village)
 
 class RandomEvent:
     """
@@ -28,7 +12,7 @@ class RandomEvent:
         self.initial_effect: Effect = None
         
         self.opt_1_effect: Effect = None
-        self.opt_1_effect: Effect = None
+        self.opt_2_effect: Effect = None
 
         self.opt_1_label = ""
         self.opt_2_label = ""
@@ -59,5 +43,10 @@ class RandomEvent:
     
 
 random_events = [
-
+    RandomEvent("A blight has struck the village's crops")
+    .set_description("The crops have been infected with a blight, reducing food production")
+    .set_initial_effect(Effect("Blight", 3, resource_prod_name="food", magnitude=0.5))
+    .set_opt_1_effect(Effect("Crop Burning", 3, resource_prod_name="food", magnitude=0, removes_effect="Blight", removes_effect_chance=0.8))
+    .set_opt_1_label("Burn the crops")
+    .set_opt_2_label("Wait the blight out")
 ]
