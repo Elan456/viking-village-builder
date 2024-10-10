@@ -15,3 +15,6 @@ camera_y = 0
 CAMERA_SPEED = 10
 
 RANDOM_EVENT_CHANCE = 0.1
+
+FONT_PATH = "assets/fonts/Oldenburg-Regular.ttf"
+FONT = pygame.font.Font("assets/fonts/Oldenburg-Regular.ttf", 64)

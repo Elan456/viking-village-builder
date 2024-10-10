@@ -13,9 +13,10 @@ def generate_placeholder(grid_width, grid_height, text, output_file):
     
     # Load a font
     try:
-        font = ImageFont.truetype("roboto.ttf", 102)
+        font = ImageFont.truetype("assets/fonts/Oldenburg-Regular.ttf", 102)
     except IOError:
-        font = ImageFont.load_default(32)
+        print("Font not found, using default font")
+        font = ImageFont.load_default(size=32)
     
     # Calculate text size and position
     text_bbox = draw.textbbox((0, 0), text, font=font)

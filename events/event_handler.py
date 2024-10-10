@@ -2,8 +2,12 @@ import pygame
 
 from config.defines import * 
 import config.defines as defines 
+from events.announcements import announcement_handler
 
 class EventHandler:
+    """
+    General event handler, i.e. keyboard and mouse events 
+    """
     def __init__(self) -> None:
         pass 
 
@@ -16,6 +20,10 @@ class EventHandler:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.quit()
             return
+        
+        # Have the spacebar trigger a "hello there" announcement
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            announcement_handler.add_announcement("Hello there!")
 
         return event
     

@@ -1,8 +1,11 @@
 import pygame 
-from config.defines import *
+from typing import List
+from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH, GRID_SIZE, RIVER_HEIGHT, camera_x, camera_y
 import config.defines as defines 
 from buildings.building_panel import BuildingPanel
+from game.main_panel import MainPanel
 from events.random_event_handler import RandomEventHandler
+from effects.effect import Effect
 
 class Village:
     """
@@ -15,8 +18,26 @@ class Village:
 
         self.river_top = RIVER_HEIGHT
         self.building_panel = BuildingPanel()
+        self.main_panel = MainPanel(self)
         self.random_events = RandomEventHandler(self)
-        self.active_effects = []  # Effects which are currently active
+        self.active_effects: List[Effect] = []  # Effects which are currently active
+
+    def on_new_turn(self):
+        """
+        Called when a new turn occurs
+        """
+        # Setting the production multipliers to 1 again
+        # The random events can then change them 
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
+        
+        # Apply all active effects to get the new production multipliers
+        self.active_effects = [effect for effect in self.active_effects if effect.duration > 0]
+        for effect in self.active_effects:
+            effect.apply(self)
+            # Reduce the duration of all effects
+            effect.duration -= 1
+
+        self.random_events.on_new_turn()
 
     def add_building(self, building):
         self.buildings.append(building)
@@ -28,11 +49,9 @@ class Village:
             building.update()
 
         self.building_panel.update(mouse_pos)
+        self.main_panel.update()
 
-        # Setting the production multipliers to 1 again
-        # The random events can then change them 
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
-        self.random_events.update() 
+
 
     def draw_background(self, surface: pygame.Surface):
         pygame.draw.rect(surface, (0, 150, 0), (0 - camera_x, 0 - camera_y, DISPLAY_WIDTH, DISPLAY_HEIGHT))
@@ -51,4 +70,8 @@ class Village:
             building.draw(surface)
 
         self.building_panel.draw(surface)
+        self.main_panel.draw(surface)
         self.random_events.display(surface)
+
+        for i in range(len(self.active_effects)):
+            self.active_effects[i].draw(surface, i)

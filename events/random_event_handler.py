@@ -27,25 +27,13 @@ class RandomEventHandler:
         pass 
 
     def display(self, surface):
-        # In the top left corner of the screen, display all the current active effects
-        for i, effect in enumerate(self.effects):
-            text = self.font.render(effect.name + " " + str(effect.duration) + " turns left", True, (0, 0, 0))
-            surface.blit(text, (10, 10 + i * 60))
+        pass 
+        # # In the top left corner of the screen, display all the current active effects
+        # for i, effect in enumerate(self.effects):
+        #     text = self.font.render(effect.name + " " + str(effect.duration) + " turns left", True, (0, 0, 0))
+        #     surface.blit(text, (10, 10 + i * 60))
 
     def on_new_turn(self):
-
-        # Apply all active effects
-        for effect in self.effects:
-            effect.apply(self.village)
-
-
-        # Reduce the duration of all effects
-        for effect in self.effects:
-            effect.duration -= 1
-            if effect.duration == 0:
-                self.effects.remove(effect)
-
-
         # When a new turn occurs, there is a chance for a random event to occur
         if random.random() < RANDOM_EVENT_CHANCE:
             self.showing_event = True

@@ -1,5 +1,6 @@
 import random 
 from events.announcements import announcement_handler
+from config.defines import FONT
 
 class Effect:
     """
@@ -55,6 +56,17 @@ class Effect:
             village.resources[self.resource_count_name] += self.magnitude
         if self.resource_prod_name is not None:
             village.production_multipliers[self.resource_prod_name] = self.magnitude
+
+    def draw(self, surface, i): 
+        """
+        Draw the effect and how many turns are left in the top-left corner of the screen
+        :param surface: The surface to draw on
+        :param i: The index of the effect in the list (for vertical spacing)
+        """
+
+        text = f"{self.name} {self.duration} turns left"
+        text = FONT.render(text, True, (0, 0, 0))
+        surface.blit(text, (10, 10 + i * 60))
 
     def __str__(self) -> str:
         """
