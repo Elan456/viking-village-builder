@@ -13,8 +13,8 @@ ALL_BUILDINGS = [GrainField, Mine, LumberMill, BlackSmith]
 class BuildingPanel:
     def __init__(self) -> None:
         self.buildings = []
-        self.selected_building = None
-        self.hovered_building = None
+        self.selected_building: int = None  # Index of the selected building
+        self.hovered_building: int = None  # Index of the hovered building
 
         self.width = GRID_SIZE * 4
         
@@ -45,10 +45,18 @@ class BuildingPanel:
         # Check if the mouse is over a building
         for i, (building, image, highlighted_image) in enumerate(self.buildings):
             if self.x < mouse_pos[0] < self.x + self.width and self.y + i * GRID_SIZE * 3 < mouse_pos[1] < self.y + (i + 1) * GRID_SIZE * 3:
-                self.hovered_building = building
+                self.hovered_building = i
                 break
         else:
             self.hovered_building = None
+
+        # If mouse is down, then set the selected buildign to the hovered building
+        if pygame.mouse.get_pressed()[0]: 
+            if self.hovered_building is not None:
+                self.selected_building = self.hovered_building
+        else:
+            self.selected_building = None
+
     
     def draw(self, surface: pygame.Surface):
         temp_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
@@ -62,9 +70,17 @@ class BuildingPanel:
             # Get x for centering it
             x = (self.width - building[1].get_width()) // 2
             # Check if hovered
-            if self.hovered_building == building[0]:
+            if self.hovered_building == i:
                 temp_surface.blit(building[2], (x, i * GRID_SIZE * 3))
             else:
                 temp_surface.blit(building[1], (x, i * GRID_SIZE * 3))
 
         surface.blit(temp_surface, (self.x, self.y))
+
+        # Draw the selected building centered on the mouse
+        if self.selected_building is not None:
+            _, image, _ = self.buildings[self.selected_building]
+            x, y = pygame.mouse.get_pos()
+            x -= image.get_width() // 2
+            y -= image.get_height() // 2
+            surface.blit(image, (x, y))

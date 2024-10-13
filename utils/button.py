@@ -45,7 +45,6 @@ class Button:
         if self.is_hovered(mouse_pos):
             if not mouse_down and self.clicked:
                 self.action()
-                print("ACTION")
                 self.clicked = False
             elif mouse_down:
                 self.clicked = True

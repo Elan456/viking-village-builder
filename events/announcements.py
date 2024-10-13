@@ -13,7 +13,7 @@ class Announcement:
         self.max_tick = self.fade_in_duration + self.fade_out_duration
         self.tick = self.max_tick  # Start with the full tick for both phases
 
-    def display(self, surface, i):
+    def draw(self, surface, i):
         # Determine the opacity based on the current tick value
         if self.tick > self.fade_out_duration:
             # Fade-in phase: tick goes from fade_in_duration to max_tick
@@ -65,7 +65,7 @@ class AnnouncementHandler:
 
     def display(self, surface):
         for i, announcement in enumerate(self.announcements):
-            announcement.display(surface, i)
+            announcement.draw(surface, i)
 
 
 # Statically defined, singleton AnnouncementHandler
