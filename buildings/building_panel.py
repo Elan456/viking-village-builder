@@ -4,17 +4,26 @@ Shows the price of the building and what it produces when hovering over it.
 """
 
 import pygame
-from config.defines import *
+from typing import List, Tuple
+from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT, camera_x, camera_y
 from buildings.craft import BlackSmith
 from buildings.raw import GrainField, LumberMill, Mine
+from buildings.building import Building
 
-ALL_BUILDINGS = [GrainField, Mine, LumberMill, BlackSmith]
+ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, BlackSmith]
 
 class BuildingPanel:
-    def __init__(self) -> None:
-        self.buildings = []
-        self.selected_building: int = None  # Index of the selected building
+    def __init__(self, village) -> None:
+        self.village = village
+        self.buildings: List[Tuple[Building, pygame.Surface, pygame.Surface]] = []
         self.hovered_building: int = None  # Index of the hovered building
+        
+        self.selected_building: int = None  # Index of the selected building
+        self.selected_can_be_placed = False
+        self.selected_cell_x = 0
+        self.selected_cell_y = 0
+        self.selected_width = 0
+        self.selected_height = 0
 
         self.width = GRID_SIZE * 4
         
@@ -38,7 +47,7 @@ class BuildingPanel:
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
 
-            self.buildings.append((building, image, highlighted_image))
+            self.buildings.append((building(None, 0, 0), image, highlighted_image))
 
 
     def update(self, mouse_pos: tuple):
@@ -55,10 +64,70 @@ class BuildingPanel:
             if self.hovered_building is not None:
                 self.selected_building = self.hovered_building
         else:
+            if self.selected_building is not None:
+                # If the mouse is up, then place the building
+                if self.selected_can_be_placed:
+                    self.village.add_building(ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y))
             self.selected_building = None
+
+        if self.selected_building is not None:
+            # Getting the dimensions of the building
+            image = self.buildings[self.selected_building][1]
+
+            # Width and height from the image // GRID_SIZE
+            self.selected_width = self.buildings[self.selected_building][0].get_cell_width()
+            self.selected_height = self.buildings[self.selected_building][0].get_cell_height()
+
+            # Get the mouse position
+            x, y = pygame.mouse.get_pos()
+
+            # True x and y based on the camera position
+            x = x + camera_x - image.get_width() // 2
+            y = y + camera_y - image.get_height() // 2
+
+            # Get the top left corner of the building
+            self.selected_cell_x = round(x / GRID_SIZE) - 1
+            self.selected_cell_y = round(y / GRID_SIZE) - 1
+
+            # Check if the building can be placed
+            self.selected_can_be_placed = not self.other_building_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width, self.selected_height)
+               
+
+    def other_building_collision(self, selected_x, selected_y, selected_width_cell, selected_height_cell):
+        """
+        Based on where you want to put the selected building, return true or false if it overlaps with an existing building.
+        :param selected_x: x coordinate of the selected building's cell top left
+        :param selected_y: y coordinate of the selected building's cell top left
+        :param selected_width_cell: width of the selected building in cells
+        :param selected_height_cell: height of the selected building in cells
+        """
+
+        for building in self.village.buildings:
+            if building is self:
+                continue
+
+            # Check if the selected building overlaps with the building
+            if (selected_x < building.x_cell + building.get_cell_width() and
+                selected_x + selected_width_cell > building.x_cell and
+                selected_y < building.y_cell + building.get_cell_height() and
+                selected_y + selected_height_cell > building.y_cell):
+                return True
+        
+        return False
 
     
     def draw(self, surface: pygame.Surface):
+        # Draw onto the main surface, a green or red outline of where the building will be placed
+        if self.selected_building is not None:
+
+            color = (0, 255, 0) if self.selected_can_be_placed else (255, 0, 0)
+
+            # Draw the building
+            pygame.draw.rect(surface, color,
+                              (self.selected_cell_x * GRID_SIZE - camera_x, self.selected_cell_y * GRID_SIZE - camera_y,
+                                self.selected_width * GRID_SIZE, self.selected_height * GRID_SIZE), 5)
+
+
         temp_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
 
         # Draw the background

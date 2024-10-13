@@ -3,6 +3,7 @@ from typing import List
 from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH, GRID_SIZE, RIVER_HEIGHT, camera_x, camera_y
 import config.defines as defines 
 from buildings.building_panel import BuildingPanel
+from buildings.building import Building
 from game.main_panel import MainPanel
 from events.random_event_handler import RandomEventHandler
 from effects.effect import Effect
@@ -12,12 +13,12 @@ class Village:
     Handles the village's rendering and updating.
     """
     def __init__(self) -> None:
-        self.buildings = []
+        self.buildings: List[Building] = []
         self.resources = {"food": 0, "wood": 0, "ore": 0, "people": 0, "weapons": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
 
         self.river_top = RIVER_HEIGHT
-        self.building_panel = BuildingPanel()
+        self.building_panel = BuildingPanel(self)
         self.main_panel = MainPanel(self)
         self.random_events = RandomEventHandler(self)
         self.active_effects: List[Effect] = []  # Effects which are currently active

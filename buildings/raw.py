@@ -29,7 +29,7 @@ class GrainField(RawBuilding):
         super().__init__(village, x, y)
         
         self._set_image(GrainField.image_path)
-        self._set_production("food", 1)
+        self._set_production({"food": 1})
         self._set_construction_cost({"wood": 10})
 
         self.name = "Grain Field"
@@ -41,7 +41,7 @@ class Mine(RawBuilding):
         super().__init__(village, x, y)
 
         self._set_image(Mine.image_path)
-        self._set_production({"ore", 1})
+        self._set_production({"ore": 1})
         self._set_construction_cost({"wood": 10})
 
         self.name = "Mine"
@@ -53,7 +53,7 @@ class LumberMill(RawBuilding):
         super().__init__(village, x, y)
 
         self._set_image(LumberMill.image_path)
-        self._set_production("wood", 1)
+        self._set_production({"wood": 1})
         self._set_construction_cost({"wood": 10})
 
         
