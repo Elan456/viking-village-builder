@@ -7,11 +7,11 @@ import pygame
 from typing import List, Tuple
 from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT
 from config import defines 
-from buildings.craft import BlackSmith
+from buildings.craft import Blacksmith
 from buildings.raw import GrainField, LumberMill, Mine
 from buildings.building import Building
 
-ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, BlackSmith]
+ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, Blacksmith]
 
 class BuildingPanel:
     def __init__(self, village) -> None:

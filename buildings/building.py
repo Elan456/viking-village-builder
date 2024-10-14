@@ -1,6 +1,7 @@
 import pygame
 from config.defines import GRID_SIZE
 from config import defines 
+from villagers.villager import Villager
 
 class Building(pygame.sprite.Sprite):
     """
@@ -29,6 +30,10 @@ class Building(pygame.sprite.Sprite):
         self.name = "Building"
         self.construction_cost = {}
 
+        self.villager_name = None 
+
+        self.my_villager = Villager(self)
+
     def draw(self, surface: pygame.Surface):
         """
         Draws the building on the screen.
@@ -37,6 +42,14 @@ class Building(pygame.sprite.Sprite):
         """
         # print(camera_x, camera_y)
         surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
+
+        self.my_villager.draw(surface)
+
+    def update(self):
+        """
+        Updates the building's state. 
+        """
+        self.my_villager.update()
 
     def _set_image(self, image_path):
         self.image = pygame.image.load(image_path)
@@ -51,4 +64,10 @@ class Building(pygame.sprite.Sprite):
     
     def get_cell_height(self):
         return self.rect.height // GRID_SIZE
+    
+    def get_villager_name(self):
+        if self.villager_name is None:
+            raise NotImplementedError("Villager name not defined")
+        
+        return self.villager_name
 

@@ -31,7 +31,7 @@ class Game:
             announcement_handler.display(self.screen)
 
             pygame.display.flip()
-            self.clock.tick(120)
+            self.clock.tick(30)
             pygame.display.set_caption(f"FPS: {frame_rate}")
 
 

@@ -3,8 +3,8 @@ pygame.init()
 
 SCALE = .8
 
-DISPLAY_WIDTH = int(pygame.display.Info().current_w * SCALE)
-DISPLAY_HEIGHT = int(pygame.display.Info().current_h * SCALE)
+DISPLAY_WIDTH = 800
+DISPLAY_HEIGHT = 600
 
 print(DISPLAY_WIDTH, DISPLAY_HEIGHT)  
 

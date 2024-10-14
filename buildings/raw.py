@@ -33,6 +33,7 @@ class GrainField(RawBuilding):
         self._set_construction_cost({"wood": 10})
 
         self.name = "Grain Field"
+        self.villager_name = "farmer"
 
 class Mine(RawBuilding):
     image_path = "assets/buildings/mine.png"
@@ -45,6 +46,7 @@ class Mine(RawBuilding):
         self._set_construction_cost({"wood": 10})
 
         self.name = "Mine"
+        self.villager_name = "miner"
 
 class LumberMill(RawBuilding):
     image_path = "assets/buildings/lumber_mill.png"
@@ -55,5 +57,8 @@ class LumberMill(RawBuilding):
         self._set_image(LumberMill.image_path)
         self._set_production({"wood": 1})
         self._set_construction_cost({"wood": 10})
+
+        self.name = "Lumber Mill"
+        self.villager_name = "lumberjack"
 
         

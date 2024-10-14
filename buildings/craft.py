@@ -15,6 +15,9 @@ class CraftBuilding(Building):
         self.production = production
 
     def _set_cost(self, cost: dict):
+        """
+        Cost to craft the item
+        """
         self.cost = cost
 
     def update(self):
@@ -28,14 +31,29 @@ class CraftBuilding(Building):
             for resource, amount in self.production.items():
                 self.village.resources[resource] += amount
 
-class BlackSmith(CraftBuilding):
+class Blacksmith(CraftBuilding):
     image_path = "assets/buildings/blacksmith.png"
 
     def __init__(self, village, x, y) -> None:
         super().__init__(village, x, y)
 
-        self._set_image(BlackSmith.image_path)
+        self._set_image(Blacksmith.image_path)
         self._set_production({"weapons": 1})
         self._set_cost({"wood": 10, "ore": 5})
+        self._set_construction_cost({"wood": 50, "ore": 20})
 
         self.name = "Blacksmith"
+        self.villager_name = "blacksmith"
+
+class Shipwright(CraftBuilding):
+    image_path = "assets/buildings/shipwright.png"
+
+    def __init__(self, village, x, y) -> None:
+        super().__init__(village, x, y)
+
+        self._set_image(Shipwright.image_path)
+        self._set_production({"ships": 1})
+        self._set_cost({"wood": 20, "ore": 10})
+
+        self.name = "Shipwright"
+        self.villager_name = "shipwright"
