@@ -1,13 +1,20 @@
 import pygame 
 pygame.init()
-DISPLAY_WIDTH = pygame.display.Info().current_w
-DISPLAY_HEIGHT = pygame.display.Info().current_h
+
+SCALE = .8
+
+DISPLAY_WIDTH = int(pygame.display.Info().current_w * SCALE)
+DISPLAY_HEIGHT = int(pygame.display.Info().current_h * SCALE)
 
 print(DISPLAY_WIDTH, DISPLAY_HEIGHT)  
 
 RIVER_HEIGHT = DISPLAY_WIDTH // 10
 
-GRID_SIZE = 100
+GRID_SIZE = int(100 * SCALE * .5)
+
+# The world size for building in cells
+WORLD_WIDTH = 20
+WORLD_HEIGHT = 15
 
 camera_x = 0
 camera_y = 0

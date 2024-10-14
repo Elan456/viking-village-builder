@@ -5,7 +5,8 @@ Shows the price of the building and what it produces when hovering over it.
 
 import pygame
 from typing import List, Tuple
-from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT, camera_x, camera_y
+from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT
+from config import defines 
 from buildings.craft import BlackSmith
 from buildings.raw import GrainField, LumberMill, Mine
 from buildings.building import Building
@@ -82,8 +83,8 @@ class BuildingPanel:
             x, y = pygame.mouse.get_pos()
 
             # True x and y based on the camera position
-            x = x + camera_x - image.get_width() // 2
-            y = y + camera_y - image.get_height() // 2
+            x = x + defines.camera_x - image.get_width() // 2
+            y = y + defines.camera_y - image.get_height() // 2
 
             # Get the top left corner of the building
             self.selected_cell_x = round(x / GRID_SIZE) - 1
@@ -106,11 +107,11 @@ class BuildingPanel:
             if building is self:
                 continue
 
-            # Check if the selected building overlaps with the building
-            if (selected_x < building.x_cell + building.get_cell_width() and
-                selected_x + selected_width_cell > building.x_cell and
-                selected_y < building.y_cell + building.get_cell_height() and
-                selected_y + selected_height_cell > building.y_cell):
+            # Check if the selected building overlaps with the building or is too close to allow for a path
+            if (selected_x < building.x_cell + building.get_cell_width() + 1 and
+                selected_x + selected_width_cell > building.x_cell - 1 and
+                selected_y < building.y_cell + building.get_cell_height() + 1 and
+                selected_y + selected_height_cell > building.y_cell - 1):
                 return True
         
         return False
@@ -124,7 +125,7 @@ class BuildingPanel:
 
             # Draw the building
             pygame.draw.rect(surface, color,
-                              (self.selected_cell_x * GRID_SIZE - camera_x, self.selected_cell_y * GRID_SIZE - camera_y,
+                              (self.selected_cell_x * GRID_SIZE - defines.camera_x, self.selected_cell_y * GRID_SIZE - defines.camera_y,
                                 self.selected_width * GRID_SIZE, self.selected_height * GRID_SIZE), 5)
 
 

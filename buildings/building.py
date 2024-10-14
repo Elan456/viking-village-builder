@@ -1,5 +1,6 @@
 import pygame
-from config.defines import GRID_SIZE, camera_x, camera_y
+from config.defines import GRID_SIZE
+from config import defines 
 
 class Building(pygame.sprite.Sprite):
     """
@@ -34,7 +35,8 @@ class Building(pygame.sprite.Sprite):
 
         :param surface: The surface to draw the building on
         """
-        surface.blit(self.image, (self.x - camera_x, self.y - camera_y))
+        # print(camera_x, camera_y)
+        surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
 
     def _set_image(self, image_path):
         self.image = pygame.image.load(image_path)

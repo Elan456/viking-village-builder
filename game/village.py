@@ -60,10 +60,10 @@ class Village:
         pygame.draw.rect(surface, (0, 0, 255), (0, self.river_top - defines.camera_y, DISPLAY_WIDTH, RIVER_HEIGHT))
 
         # Draw a grid
-        for x in range(0, DISPLAY_WIDTH, GRID_SIZE):
-            pygame.draw.line(surface, (0, 0, 0), (x - defines.camera_x, 0 - defines.camera_y), (x - defines.camera_x, DISPLAY_HEIGHT - defines.camera_y))
-        for y in range(0, DISPLAY_HEIGHT + GRID_SIZE, GRID_SIZE):
-            pygame.draw.line(surface, (0, 0, 0), (0 - defines.camera_x, y - defines.camera_y), (DISPLAY_WIDTH - defines.camera_x, y - defines.camera_y))
+        for x in range(0, defines.WORLD_WIDTH * GRID_SIZE + GRID_SIZE, GRID_SIZE):
+            pygame.draw.line(surface, (0, 0, 0), (x - defines.camera_x, 0 - defines.camera_y), (x - defines.camera_x, defines.WORLD_HEIGHT * GRID_SIZE - defines.camera_y))
+        for y in range(0, defines.WORLD_HEIGHT * GRID_SIZE + GRID_SIZE, GRID_SIZE):
+            pygame.draw.line(surface, (0, 0, 0), (0 - defines.camera_x, y - defines.camera_y), (defines.WORLD_WIDTH * GRID_SIZE - defines.camera_x, y - defines.camera_y))
     
     def draw(self, surface: pygame.Surface):
         self.draw_background(surface)

@@ -1,6 +1,7 @@
 import pygame 
 
 from config.defines import * 
+from config.defines import camera_x, camera_y
 import config.defines as defines 
 from events.announcements import announcement_handler
 
