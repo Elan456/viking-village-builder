@@ -9,6 +9,14 @@ class Villager(pygame.sprite.Sprite):
     idle_ss = {name: pygame.image.load(f"assets/villagers/{name}/idle.png") for name in ALL_VILLAGERS}
     walk_ss = {name: pygame.image.load(f"assets/villagers/{name}/walk.png") for name in ALL_VILLAGERS}
 
+    frame_width = 48 * 2
+    frame_height = 48 * 2
+
+    # Scale all the images by 2x 
+    for name in ALL_VILLAGERS:
+        idle_ss[name] = pygame.transform.scale(idle_ss[name], (48 * 4 * 2, 48 * 2))
+        walk_ss[name] = pygame.transform.scale(walk_ss[name], (48 * 6 * 2, 48 * 2))
+
     def __init__(self, my_building) -> None:
         super().__init__()
         self.building = my_building
@@ -26,22 +34,33 @@ class Villager(pygame.sprite.Sprite):
         self.frame_tick = 0
 
         self.destination = None
+        self.facing = 0  # 0 = right, 1 = left
 
     def get_image(self):
         if self.name is None:
-            return pygame.Surface((48, 48))
+            return pygame.Surface((Villager.frame_width, Villager.frame_height))
         if self.current_action == "idle":
             base_image = Villager.idle_ss[self.name]
-            x = (int(self.frame_tick) % 4) * 48
+            x = (int(self.frame_tick) % 4) * Villager.frame_width
             y = 0
-            return base_image.subsurface((x, y, 48, 48))
+            # When facing left, flip the image
+            if self.facing == 1:
+                base_image = pygame.transform.flip(base_image, True, False)
+                
+            return base_image.subsurface((x, y, Villager.frame_width, Villager.frame_height))
 
         elif self.current_action == "walk":
             # (50x50) with 6 frames
             base_image = Villager.walk_ss[self.name]
-            x = (int(self.frame_tick) % 6) * 48
+            x = (int(self.frame_tick) % 6) * Villager.frame_width
             y = 0
-            return base_image.subsurface((x, y, 48, 48))
+            width = Villager.frame_width
+            # When facing left, flip the image
+            if self.facing == 1:
+                base_image = pygame.transform.flip(base_image, True, False)
+                x += Villager.frame_width / 2
+                width /= 2
+            return base_image.subsurface((x, y, width, Villager.frame_height))
         
     def start_walking(self):
         self.current_action = "walk"
@@ -69,6 +88,10 @@ class Villager(pygame.sprite.Sprite):
             # Move towards the destination
             dx = self.destination[0] - self.x
             dy = self.destination[1] - self.y
+            if dx < 0:
+                self.facing = 1
+            else:
+                self.facing = 0
             dist = (dx ** 2 + dy ** 2) ** 0.5
             if dist < 2:
                 self.current_action = "idle"

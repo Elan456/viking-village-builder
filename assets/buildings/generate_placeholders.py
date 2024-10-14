@@ -13,7 +13,7 @@ def generate_placeholder(grid_width, grid_height, text, output_file):
     
     # Load a font
     try:
-        font = ImageFont.truetype("assets/fonts/Oldenburg-Regular.ttf", 102)
+        font = ImageFont.truetype("assets/fonts/Oldenburg-Regular.ttf", 12)
     except IOError:
         print("Font not found, using default font")
         font = ImageFont.load_default(size=32)
