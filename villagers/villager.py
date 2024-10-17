@@ -29,7 +29,7 @@ class Villager(pygame.sprite.Sprite):
 
         self.current_action = "idle"  # idle, walk
         self.walk_time = 600  # How long to spend walking (frames)
-        self.idle_time = 0
+        self.idle_time = 100
         self.current_time = 0 # Counts down to zero and then switches actions
         self.frame_tick = 0
 
@@ -43,11 +43,14 @@ class Villager(pygame.sprite.Sprite):
             base_image = Villager.idle_ss[self.name]
             x = (int(self.frame_tick) % 4) * Villager.frame_width
             y = 0
+            width = Villager.frame_width
             # When facing left, flip the image
             if self.facing == 1:
                 base_image = pygame.transform.flip(base_image, True, False)
+                x += Villager.frame_width / 2
+                width /= 2
                 
-            return base_image.subsurface((x, y, Villager.frame_width, Villager.frame_height))
+            return base_image.subsurface((x, y, width, Villager.frame_height))
 
         elif self.current_action == "walk":
             # (50x50) with 6 frames

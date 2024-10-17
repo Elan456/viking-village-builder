@@ -1,6 +1,6 @@
 import pygame 
 from typing import List
-from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH, GRID_SIZE, RIVER_HEIGHT, camera_x, camera_y
+from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH, GRID_SIZE, camera_x, camera_y
 import config.defines as defines 
 from buildings.building_panel import BuildingPanel
 from buildings.building import Building
@@ -14,10 +14,13 @@ class Village:
     """
     def __init__(self) -> None:
         self.buildings: List[Building] = []
+        self.turn = 0
         self.resources = {"food": 0, "wood": 0, "ore": 0, "people": 0, "weapons": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
 
-        self.river_top = RIVER_HEIGHT
+        self.river_top_cell = 3
+        self.river_width_cells = 3
+
         self.building_panel = BuildingPanel(self)
         self.main_panel = MainPanel(self)
         self.random_events = RandomEventHandler(self)
@@ -27,6 +30,7 @@ class Village:
         """
         Called when a new turn occurs
         """
+        self.turn += 1 
         # Setting the production multipliers to 1 again
         # The random events can then change them 
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
@@ -57,7 +61,7 @@ class Village:
     def draw_background(self, surface: pygame.Surface):
         pygame.draw.rect(surface, (0, 150, 0), (0 - camera_x, 0 - camera_y, DISPLAY_WIDTH, DISPLAY_HEIGHT))
         # river
-        pygame.draw.rect(surface, (0, 0, 255), (0, self.river_top - defines.camera_y, DISPLAY_WIDTH, RIVER_HEIGHT))
+        pygame.draw.rect(surface, (0, 0, 255), (0, self.river_top_cell * GRID_SIZE - defines.camera_y, DISPLAY_WIDTH, self.river_width_cells * GRID_SIZE))
 
         # Draw a grid
         for x in range(0, defines.WORLD_WIDTH * GRID_SIZE + GRID_SIZE, GRID_SIZE):

@@ -2,8 +2,6 @@
 Defines the buildings which simply collect raw resources
 """
 
-import pygame
-
 from buildings.building import Building
 
 class RawBuilding(Building):
