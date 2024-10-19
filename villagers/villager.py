@@ -9,13 +9,13 @@ class Villager(pygame.sprite.Sprite):
     idle_ss = {name: pygame.image.load(f"assets/villagers/{name}/idle.png") for name in ALL_VILLAGERS}
     walk_ss = {name: pygame.image.load(f"assets/villagers/{name}/walk.png") for name in ALL_VILLAGERS}
 
-    frame_width = 48 * 2
-    frame_height = 48 * 2
+    frame_width = defines.GRID_SIZE * 2
+    frame_height = defines.GRID_SIZE * 2
 
     # Scale all the images by 2x 
     for name in ALL_VILLAGERS:
-        idle_ss[name] = pygame.transform.scale(idle_ss[name], (48 * 4 * 2, 48 * 2))
-        walk_ss[name] = pygame.transform.scale(walk_ss[name], (48 * 6 * 2, 48 * 2))
+        idle_ss[name] = pygame.transform.scale(idle_ss[name], (frame_width * 4, frame_height))
+        walk_ss[name] = pygame.transform.scale(walk_ss[name], (frame_width * 6, frame_height))
 
     def __init__(self, my_building) -> None:
         super().__init__()
