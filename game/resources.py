@@ -5,7 +5,6 @@ resource_to_icon = {
     "people": "assets/resources/people.png",
     "weapons": "assets/resources/weapons.png",
     "boats": "assets/resources/boats.png",
-    "gold": "assets/resources/gold.png",
 }
 
 
