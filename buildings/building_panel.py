@@ -10,6 +10,7 @@ from config import defines
 from buildings.craft import Blacksmith
 from buildings.raw import GrainField, LumberMill, Mine
 from buildings.building import Building
+from buildings.building_hover_panel import BuildingHoverPanel
 
 ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, Blacksmith]
 
@@ -36,6 +37,8 @@ class BuildingPanel:
         self.font = pygame.font.Font(None, 36)
 
         self.load_buildings()
+
+        self.building_hover_panel = BuildingHoverPanel()
 
     def load_buildings(self):
         # Populate buildings with (building, image) tuples
@@ -154,3 +157,8 @@ class BuildingPanel:
             x -= image.get_width() // 2
             y -= image.get_height() // 2
             surface.blit(image, (x, y))
+
+        # If a building is being hovered on, then draw the hover panel
+        if self.hovered_building is not None:
+            building = self.buildings[self.hovered_building][0]
+            self.building_hover_panel.draw(surface, building, in_shop=True)

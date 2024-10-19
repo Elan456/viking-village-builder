@@ -29,6 +29,7 @@ class Building(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.name = "Building"
         self.construction_cost = {}
+        self.construction_time = 1
 
         self.villager_name = None 
 
@@ -58,6 +59,9 @@ class Building(pygame.sprite.Sprite):
 
     def _set_construction_cost(self, cost: dict):
         self.construction_cost = cost
+
+    def _set_construction_time(self, time: int):
+        self.construction_time = time
 
     def get_cell_width(self):
         return self.rect.width // GRID_SIZE
