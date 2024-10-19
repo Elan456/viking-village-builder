@@ -1,5 +1,4 @@
 import pygame
-from config.defines import GRID_SIZE
 from config import defines 
 from villagers.villager import Villager
 
@@ -20,8 +19,8 @@ class Building(pygame.sprite.Sprite):
         self.village = village
         self.x_cell = x_cell
         self.y_cell = y_cell
-        self.x = x_cell * GRID_SIZE
-        self.y = y_cell * GRID_SIZE
+        self.x = x_cell * defines.GRID_SIZE
+        self.y = y_cell * defines.GRID_SIZE
 
         self.image = pygame.Surface((50, 50))
         self.image.fill((255, 0, 0))
@@ -70,10 +69,10 @@ class Building(pygame.sprite.Sprite):
         self.construction_time = time
 
     def get_cell_width(self):
-        return self.rect.width // GRID_SIZE
+        return self.rect.width // defines.GRID_SIZE
     
     def get_cell_height(self):
-        return self.rect.height // GRID_SIZE
+        return self.rect.height // defines.GRID_SIZE
     
     def get_villager_name(self):
         if self.villager_name is None:

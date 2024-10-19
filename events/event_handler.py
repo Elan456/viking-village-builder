@@ -1,7 +1,6 @@
 import pygame 
 
-from config.defines import * 
-from config.defines import camera_x, camera_y
+from config.defines import CAMERA_SPEED
 import config.defines as defines 
 from events.announcements import announcement_handler
 
@@ -37,6 +36,7 @@ class EventHandler:
         
         frame_rate_speed_scale = 120 / frame_rate
         self.camera_movements(frame_rate_speed_scale)
+        self.camera_mouse_pan()
 
         for event in pygame.event.get():
             event = self.handle(event)
@@ -56,3 +56,9 @@ class EventHandler:
             defines.camera_y -= CAMERA_SPEED * frame_rate_speed_scale
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             defines.camera_y += CAMERA_SPEED * frame_rate_speed_scale
+
+    def camera_mouse_pan(self):
+        x, y = pygame.mouse.get_rel()
+        if pygame.mouse.get_pressed()[1]:
+            defines.camera_x -= x
+            defines.camera_y -= y
