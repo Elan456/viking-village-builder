@@ -11,8 +11,8 @@ class RawBuilding(Building):
     def _set_production(self, production: dict):
         self.production = production
 
-    def update(self):
-        super().update()
+    def on_new_turn(self):
+        super().on_new_turn()
 
         # Production
         for resource, amount in self.production.items():

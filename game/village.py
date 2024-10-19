@@ -42,6 +42,10 @@ class Village:
             # Reduce the duration of all effects
             effect.duration -= 1
 
+        # Call the on_new_turn method of all buildings
+        for building in self.buildings:
+            building.on_new_turn()
+
         self.random_events.on_new_turn()
 
     def add_building(self, building):

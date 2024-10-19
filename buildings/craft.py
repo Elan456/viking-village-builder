@@ -20,8 +20,8 @@ class CraftBuilding(Building):
         """
         self.cost = cost
 
-    def update(self):
-        super().update()
+    def on_new_turn(self):
+        super().on_new_turn()
 
         # If the village has the available resources to craft the item
         # then craft it 
@@ -29,7 +29,8 @@ class CraftBuilding(Building):
             for resource, amount in self.cost.items():
                 self.village.resources[resource] -= amount
             for resource, amount in self.production.items():
-                self.village.resources[resource] += amount
+                self.village.resources[resource] += amount * self.village.production_multipliers[resource]
+
 
 class Blacksmith(CraftBuilding):
     image_path = "assets/buildings/blacksmith.png"

@@ -94,7 +94,7 @@ class BuildingPanel:
             self.selected_cell_y = round(y / GRID_SIZE) - 1
 
             # Check if the building can be placed
-            self.selected_can_be_placed = not self.other_building_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width, self.selected_height)
+            self.selected_can_be_placed = not self.other_building_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width, self.selected_height) and not self.river_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width, self.selected_height)
                
 
     def other_building_collision(self, selected_x, selected_y, selected_width_cell, selected_height_cell):
@@ -118,6 +118,23 @@ class BuildingPanel:
                 return True
         
         return False
+    
+    def river_collision(self, selected_x, selected_y, selected_width_cell, selected_height_cell):
+        """
+        Based on where you want to put the selected building, return true or false if it overlaps with a river.
+        :param selected_x: x coordinate of the selected building's cell top left
+        :param selected_y: y coordinate of the selected building's cell top left
+        :param selected_width_cell: width of the selected building in cells
+        :param selected_height_cell: height of the selected building in cells
+        """
+
+        river_min_y_cell = self.village.river_top_cell
+        river_max_y_cell = river_min_y_cell + self.village.river_width_cells
+
+        # If the y of the building overlaps with the river, then return true
+        if (selected_y < river_max_y_cell and
+            selected_y + selected_height_cell > river_min_y_cell):
+            return True
 
     
     def draw(self, surface: pygame.Surface):

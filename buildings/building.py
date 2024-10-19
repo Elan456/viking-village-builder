@@ -52,6 +52,12 @@ class Building(pygame.sprite.Sprite):
         """
         self.my_villager.update()
 
+    def on_new_turn(self):
+        """
+        Called when a new turn occurs
+        """
+        pass
+
     def _set_image(self, image_path):
         self.image = pygame.image.load(image_path)
         self.rect = self.image.get_rect()

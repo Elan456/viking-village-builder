@@ -8,7 +8,7 @@ DISPLAY_HEIGHT = 600
 
 print(DISPLAY_WIDTH, DISPLAY_HEIGHT)  
 
-GRID_SIZE = int(100 * SCALE * .5)
+GRID_SIZE = int(100 * SCALE * .3)
 
 # The world size for building in cells
 WORLD_WIDTH = 20
