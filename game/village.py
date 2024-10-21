@@ -84,7 +84,7 @@ class Village:
         for building in self.buildings:
             building.draw(surface)
 
-        self.navmesh.draw(surface)
+        # self.navmesh.draw(surface)
 
         self.building_panel.draw(surface)
         self.main_panel.draw(surface)

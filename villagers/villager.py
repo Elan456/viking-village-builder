@@ -2,10 +2,15 @@ import pygame
 import random
 from config import defines 
 from .navmesh import Node
+import json 
+from utils.utils import long_text, longTextnewLines
 
 ALL_VILLAGERS = ["farmer", "miner", "lumberjack", "blacksmith", "shipwright", "builder", "hersir"]
 
 class Villager(pygame.sprite.Sprite):
+
+    blurts = json.load(open("villagers/blurts.json", "r"))
+    blurt_font = pygame.font.Font(defines.FONT_PATH, 10)
 
     idle_ss = {name: pygame.image.load(f"assets/villagers/{name}/idle.png") for name in ALL_VILLAGERS}
     walk_ss = {name: pygame.image.load(f"assets/villagers/{name}/walk.png") for name in ALL_VILLAGERS}
@@ -34,6 +39,9 @@ class Villager(pygame.sprite.Sprite):
         self.current_time = 0 # Counts down to zero and then switches actions
         self.frame_tick = 0
 
+        self.blurt_tick = 50
+        self.blurt_message = None
+
         self.destination = None
         self.facing = 0  # 0 = right, 1 = left
 
@@ -42,6 +50,23 @@ class Villager(pygame.sprite.Sprite):
 
         self.speed = 1
         self.lost = False
+
+    def handle_blurt(self):
+        self.blurt_tick -= 1
+        if self.blurt_tick == 0:
+            self.blurt_message = random.choice(Villager.blurts[self.name])
+            self.blurt_message = longTextnewLines(self.blurt_message, 20)
+
+            
+        if self.blurt_tick < -100:
+            self.blurt_tick = random.randint(100, 200)
+
+    def draw_blurt(self, surface):
+        # Add a light gray rectangle behind the text (opacity 128)
+        if self.blurt_message is not None:
+            long_text(surface, (self.x - defines.camera_x, self.y - 20 - defines.camera_y), self.blurt_message, (0, 0, 0), self.blurt_font, 20, align="center",
+                      rect_color=(128, 128, 128, 128),
+                      border_color=(0, 0, 0, 128))
 
     def get_image(self):
         if self.name is None:
@@ -88,6 +113,8 @@ class Villager(pygame.sprite.Sprite):
         if self.name is None:
             self.name = self.building.get_villager_name()
 
+        self.handle_blurt()
+
         self.frame_tick += 0.1
         self.current_time -= 1
 
@@ -133,11 +160,14 @@ class Villager(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.get_image(), (self.x - defines.camera_x, self.y - defines.camera_y))
-        self.draw_path(surface)
+        # self.draw_path(surface)
 
         if self.lost:
             # Draw a red X over the villager
             pygame.draw.line(surface, (255, 0, 0), (self.x - 10 - defines.camera_x, self.y - 10 - defines.camera_y), (self.x + 10 - defines.camera_x, self.y + 10 - defines.camera_y), 3)
+
+        if self.blurt_tick < 0:
+            self.draw_blurt(surface)
 
     def get_random_building_edge(self, building):
         """
