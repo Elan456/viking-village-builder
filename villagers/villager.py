@@ -1,6 +1,7 @@
 import pygame 
 import random
 from config import defines 
+from .navmesh import Node
 
 ALL_VILLAGERS = ["farmer", "miner", "lumberjack", "blacksmith", "shipwright", "builder", "hersir"]
 
@@ -36,6 +37,12 @@ class Villager(pygame.sprite.Sprite):
         self.destination = None
         self.facing = 0  # 0 = right, 1 = left
 
+        self.current_destination_index = 0
+        self.path = [] # Sequence of points to walk to
+
+        self.speed = 1
+        self.lost = False
+
     def get_image(self):
         if self.name is None:
             return pygame.Surface((Villager.frame_width, Villager.frame_height))
@@ -64,10 +71,18 @@ class Villager(pygame.sprite.Sprite):
                 x += Villager.frame_width / 2
                 width /= 2
             return base_image.subsurface((x, y, width, Villager.frame_height))
+
         
     def start_walking(self):
         self.current_action = "walk"
-        self.destination = (self.x + random.randint(-100, 100), self.y + random.randint(-100, 100))
+        self.destination = self.choose_destination()
+        self.path = self.village.navmesh.find_path_a_star((self.x, self.y), self.destination)
+        self.lost = False
+        if self.path is None:
+            self.lost = True
+            self.current_action = "idle"
+            self.current_time = self.idle_time
+            self.destination = None
         
     def update(self):
         if self.name is None:
@@ -88,22 +103,105 @@ class Villager(pygame.sprite.Sprite):
         if self.current_action == "walk":
             if self.destination is None:
                 self.start_walking()
-            # Move towards the destination
-            dx = self.destination[0] - self.x
-            dy = self.destination[1] - self.y
+            # Move towards the next point in the path
+            dx = self.path[0].x - self.x
+            dy = self.path[0].y - self.y
             if dx < 0:
                 self.facing = 1
             else:
                 self.facing = 0
             dist = (dx ** 2 + dy ** 2) ** 0.5
             if dist < 2:
-                self.current_action = "idle"
-                self.current_time = self.idle_time
+                self.path.pop(0)
+                if len(self.path) == 0:
+                    self.current_action = "idle"
+                    self.current_time = self.idle_time
+                    self.destination = None
             else:
-                if dx != 0:
-                    self.x += dx / abs(dx)
-                if dy != 0:
-                    self.y += dy / abs(dy)
+                dx /= dist
+                dy /= dist
+                self.x += dx * self.speed
+                self.y += dy * self.speed
+
+    def draw_path(self, surface):
+        if self.path is None:
+            return
+
+        path = [Node(self.x, self.y)] + self.path
+        for i in range(len(path) - 1):
+            pygame.draw.line(surface, (255, 0, 0), (path[i].x - defines.camera_x, path[i].y - defines.camera_y), (path[i + 1].x - defines.camera_x, path[i + 1].y - defines.camera_y), 8)
 
     def draw(self, surface):
         surface.blit(self.get_image(), (self.x - defines.camera_x, self.y - defines.camera_y))
+        self.draw_path(surface)
+
+        if self.lost:
+            # Draw a red X over the villager
+            pygame.draw.line(surface, (255, 0, 0), (self.x - 10 - defines.camera_x, self.y - 10 - defines.camera_y), (self.x + 10 - defines.camera_x, self.y + 10 - defines.camera_y), 3)
+
+    def get_random_building_edge(self, building):
+        """
+        If a building is 3x3 from (0, 0) to (2, 2) this function could return (0, 1) or (2, 0) etc. (but multiplied by GRID_SIZE)
+        """
+        x = random.choice([-1, building.get_cell_width()]) * defines.GRID_SIZE
+        y = random.choice([-1, building.get_cell_height() - 1]) * defines.GRID_SIZE
+        x += building.x
+        y += building.y
+        return x, y
+    
+    def get_random_building_by_type(self, building_type):
+        """
+        Get a random building of the given type
+        """
+        random_order = self.village.buildings.copy()
+        random.shuffle(random_order)
+        for building in random_order:
+            if building.name == building_type:
+                return building
+        return None
+
+    def choose_destination(self):
+        self.current_destination_index += 1
+        if self.name == "farmer":
+            # Farmers will walk around their own farm
+            return self.get_random_building_edge(self.building)
+        
+        elif self.name == "miner":
+            self.current_destination_index %= 2
+            # Miners will walk to the ore cluster at cell (10, 5)
+            if self.current_destination_index == 0:
+                return self.get_random_building_edge(self.building)
+            elif self.current_destination_index == 1:
+                return 10 * defines.GRID_SIZE, 5 * defines.GRID_SIZE
+            
+        elif self.name == "lumberjack":
+            self.current_destination_index %= 2
+            # Lumberjacks will walk to the forest at cell (-10, 5)
+            if self.current_destination_index == 0:
+                return self.get_random_building_edge(self.building)
+            elif self.current_destination_index == 1:
+                return -10 * defines.GRID_SIZE, 5 * defines.GRID_SIZE
+            
+        elif self.name == "blacksmith":
+            self.current_destination_index %= 3
+
+            # Goes between the lumberjack, miner and blacksmith
+            if self.current_destination_index == 0:
+                return self.get_random_building_edge(self.building)
+            elif self.current_destination_index == 1:
+                lumbermill = self.get_random_building_by_type("Lumber Mill")
+                if lumbermill is None:
+                    return self.get_random_building_edge(self.building)
+                return self.get_random_building_edge(lumbermill)
+            elif self.current_destination_index == 2:
+                mine = self.get_random_building_by_type("Mine")
+                if mine is None:
+                    return self.get_random_building_edge(self.building)
+                return self.get_random_building_edge(mine)
+            
+        else:
+            self.current_destination_index %= 1
+            return self.get_random_building_edge(self.building)
+
+
+

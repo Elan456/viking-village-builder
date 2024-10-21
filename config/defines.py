@@ -11,8 +11,8 @@ print(DISPLAY_WIDTH, DISPLAY_HEIGHT)
 GRID_SIZE = int(100 * SCALE * .3)
 
 # The world size for building in cells
-WORLD_WIDTH = 20
-WORLD_HEIGHT = 15
+WORLD_WIDTH = 50
+WORLD_HEIGHT = 50
 
 camera_x = 0
 camera_y = 0

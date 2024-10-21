@@ -7,6 +7,7 @@ from buildings.building import Building
 from game.main_panel import MainPanel
 from events.random_event_handler import RandomEventHandler
 from effects.effect import Effect
+from villagers.navmesh import NavMesh
 
 class Village:
     """
@@ -25,6 +26,8 @@ class Village:
         self.main_panel = MainPanel(self)
         self.random_events = RandomEventHandler(self)
         self.active_effects: List[Effect] = []  # Effects which are currently active
+
+        self.navmesh = NavMesh(self)
 
     def on_new_turn(self):
         """
@@ -50,6 +53,9 @@ class Village:
 
     def add_building(self, building):
         self.buildings.append(building)
+
+        # Update the Villager's navmesh
+        self.navmesh.generate_navmesh()
 
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
@@ -77,6 +83,8 @@ class Village:
         self.draw_background(surface)
         for building in self.buildings:
             building.draw(surface)
+
+        self.navmesh.draw(surface)
 
         self.building_panel.draw(surface)
         self.main_panel.draw(surface)
