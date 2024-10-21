@@ -16,8 +16,8 @@ class Village:
     def __init__(self) -> None:
         self.buildings: List[Building] = []
         self.turn = 0
-        self.resources = {"food": 0, "wood": 0, "ore": 0, "people": 0, "weapons": 0}
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
+        self.resources = {"food": 0, "wood": 0, "ore": 0, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 0}
 
         self.river_top_cell = 3
         self.river_width_cells = 3
@@ -36,7 +36,7 @@ class Village:
         self.turn += 1 
         # Setting the production multipliers to 1 again
         # The random events can then change them 
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 0}
         
         # Apply all active effects to get the new production multipliers
         self.active_effects = [effect for effect in self.active_effects if effect.duration > 0]

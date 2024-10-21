@@ -5,6 +5,8 @@ resource_to_icon = {
     "ore": "assets/resources/ore.png",
     "food": "assets/resources/food.png",
     "weapons": "assets/resources/axe.png",
+    "warriors": "assets/resources/warrior.png",
+    "ships": "assets/resources/ship.png",
 }
 
 # Load all the resources and replace the dict with the properly scaled images

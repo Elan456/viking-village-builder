@@ -40,4 +40,5 @@ generate_placeholder(3, 2, "Lumber Mill", "lumber_mill.png")
 
 generate_placeholder(2, 2, "Blacksmith", "blacksmith.png")
 generate_placeholder(4, 2, "Shipwright", "shipwright.png") 
+generate_placeholder(2, 6, "Barrack", "barrack.png") 
 

@@ -7,12 +7,12 @@ import pygame
 from typing import List, Tuple
 from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT
 from config import defines 
-from buildings.craft import Blacksmith
+from buildings.craft import Blacksmith, Barrack, Shipwright
 from buildings.raw import GrainField, LumberMill, Mine
 from buildings.building import Building
 from buildings.building_hover_panel import BuildingHoverPanel
 
-ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, Blacksmith]
+ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, Blacksmith, Shipwright, Barrack]
 
 class BuildingPanel:
     def __init__(self, village) -> None:

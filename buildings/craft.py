@@ -55,6 +55,21 @@ class Shipwright(CraftBuilding):
         self._set_image(Shipwright.image_path)
         self._set_production({"ships": 1})
         self._set_cost({"wood": 20, "ore": 10})
+        self._set_construction_cost({"wood": 100, "ore": 50})
 
         self.name = "Shipwright"
         self.villager_name = "shipwright"
+
+class Barrack(CraftBuilding):
+    image_path = "assets/buildings/barrack.png"
+
+    def __init__(self, village, x, y) -> None:
+        super().__init__(village, x, y)
+
+        self._set_image(Barrack.image_path)
+        self._set_production({"warriors": 1})
+        self._set_cost({"weapons": 1, "food": 20})
+        self._set_construction_cost({"wood": 100, "ore": 50})
+
+        self.name = "Barrack"
+        self.villager_name = "hersir"
