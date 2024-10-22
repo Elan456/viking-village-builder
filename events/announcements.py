@@ -4,12 +4,12 @@ from config.defines import FONT_PATH, DISPLAY_WIDTH, DISPLAY_HEIGHT
 
 class Announcement:
 
-    font = pygame.font.Font(FONT_PATH, 128)
+    font = pygame.font.Font(FONT_PATH, 32)
 
     def __init__(self, text) -> None:
         self.text = text
-        self.fade_in_duration = 50  # Duration of fade-in (ticks)
-        self.fade_out_duration = 500  # Duration of fade-out (ticks)
+        self.fade_in_duration = 10  # Duration of fade-in (ticks)
+        self.fade_out_duration = 100  # Duration of fade-out (ticks)
         self.max_tick = self.fade_in_duration + self.fade_out_duration
         self.tick = self.max_tick  # Start with the full tick for both phases
 
@@ -39,7 +39,8 @@ class Announcement:
         text_surface.set_alpha(opacity)
 
         # Blit the text surface onto the main surface
-        surface.blit(text_surface, (DISPLAY_WIDTH // 2 - text.get_width() // 2, DISPLAY_HEIGHT // 2 - text.get_height() // 2 + i * 120))
+        text_height = text.get_height()
+        surface.blit(text_surface, (DISPLAY_WIDTH // 2 - text.get_width() // 2, DISPLAY_HEIGHT // 2 - text.get_height() // 2 + i * (text_height + 10)))
 
     def update(self):
         # Decrease the tick over time, capping it at 0

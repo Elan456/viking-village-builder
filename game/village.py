@@ -16,11 +16,14 @@ class Village:
     def __init__(self) -> None:
         self.buildings: List[Building] = []
         self.turn = 0
-        self.resources = {"food": 0, "wood": 0, "ore": 0, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
+        self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 0}
 
         self.river_top_cell = 3
         self.river_width_cells = 3
+
+        self.width_cell = defines.WORLD_WIDTH
+        self.height_cell = defines.WORLD_HEIGHT
 
         self.building_panel = BuildingPanel(self)
         self.main_panel = MainPanel(self)
@@ -36,7 +39,7 @@ class Village:
         self.turn += 1 
         # Setting the production multipliers to 1 again
         # The random events can then change them 
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 0}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
         
         # Apply all active effects to get the new production multipliers
         self.active_effects = [effect for effect in self.active_effects if effect.duration > 0]
@@ -51,7 +54,11 @@ class Village:
 
         self.random_events.on_new_turn()
 
-    def add_building(self, building):
+    def add_building(self, building: Building):
+        # Deduct the construction_cost
+        for resource, amount in building.construction_cost.items():
+            self.resources[resource] -= amount
+
         self.buildings.append(building)
 
         # Update the Villager's navmesh

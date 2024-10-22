@@ -11,6 +11,7 @@ from buildings.craft import Blacksmith, Barrack, Shipwright
 from buildings.raw import GrainField, LumberMill, Mine
 from buildings.building import Building
 from buildings.building_hover_panel import BuildingHoverPanel
+from events.announcements import announcement_handler
 
 ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, Blacksmith, Shipwright, Barrack]
 
@@ -22,10 +23,11 @@ class BuildingPanel:
         
         self.selected_building: int = None  # Index of the selected building
         self.selected_can_be_placed = False
+        self.selected_can_be_placed_msg = ""
         self.selected_cell_x = 0
         self.selected_cell_y = 0
-        self.selected_width = 0
-        self.selected_height = 0
+        self.selected_width_cell = 0
+        self.selected_height_cell = 0
 
         self.width = GRID_SIZE * 4
         
@@ -53,6 +55,35 @@ class BuildingPanel:
 
             self.buildings.append((building(None, 0, 0), image, highlighted_image))
 
+    def check_selected_can_be_placed(self):
+        """
+        Runs all the checks to see if the selected building can be placed
+        1. Check if the building is colliding with another building
+        2. Check if the building is colliding with the river
+        3. Check if the building is colliding with the edge of the map
+        4. Check if there are enough resources
+        """
+
+        # Check if the building is colliding with another building
+        if self.other_building_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width_cell, self.selected_height_cell):
+            return False, "Building is colliding with another building"
+
+        # Check if the building is colliding with the river
+        if self.river_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width_cell, self.selected_height_cell):
+            return False, "Building is colliding with the river"
+
+        # Check if the building is colliding with the edge of the map
+        if self.selected_cell_x < 0 or self.selected_cell_x + self.selected_width_cell > self.village.width_cell or self.selected_cell_y < 0 or self.selected_cell_y + self.selected_height_cell > self.village.height_cell:
+            return False, "Building is colliding with the edge of the map"
+
+        # Check if there are enough resources
+        building = ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y)
+        for resource, amount in building.construction_cost.items():
+            if self.village.resources[resource] < amount:
+                return False, f"Not enough {resource}"
+
+        return True, "Building can be placed"
+
 
     def update(self, mouse_pos: tuple):
         # Check if the mouse is over a building
@@ -72,6 +103,8 @@ class BuildingPanel:
                 # If the mouse is up, then place the building
                 if self.selected_can_be_placed:
                     self.village.add_building(ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y))
+                else:
+                    announcement_handler.add_announcement(self.selected_can_be_placed_msg)
             self.selected_building = None
 
         if self.selected_building is not None:
@@ -79,8 +112,8 @@ class BuildingPanel:
             image = self.buildings[self.selected_building][1]
 
             # Width and height from the image // GRID_SIZE
-            self.selected_width = self.buildings[self.selected_building][0].get_cell_width()
-            self.selected_height = self.buildings[self.selected_building][0].get_cell_height()
+            self.selected_width_cell = self.buildings[self.selected_building][0].get_cell_width()
+            self.selected_height_cell = self.buildings[self.selected_building][0].get_cell_height()
 
             # Get the mouse position
             x, y = pygame.mouse.get_pos()
@@ -94,7 +127,7 @@ class BuildingPanel:
             self.selected_cell_y = round(y / GRID_SIZE) - 1
 
             # Check if the building can be placed
-            self.selected_can_be_placed = not self.other_building_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width, self.selected_height) and not self.river_collision(self.selected_cell_x, self.selected_cell_y, self.selected_width, self.selected_height)
+            self.selected_can_be_placed, self.selected_can_be_placed_msg = self.check_selected_can_be_placed()
                
 
     def other_building_collision(self, selected_x, selected_y, selected_width_cell, selected_height_cell):
@@ -146,7 +179,7 @@ class BuildingPanel:
             # Draw the building
             pygame.draw.rect(surface, color,
                               (self.selected_cell_x * GRID_SIZE - defines.camera_x, self.selected_cell_y * GRID_SIZE - defines.camera_y,
-                                self.selected_width * GRID_SIZE, self.selected_height * GRID_SIZE), 5)
+                                self.selected_width_cell * GRID_SIZE, self.selected_height_cell * GRID_SIZE), 5)
 
 
         temp_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
