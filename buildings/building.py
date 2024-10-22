@@ -43,8 +43,6 @@ class Building(pygame.sprite.Sprite):
         # print(camera_x, camera_y)
         surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
 
-        self.my_villager.draw(surface)
-
     def update(self):
         """
         Updates the building's state. 

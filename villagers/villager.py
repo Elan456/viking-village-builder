@@ -59,14 +59,14 @@ class Villager(pygame.sprite.Sprite):
 
             
         if self.blurt_tick < -100:
-            self.blurt_tick = random.randint(100, 200)
+            self.blurt_tick = random.randint(500, 2000)
 
     def draw_blurt(self, surface):
         # Add a light gray rectangle behind the text (opacity 128)
         if self.blurt_message is not None:
             long_text(surface, (self.x - defines.camera_x, self.y - 20 - defines.camera_y), self.blurt_message, (0, 0, 0), self.blurt_font, 20, align="center",
-                      rect_color=(128, 128, 128, 128),
-                      border_color=(0, 0, 0, 128))
+                      rect_color=(128, 128, 128, 255),
+                      border_color=(0, 0, 0, 255))
 
     def get_image(self):
         if self.name is None:

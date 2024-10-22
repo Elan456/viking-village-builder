@@ -52,12 +52,14 @@ def long_text(surface, coor, newLinedtext, text_color, font, maxchar,
         x -= r.width / 2
         y -= r.height / 2
 
-    true_rect = [x, y, r.width, r.height * len(parts)]
+    true_rect = [x, y, r.width, r.height * len(parts) + 4]
     # Update width by finding the longest line
     for p in partsrendertext:
         r = p.get_rect()
         if r.width > true_rect[2]:
             true_rect[2] = r.width
+    
+    true_rect[2] += 4
 
     # Draw the background rectangle
     # Create opcaity surface
@@ -70,6 +72,6 @@ def long_text(surface, coor, newLinedtext, text_color, font, maxchar,
 
 
     for p in range(len(parts)):
-        surface.blit(partsrendertext[p], (x, y + r.height * p))
+        surface.blit(partsrendertext[p], (x + 2, y + r.height * p + 2))
 
     return len(parts) * r.height
