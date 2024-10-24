@@ -17,7 +17,7 @@ class Village:
         self.buildings: List[Building] = []
         self.turn = 0
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 0}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
         self.river_top_cell = 3
         self.river_width_cells = 3
@@ -31,6 +31,7 @@ class Village:
         self.active_effects: List[Effect] = []  # Effects which are currently active
 
         self.navmesh = NavMesh(self)
+        # self.draw_navmesh = False 
 
     def on_new_turn(self):
         """

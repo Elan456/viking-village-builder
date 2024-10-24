@@ -18,10 +18,10 @@ class MainPanel:
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
         self.resource_font = pygame.font.Font(FONT_PATH, 16)
 
-        self.resource_box_width = 100
-        self.resource_box_height = 100
+        self.resource_box_width = 200
+        self.resource_box_height = self.village.resources.keys().__len__() * self.resource_font.get_height() 
         self.resource_box = pygame.Surface((self.resource_box_width, self.resource_box_height), pygame.SRCALPHA)
-        self.resource_box.fill((150, 150, 150, 180))
+        self.resource_box.fill((150, 150, 150, 150))
     
         
     def update(self):
@@ -41,7 +41,16 @@ class MainPanel:
         for i, resource in enumerate(resource_to_icon.keys()):
             icon = get_icon(resource)
             surface.blit(icon, (DISPLAY_WIDTH//2-self.resource_box_width//2, 0 + i*20))
-            resource_text = self.resource_font.render(f"{self.village.resources[resource]}", True, (0, 0, 0))
+            # Incoming resources
+            incoming = sum([building.production.get(resource, 0) for building in self.village.buildings])
+
+            resource_string = f"{self.village.resources[resource]} + {incoming}"
+
+            multiplication_value = self.village.production_multipliers[resource]
+
+            resource_string += f" x {multiplication_value:.2f}" if multiplication_value != 1 else ""
+
+            resource_text = self.resource_font.render(resource_string, True, (0, 0, 0))
             surface.blit(resource_text, (DISPLAY_WIDTH//2-self.resource_box_width//2 + 50, 0 + i*20))
 
     def next_turn(self):

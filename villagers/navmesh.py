@@ -115,7 +115,6 @@ class NavMesh:
                     self.nodes[i].add_neighbor(self.nodes[other_node_index], distance)
                     self.nodes[other_node_index].add_neighbor(self.nodes[i], distance)
                     total_neighbors += 1
-        print("TOTAL NEIGHBORS:", total_neighbors)
 
         # If a node has no neighbors, remove it
         nodes_to_remove = [node for node in self.nodes if len(node.neighbors) == 0]
