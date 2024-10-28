@@ -19,7 +19,7 @@ class Button:
         self.color = color 
         self.hover_color = (min(color[0] + 100, 255), min(color[1] + 100, 255), min(color[2] + 100, 255))
         self.text_color = text_color 
-        self.font = pygame.font.Font(FONT_PATH, 24)
+        self.font = font if font is not None else pygame.font.Font(FONT_PATH, 24)
         self.action = action 
 
         self.rect = pygame.Rect(x, y, width, height)
@@ -34,7 +34,7 @@ class Button:
     def change_text(self, text):
         self.text = text
 
-    def update(self):
+    def update(self, cam_x=0, cam_y=0):
         """
         Checks if the button is clicked on and then triggers the action
         """
@@ -42,7 +42,9 @@ class Button:
         mouse_pos = pygame.mouse.get_pos()
         mouse_down = pygame.mouse.get_pressed()[0]
 
-        if self.is_hovered(mouse_pos):
+        print(mouse_pos, cam_x, cam_y)
+
+        if self.is_hovered(mouse_pos, cam_x, cam_y):
             if not mouse_down and self.clicked:
                 self.action()
                 self.clicked = False
@@ -51,10 +53,17 @@ class Button:
         else:
             self.clicked = False
 
-    def draw(self, surface):
-        color = self.hover_color if self.is_hovered(pygame.mouse.get_pos()) else self.color
-        pygame.draw.rect(surface, color, self.rect)
-        surface.blit(self.text, (self.x + self.width / 2 - self.text.get_width() / 2, self.y + self.height / 2 - self.text.get_height() / 2))
+    def draw(self, surface, cam_x=0, cam_y=0):
+        color = self.hover_color if self.is_hovered(pygame.mouse.get_pos(), cam_x, cam_y) else self.color
+        pygame.draw.rect(surface, color, 
+                         (self.x - cam_x, self.y - cam_y, self.width, self.height))
+        surface.blit(self.text, (self.x + self.width / 2 - self.text.get_width() / 2 - cam_x, self.y + self.height / 2 - self.text.get_height() / 2 - cam_y))
 
-    def is_hovered(self, mouse_pos):
+    def is_hovered(self, mouse_pos, cam_x=0, cam_y=0):
+        mouse_pos = (mouse_pos[0] + cam_x, mouse_pos[1] + cam_y)
         return self.rect.collidepoint(mouse_pos)
+    
+    def move(self, new_x, new_y):
+        self.x = new_x
+        self.y = new_y
+        self.rect.topleft = (new_x, new_y)

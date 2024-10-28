@@ -39,7 +39,7 @@ class BuildingPanel:
 
         self.load_buildings()
 
-        self.building_hover_panel = BuildingHoverPanel() 
+        self.building_hover_panel = BuildingHoverPanel(self.village) 
         self.mouse_pos = (0, 0)
 
         # Ensures that the a building is selected only when the mouse clicks
@@ -110,6 +110,8 @@ class BuildingPanel:
 
     def update(self, mouse_pos: tuple):
         self.mouse_pos = mouse_pos
+
+        self.building_hover_panel.update()
 
         # Check if the mouse is over a building
         for i, (building, image, highlighted_image) in enumerate(self.buildings):
@@ -223,4 +225,6 @@ class BuildingPanel:
         # If a building is being hovered on, then draw the hover panel
         if self.hovered_building is not None:
             building = self.buildings[self.hovered_building][0]
-            self.building_hover_panel.draw(surface, building, in_shop=True)
+            self.building_hover_panel.draw(surface, building)
+        else:
+            self.building_hover_panel.draw(surface)

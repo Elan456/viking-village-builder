@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 
-from config.defines import *
+from config.defines import GRID_SIZE
+from buildings.building_info import BldInfo
 
 def generate_placeholder(grid_width, grid_height, text, output_file):
     # Create a new image with white background
@@ -34,12 +35,10 @@ def generate_placeholder(grid_width, grid_height, text, output_file):
 
 # Generate each building
 
-generate_placeholder(3, 3, "Grain Field", "grainfield.png")
-generate_placeholder(1, 1, "Mine", "mine.png")
-generate_placeholder(3, 2, "Lumber Mill", "lumbermill.png")
-
-generate_placeholder(2, 2, "Blacksmith", "blacksmith.png")
-generate_placeholder(4, 2, "Shipwright", "shipyard.png") 
-generate_placeholder(2, 6, "Barrack", "barracks.png") 
-generate_placeholder(2, 2, "Bulder's Hut", "buildershut.png") 
+all_buildings = BldInfo.get_all_keys()
+for building in all_buildings:
+    width = BldInfo.get_width(building)
+    height = BldInfo.get_height(building)
+    name = BldInfo.get_name(building)
+    generate_placeholder(width, height, name, f"{building}.png")
 
