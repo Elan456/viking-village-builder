@@ -1,0 +1,106 @@
+{
+    "grainfield": {
+        "name": "Grain Field",
+        "width": 2,
+        "height": 2,
+        "villager_name": "farmer",
+        "construction_time": 2,
+        "construction": {
+            "wood": 10
+        },
+        "production": {
+            "food": 1
+        }
+    },
+    "mine": {
+        "name": "Mine",
+        "width": 3,
+        "height": 2,
+        "villager_name": "miner",
+        "construction_time": 2,
+        "construction": {
+            "wood": 10
+        },
+        "production": {
+            "ore": 1
+        }
+    },
+    "lumbermill": {
+        "name": "Lumber Mill",
+        "width": 2,
+        "height": 3,
+        "villager_name": "lumberjack",
+        "construction_time": 2,
+        "construction": {
+            "wood": 10
+        },
+        "production": {
+            "wood": 1
+        }
+    },
+    "blacksmith": {
+        "name": "Blacksmith",
+        "width": 2,
+        "height": 2,
+        "villager_name": "blacksmith",
+        "construction_time": 4,
+        "construction": {
+            "wood": 50,
+            "ore": 20
+        },
+        "cost": {
+            "wood": 10,
+            "ore": 5
+        },
+        "production": {
+            "weapons": 1
+        }
+    },
+    "shipyard": {
+        "name": "Shipyard",
+        "width": 5,
+        "height": 3,
+        "villager_name": "shipwright",
+        "construction_time": 4,
+        "construction": {
+            "wood": 20,
+            "ore": 10
+        },
+        "cost": {
+            "wood": 20,
+            "ore": 10
+        },
+        "production": {
+            "ships": 1
+        }
+    },
+    "barracks": {
+        "name": "Barracks",
+        "width": 3,
+        "height": 3,
+        "villager_name": "hersir",
+        "construction_time": 4,
+        "construction": {
+            "wood": 100,
+            "ore": 50
+        },
+        "cost": {
+            "weapons": 1,
+            "food": 20
+        },
+        "production": {
+            "warriors": 1
+        }
+    },
+    "buildershut": {
+        "name": "Builder's Hut",
+        "width": 2,
+        "height": 2,
+        "villager_name": "builder",
+        "construction_time": 2,
+        "construction": {
+            "wood": 50,
+            "ore": 20
+        }
+    }
+}

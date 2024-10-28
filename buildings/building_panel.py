@@ -7,13 +7,12 @@ import pygame
 from typing import List, Tuple
 from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT
 from config import defines 
-from buildings.craft import Blacksmith, Barrack, Shipwright
-from buildings.raw import GrainField, LumberMill, Mine
+from buildings.building_info import BldInfo
 from buildings.building import Building
 from buildings.building_hover_panel import BuildingHoverPanel
 from events.announcements import announcement_handler
 
-ALL_BUILDINGS: List[Building] = [GrainField, Mine, LumberMill, Blacksmith, Shipwright, Barrack]
+ALL_BUILDINGS: List[str] = BldInfo.get_all_keys()
 
 class BuildingPanel:
     def __init__(self, village) -> None:
@@ -49,7 +48,7 @@ class BuildingPanel:
     def load_buildings(self):
         # Populate buildings with (building, image) tuples
         for building in ALL_BUILDINGS:
-            image = pygame.image.load(building.image_path)
+            image = pygame.image.load(BldInfo.get_image_path(building))
 
 
             scale = 2*GRID_SIZE / image.get_height()
@@ -57,7 +56,7 @@ class BuildingPanel:
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
 
-            self.buildings.append((building(None, 0, 0), image, highlighted_image))
+            self.buildings.append((building, image, highlighted_image))
 
     def check_selected_can_be_placed(self):
         """
@@ -81,8 +80,8 @@ class BuildingPanel:
             return False, "Building is colliding with the edge of the map"
 
         # Check if there are enough resources
-        building = ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y)
-        for resource, amount in building.construction_cost.items():
+        building = ALL_BUILDINGS[self.selected_building]
+        for resource, amount in BldInfo.get_construction_cost(building).items():
             if self.village.resources[resource] < amount:
                 return False, f"Not enough {resource}"
 
@@ -103,7 +102,7 @@ class BuildingPanel:
             # If the mouse is up, then place the building
             if self.selected_building is not None:
                 if self.selected_can_be_placed:
-                    self.village.add_building(ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y))
+                    self.village.add_building(Building(self.village, self.selected_cell_x, self.selected_cell_y, ALL_BUILDINGS[self.selected_building]))
                 else:
                     announcement_handler.add_announcement(self.selected_can_be_placed_msg)
             self.selected_building = None
@@ -125,8 +124,8 @@ class BuildingPanel:
             image = self.buildings[self.selected_building][1]
 
             # Width and height from the image // GRID_SIZE
-            self.selected_width_cell = self.buildings[self.selected_building][0].get_cell_width()
-            self.selected_height_cell = self.buildings[self.selected_building][0].get_cell_height()
+            self.selected_width_cell = BldInfo.get_width(self.buildings[self.selected_building][0])
+            self.selected_height_cell = BldInfo.get_height(self.buildings[self.selected_building][0])
 
             # Get the mouse position
             x, y = pygame.mouse.get_pos()

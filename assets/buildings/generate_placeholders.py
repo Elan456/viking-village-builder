@@ -34,11 +34,12 @@ def generate_placeholder(grid_width, grid_height, text, output_file):
 
 # Generate each building
 
-generate_placeholder(3, 3, "Grain Field", "grain_field.png")
+generate_placeholder(3, 3, "Grain Field", "grainfield.png")
 generate_placeholder(1, 1, "Mine", "mine.png")
-generate_placeholder(3, 2, "Lumber Mill", "lumber_mill.png")
+generate_placeholder(3, 2, "Lumber Mill", "lumbermill.png")
 
 generate_placeholder(2, 2, "Blacksmith", "blacksmith.png")
-generate_placeholder(4, 2, "Shipwright", "shipwright.png") 
-generate_placeholder(2, 6, "Barrack", "barrack.png") 
+generate_placeholder(4, 2, "Shipwright", "shipyard.png") 
+generate_placeholder(2, 6, "Barrack", "barracks.png") 
+generate_placeholder(2, 2, "Bulder's Hut", "buildershut.png") 
 

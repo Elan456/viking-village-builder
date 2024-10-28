@@ -4,12 +4,11 @@ Defines the panel that shows when the user hovers over a building
 import pygame 
 
 from .building import Building
-from .craft import CraftBuilding
-from .raw import RawBuilding
 from utils.button import Button
 from config.defines import FONT_PATH
 from game.resources import get_icon
 from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH
+from buildings.building_info import BldInfo
 
 
 class BuildingHoverPanel:
@@ -42,7 +41,7 @@ class BuildingHoverPanel:
         surface.blit(self.panel_box, (x, y))
 
         # Building name
-        name_text = self.font.render(building.name, True, (0, 0, 0))
+        name_text = self.font.render(BldInfo.get_name(building), True, (0, 0, 0))
         surface.blit(name_text, (x + 10, y + 10))
 
         # Column text
@@ -50,14 +49,14 @@ class BuildingHoverPanel:
         surface.blit(columns_text, (x + 10, y + 30))
 
         # Construction cost
-        self.draw_resource_dict(surface, x + 5, y + 50, building.construction_cost)
+        self.draw_resource_dict(surface, x + 5, y + 50, BldInfo.get_construction_cost(building))
 
         # Resource production
-        self.draw_resource_dict(surface, x + 100, y + 50, building.production)
+        self.draw_resource_dict(surface, x + 100, y + 50, BldInfo.get_production(building))
 
         # Resource consumption
-        if isinstance(building, CraftBuilding):
-            self.draw_resource_dict(surface, x + 200, y + 50, building.cost)
+        if BldInfo.get_cost(building):
+            self.draw_resource_dict(surface, x + 200, y + 50, BldInfo.get_cost(building))
 
         if not in_shop:
             self.disable_button.rect.topleft = (building.x + 50, building.y)
