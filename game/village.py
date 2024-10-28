@@ -1,6 +1,6 @@
 import pygame 
 from typing import List
-from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH, GRID_SIZE, camera_x, camera_y
+from config.defines import DISPLAY_HEIGHT, DISPLAY_WIDTH, GRID_SIZE, camera_x, camera_y, show_navmesh
 import config.defines as defines 
 from buildings.building_panel import BuildingPanel
 from buildings.building import Building
@@ -13,7 +13,9 @@ class Village:
     """
     Handles the village's rendering and updating.
     """
-    def __init__(self) -> None:
+    def __init__(self, event_handler) -> None:
+        self.event_handler = event_handler
+
         self.buildings: List[Building] = []
         self.turn = 0
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
@@ -31,7 +33,6 @@ class Village:
         self.active_effects: List[Effect] = []  # Effects which are currently active
 
         self.navmesh = NavMesh(self)
-        # self.draw_navmesh = False 
 
     def on_new_turn(self):
         """
@@ -82,10 +83,10 @@ class Village:
         pygame.draw.rect(surface, (0, 0, 255), (0, self.river_top_cell * GRID_SIZE - defines.camera_y, DISPLAY_WIDTH, self.river_width_cells * GRID_SIZE))
 
         # Draw a grid
-        for x in range(0, defines.WORLD_WIDTH * GRID_SIZE + GRID_SIZE, GRID_SIZE):
-            pygame.draw.line(surface, (0, 0, 0), (x - defines.camera_x, 0 - defines.camera_y), (x - defines.camera_x, defines.WORLD_HEIGHT * GRID_SIZE - defines.camera_y))
-        for y in range(0, defines.WORLD_HEIGHT * GRID_SIZE + GRID_SIZE, GRID_SIZE):
-            pygame.draw.line(surface, (0, 0, 0), (0 - defines.camera_x, y - defines.camera_y), (defines.WORLD_WIDTH * GRID_SIZE - defines.camera_x, y - defines.camera_y))
+        # for x in range(0, defines.WORLD_WIDTH * GRID_SIZE + GRID_SIZE, GRID_SIZE):
+        #     pygame.draw.line(surface, (0, 0, 0), (x - defines.camera_x, 0 - defines.camera_y), (x - defines.camera_x, defines.WORLD_HEIGHT * GRID_SIZE - defines.camera_y))
+        # for y in range(0, defines.WORLD_HEIGHT * GRID_SIZE + GRID_SIZE, GRID_SIZE):
+        #     pygame.draw.line(surface, (0, 0, 0), (0 - defines.camera_x, y - defines.camera_y), (defines.WORLD_WIDTH * GRID_SIZE - defines.camera_x, y - defines.camera_y))
     
     def draw(self, surface: pygame.Surface):
         self.draw_background(surface)
@@ -95,7 +96,9 @@ class Village:
         for building in self.buildings:
             building.my_villager.draw(surface)
 
-        # self.navmesh.draw(surface)
+
+        if defines.show_navmesh:    
+            self.navmesh.draw(surface)
 
         self.building_panel.draw(surface)
         self.main_panel.draw(surface)

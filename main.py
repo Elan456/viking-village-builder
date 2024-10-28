@@ -14,8 +14,8 @@ class Game:
         self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
         # Enable alpha channel for transparency
         self.screen.set_alpha(None)
-        self.village = Village()
         self.event_handler = EventHandler()
+        self.village = Village(self.event_handler)
         self.clock = pygame.time.Clock()
 
     def start(self):

@@ -40,7 +40,11 @@ class BuildingPanel:
 
         self.load_buildings()
 
-        self.building_hover_panel = BuildingHoverPanel()
+        self.building_hover_panel = BuildingHoverPanel() 
+        self.mouse_pos = (0, 0)
+
+        # Ensures that the a building is selected only when the mouse clicks
+        self.village.event_handler.register_mouse_click(self.on_mouse_click)
 
     def load_buildings(self):
         # Populate buildings with (building, image) tuples
@@ -83,9 +87,31 @@ class BuildingPanel:
                 return False, f"Not enough {resource}"
 
         return True, "Building can be placed"
+    
+
+    def on_mouse_click(self, event):
+        """
+        Called whenever a mouse down event is detected.
+        """
+        
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            # Based on the location of the mouse try to set a building as selected
+            if self.hovered_building is not None:
+                self.selected_building = self.hovered_building
+
+        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
+            # If the mouse is up, then place the building
+            if self.selected_building is not None:
+                if self.selected_can_be_placed:
+                    self.village.add_building(ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y))
+                else:
+                    announcement_handler.add_announcement(self.selected_can_be_placed_msg)
+            self.selected_building = None
 
 
     def update(self, mouse_pos: tuple):
+        self.mouse_pos = mouse_pos
+
         # Check if the mouse is over a building
         for i, (building, image, highlighted_image) in enumerate(self.buildings):
             if self.x < mouse_pos[0] < self.x + self.width and self.y + i * GRID_SIZE * 3 < mouse_pos[1] < self.y + (i + 1) * GRID_SIZE * 3:
@@ -93,19 +119,6 @@ class BuildingPanel:
                 break
         else:
             self.hovered_building = None
-
-        # If mouse is down, then set the selected buildign to the hovered building
-        if pygame.mouse.get_pressed()[0]: 
-            if self.hovered_building is not None:
-                self.selected_building = self.hovered_building
-        else:
-            if self.selected_building is not None:
-                # If the mouse is up, then place the building
-                if self.selected_can_be_placed:
-                    self.village.add_building(ALL_BUILDINGS[self.selected_building](self.village, self.selected_cell_x, self.selected_cell_y))
-                else:
-                    announcement_handler.add_announcement(self.selected_can_be_placed_msg)
-            self.selected_building = None
 
         if self.selected_building is not None:
             # Getting the dimensions of the building

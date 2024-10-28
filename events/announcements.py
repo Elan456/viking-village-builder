@@ -26,11 +26,11 @@ class Announcement:
         opacity = int(255 * fade_factor)
 
         # Render the text without color, just using grayscale or original color
-        text = Announcement.font.render(self.text, True, (255, 255, 255))  # Render with solid white
+        text = Announcement.font.render(self.text, True, (0, 0, 0))  # Render with solid white
 
         # Create a surface to control opacity
         text_surface = pygame.Surface(text.get_size(), pygame.SRCALPHA)
-        text_surface.fill((255, 255, 255, 0))  # Transparent surface
+        text_surface.fill((255, 255, 255, 128))  # Transparent surface
 
         # Blit the text onto the transparent surface
         text_surface.blit(text, (0, 0))

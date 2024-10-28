@@ -23,3 +23,5 @@ RANDOM_EVENT_CHANCE = 0.1
 
 FONT_PATH = "assets/fonts/Oldenburg-Regular.ttf"
 FONT = pygame.font.Font("assets/fonts/Oldenburg-Regular.ttf", 64)
+
+show_navmesh = False

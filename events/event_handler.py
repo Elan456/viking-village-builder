@@ -9,7 +9,13 @@ class EventHandler:
     General event handler, i.e. keyboard and mouse events 
     """
     def __init__(self) -> None:
-        pass 
+        self.mouse_click_funcs = []
+
+    def register_mouse_click(self, func):
+        """
+        When main mouse clicks, call this function
+        """
+        self.mouse_click_funcs.append(func)
 
     def handle(self, event):
         if event.type == pygame.QUIT:
@@ -24,6 +30,15 @@ class EventHandler:
         # Have the spacebar trigger a "hello there" announcement
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             announcement_handler.add_announcement("Hello there!")
+
+        # Pressing 'n' should set the show navmesh config in the config defines toggle
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+            defines.show_navmesh = not defines.show_navmesh
+
+        # Mouse click events
+        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+            for func in self.mouse_click_funcs:
+                func(event)
 
         return event
     
