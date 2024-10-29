@@ -18,6 +18,7 @@ class BuildingHoverPanel:
 
         self.small_font = pygame.font.Font(FONT_PATH, 12)
         self.disable_button = Button(0, 0, defines.GRID_SIZE * 3, defines.GRID_SIZE, "Disable", (255, 0, 0), (0, 0, 0), self.small_font, None)
+        self.enable_button = Button(0, 0, defines.GRID_SIZE * 3, defines.GRID_SIZE, "Enable", (0, 255, 255), (0, 0, 0), self.small_font, None)
         self.demolish_button = Button(0, 0, defines.GRID_SIZE * 3, defines.GRID_SIZE, "Demolish", (255, 0, 0), (0, 0, 0), self.small_font, None)
 
         self.font = pygame.font.Font(FONT_PATH, 16)
@@ -74,8 +75,12 @@ class BuildingHoverPanel:
             self.draw_resource_dict(surface, x + 200, y + 50, BldInfo.get_cost(building))
 
         if not in_shop:
-            self.disable_button.move(self.real_building.x, self.real_building.y)
-            self.disable_button.draw(surface, defines.camera_x, defines.camera_y)
+            if self.real_building.disabled:
+                self.enable_button.move(self.real_building.x, self.real_building.y)
+                self.enable_button.draw(surface, defines.camera_x, defines.camera_y)
+            else:
+                self.disable_button.move(self.real_building.x, self.real_building.y)
+                self.disable_button.draw(surface, defines.camera_x, defines.camera_y)
             self.demolish_button.move(self.real_building.x, self.real_building.y + defines.GRID_SIZE)
             self.demolish_button.draw(surface, defines.camera_x, defines.camera_y)
 
@@ -102,5 +107,12 @@ class BuildingHoverPanel:
                 self.real_building = building
                 break
 
-        self.disable_button.update(defines.camera_x, defines.camera_y)
-        self.demolish_button.update(defines.camera_x, defines.camera_y)
+        if self.real_building:
+            if self.real_building.disabled:
+                self.enable_button.update(defines.camera_x, defines.camera_y)
+                self.enable_button.set_action(self.real_building.enable)
+            else:
+                self.disable_button.update(defines.camera_x, defines.camera_y)
+                self.disable_button.set_action(self.real_building.disable)
+            self.demolish_button.update(defines.camera_x, defines.camera_y)
+            self.demolish_button.set_action(self.real_building.demolish)

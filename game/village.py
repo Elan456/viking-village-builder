@@ -8,6 +8,7 @@ from game.main_panel import MainPanel
 from events.random_event_handler import RandomEventHandler
 from effects.effect import Effect
 from villagers.navmesh import NavMesh
+from game.initial_village import add_initial_buildings
 
 class Village:
     """
@@ -34,6 +35,11 @@ class Village:
 
         self.navmesh = NavMesh(self)
 
+        self.building_demolish_queue = []
+        self.building_construction_queue = []
+
+        add_initial_buildings(self)
+
     def on_new_turn(self):
         """
         Called when a new turn occurs
@@ -56,10 +62,21 @@ class Village:
 
         self.random_events.on_new_turn()
 
-    def add_building(self, building: Building):
+    def construct_building(self, building: Building):
+        """
+        Adds a building to the construction queue, while it is being built 
+        """
         # Deduct the construction_cost
         for resource, amount in building.construction_cost.items():
             self.resources[resource] -= amount
+
+        self.building_construction_queue.append(building)
+
+    def add_building(self, building: Building):
+        """
+        Makes the building part of the village
+        Adds the navmesh of the building to the village's navmesh
+        """
 
         self.buildings.append(building)
 

@@ -42,8 +42,6 @@ class Button:
         mouse_pos = pygame.mouse.get_pos()
         mouse_down = pygame.mouse.get_pressed()[0]
 
-        print(mouse_pos, cam_x, cam_y)
-
         if self.is_hovered(mouse_pos, cam_x, cam_y):
             if not mouse_down and self.clicked:
                 self.action()
@@ -67,3 +65,6 @@ class Button:
         self.x = new_x
         self.y = new_y
         self.rect.topleft = (new_x, new_y)
+
+    def set_action(self, action):
+        self.action = action

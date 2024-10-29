@@ -42,7 +42,7 @@ class MainPanel:
             icon = get_icon(resource)
             surface.blit(icon, (DISPLAY_WIDTH//2-self.resource_box_width//2, 0 + i*20))
             # Incoming resources
-            incoming = sum([building.production.get(resource, 0) for building in self.village.buildings])
+            incoming = sum([building.get_current_production().get(resource, 0) for building in self.village.buildings])
 
             resource_string = f"{self.village.resources[resource]} + {incoming}"
 

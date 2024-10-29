@@ -22,7 +22,7 @@
             "wood": 10
         },
         "production": {
-            "ore": 1
+            "ore": 5
         }
     },
     "lumbermill": {
@@ -32,10 +32,10 @@
         "villager_name": "lumberjack",
         "construction_time": 2,
         "construction": {
-            "wood": 10
+            "wood": 20
         },
         "production": {
-            "wood": 1
+            "wood": 5
         }
     },
     "blacksmith": {

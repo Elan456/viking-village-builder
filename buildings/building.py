@@ -36,6 +36,7 @@ class Building(pygame.sprite.Sprite):
         self.villager_name = BldInfo.get_villager_name(name)
 
         self.my_villager = Villager(self)
+        self.disabled = False
 
     def draw(self, surface: pygame.Surface):
         """
@@ -46,22 +47,62 @@ class Building(pygame.sprite.Sprite):
         # print(camera_x, camera_y)
         surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
 
+        # Draw a grey rectangle if the building is disabled
+        if self.disabled:
+            pygame.draw.rect(surface, (150, 150, 150), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
+
     def update(self):
         """
         Updates the building's state. 
         """
         self.my_villager.update()
 
+    def get_current_production(self):
+        """
+        Returns a dictionary of what resources the building can produce next turn
+        """
+        current_production = {} 
+        if not self.disabled:
+            if all(self.village.resources[resource] >= amount for resource, amount in self.cost.items()):
+                for resource, amount in self.production.items():
+                    current_production[resource] = amount * self.village.production_multipliers[resource]
+
+        return current_production
+
     def on_new_turn(self):
         """
         Called when a new turn occurs
         """
-        # Try to produce resources
-        if all(self.village.resources[resource] >= amount for resource, amount in self.cost.items()):
+
+        cp = self.get_current_production()
+        if cp: # If we can produce resources
+            # Consume resources
             for resource, amount in self.cost.items():
                 self.village.resources[resource] -= amount
-            for resource, amount in self.production.items():
-                self.village.resources[resource] += amount * self.village.production_multipliers[resource]
+            # Produce resources
+            for resource, amount in cp.items():
+                self.village.resources[resource] += amount
+
+    def disable(self):
+        """
+        Disables the building
+        """
+        if not self.disabled:
+            self.disabled = True
+
+    def enable(self):
+        """
+        Enables the building
+        """
+        if self.disabled:
+            self.disabled = False
+
+    def demolish(self):
+        """
+        Adds this building to the demolish queue
+        """
+        if self not in self.village.building_demolish_queue: 
+            self.village.building_demolish_queue.append(self)
 
     def get_cell_width(self):
         return self.rect.width // defines.GRID_SIZE
