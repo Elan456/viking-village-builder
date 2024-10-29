@@ -39,7 +39,7 @@ class Villager(pygame.sprite.Sprite):
         self.current_time = 0 # Counts down to zero and then switches actions
         self.frame_tick = 0
 
-        self.blurt_tick = 50
+        self.blurt_tick = random.randint(500, 2000)
         self.blurt_message = None
 
         self.destination = None

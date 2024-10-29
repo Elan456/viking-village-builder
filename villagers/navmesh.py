@@ -74,8 +74,6 @@ class NavMesh:
         Generates/updates a navigation mesh for the village
         """
 
-        print("UPDATING NAVMESH")
-
         self.nodes = []
         self.nodes_quadtree = QuadTree((0, 0, defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE))
 

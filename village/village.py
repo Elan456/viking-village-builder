@@ -9,6 +9,7 @@ from events.random_event_handler import RandomEventHandler
 from effects.effect import Effect
 from villagers.navmesh import NavMesh
 from game.initial_village import add_initial_buildings
+from village.wall import Wall
 
 class Village:
     """
@@ -37,6 +38,8 @@ class Village:
 
         self.building_demolish_queue = []
         self.building_construction_queue = []
+
+        self.wall = Wall(self)
 
         add_initial_buildings(self)
 
@@ -91,6 +94,7 @@ class Village:
 
         self.building_panel.update(mouse_pos)
         self.main_panel.update()
+        self.wall.update()
 
 
 
@@ -107,6 +111,7 @@ class Village:
     
     def draw(self, surface: pygame.Surface):
         self.draw_background(surface)
+        self.wall.draw(surface)
         for building in self.buildings:
             building.draw(surface)
 

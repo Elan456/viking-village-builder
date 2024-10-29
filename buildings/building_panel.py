@@ -76,9 +76,13 @@ class BuildingPanel:
             return False, "Building is colliding with the river"
 
         # Check if the building is colliding with the edge of the map
-        if self.selected_cell_x < 0 or self.selected_cell_x + self.selected_width_cell > self.village.width_cell or self.selected_cell_y < 0 or self.selected_cell_y + self.selected_height_cell > self.village.height_cell:
-            return False, "Building is colliding with the edge of the map"
+        #  if self.selected_cell_x < 0 or self.selected_cell_x + self.selected_width_cell > self.village.width_cell or self.selected_cell_y < 0 or self.selected_cell_y + self.selected_height_cell > self.village.height_cell:
+         #   return False, "Building is colliding with the edge of the map"
 
+        # Check if the building collides with the wall
+        if not self.village.wall.can_build(self.selected_cell_x, self.selected_cell_y, self.selected_width_cell, self.selected_height_cell):
+            return False, "Building is outside the wall"
+        
         # Check if there are enough resources
         building = ALL_BUILDINGS[self.selected_building]
         for resource, amount in BldInfo.get_construction_cost(building).items():

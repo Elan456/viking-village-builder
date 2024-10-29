@@ -1,6 +1,6 @@
 import pygame 
 
-from game.village import Village
+from village.village import Village
 from events.event_handler import EventHandler
 from config.defines import *
 import assets.buildings.generate_placeholders
