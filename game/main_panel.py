@@ -19,8 +19,10 @@ class MainPanel:
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
         self.resource_font = pygame.font.Font(FONT_PATH, 16)
 
+        self.resource_box_x = 0
+        self.resource_box_y = 0
         self.resource_box_width = 200
-        self.resource_box_height = self.village.resources.keys().__len__() * self.resource_font.get_height() 
+        self.resource_box_height = self.village.resources.keys().__len__() * (self.resource_font.get_height() + 3)
         self.resource_box = pygame.Surface((self.resource_box_width, self.resource_box_height), pygame.SRCALPHA)
         self.resource_box.fill((150, 150, 150, 150))
     
@@ -37,11 +39,13 @@ class MainPanel:
         surface.blit(current_turn_text, (10, DISPLAY_HEIGHT - current_turn_text.get_height()))
 
         
-        surface.blit(self.resource_box, (DISPLAY_WIDTH//2-self.resource_box_width//2, 0))
+        surface.blit(self.resource_box, (self.resource_box_x, self.resource_box_y))
+
+        v_spacing = 25
 
         for i, resource in enumerate(resource_to_icon.keys()):
             icon = get_icon(resource)
-            surface.blit(icon, (DISPLAY_WIDTH//2-self.resource_box_width//2, 0 + i*20))
+            surface.blit(icon, (self.resource_box_x, 0 + i*v_spacing))
             # Incoming resources
             incoming = sum([building.get_current_production().get(resource, 0) for building in self.village.buildings])
 
@@ -52,7 +56,7 @@ class MainPanel:
             resource_string += f" x {multiplication_value:.2f}" if multiplication_value != 1 else ""
 
             resource_text = self.resource_font.render(resource_string, True, (0, 0, 0))
-            surface.blit(resource_text, (DISPLAY_WIDTH//2-self.resource_box_width//2 + 50, 0 + i*20))
+            surface.blit(resource_text, (self.resource_box_x + 30, 0 + i*v_spacing))
 
     def next_turn(self):
         self.village.on_new_turn()
