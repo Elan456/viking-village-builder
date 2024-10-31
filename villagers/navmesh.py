@@ -89,13 +89,17 @@ class NavMesh:
         self.nodes_quadtree = QuadTree((0, 0, defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE))
 
         # Adds some basic nodes to the navmesh
-        for x in range(0, defines.WORLD_WIDTH * defines.GRID_SIZE, defines.GRID_SIZE * 20):
-            for y in range(0, defines.WORLD_HEIGHT * defines.GRID_SIZE, defines.GRID_SIZE * 20):
+        for x in range(0, defines.WORLD_WIDTH * defines.GRID_SIZE, defines.GRID_SIZE * 15):
+            for y in range(0, defines.WORLD_HEIGHT * defines.GRID_SIZE, defines.GRID_SIZE * 15):
                 new_node = Node(x, y)
                 self.nodes.append(new_node)
                 self.nodes_quadtree.add(new_node, (x, y))
 
-        # Add the wall node 
+        # Add the wall nodes
+        for node in self.village.wall.outer_corner_nodes:
+            n = copy.deepcopy(node)
+            self.nodes.append(n)
+            self.nodes_quadtree.add(n, (n.x, n.y))
         wall_node = copy.deepcopy(self.village.wall.hole_node)
         self.nodes.append(wall_node)
         self.nodes_quadtree.add(wall_node, (wall_node.x, wall_node.y))

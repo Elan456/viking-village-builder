@@ -48,6 +48,11 @@ class Wall(pygame.sprite.Sprite):
         # Put a single node in the center of the wall
         self.hole_node = Node(int(self.x * GRID_SIZE + self.width // 2 * GRID_SIZE),
                               int(self.y * GRID_SIZE + self.height * GRID_SIZE))
+        
+        self.outer_corner_nodes = [Node(self.x * GRID_SIZE - self.thickness - 5, self.y * GRID_SIZE - self.thickness - 5),
+                                      Node(self.x * GRID_SIZE + self.width * GRID_SIZE + self.thickness + 5, self.y * GRID_SIZE - self.thickness - 5),
+                                      Node(self.x * GRID_SIZE - self.thickness - 5, self.y * GRID_SIZE + self.height * GRID_SIZE + self.thickness + 5),
+                                      Node(self.x * GRID_SIZE + self.width * GRID_SIZE + self.thickness + 5, self.y * GRID_SIZE + self.height * GRID_SIZE + self.thickness + 5)]
 
 
     def draw(self, surface: pygame.Surface):

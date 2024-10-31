@@ -100,8 +100,10 @@ class Villager(pygame.sprite.Sprite):
         
     def start_walking(self):
         self.current_action = "walk"
-        self.destination = self.choose_destination()
-        self.path = self.village.navmesh.find_path_a_star((self.x, self.y), self.destination)
+        if self.destination is None:
+            self.destination = self.choose_destination()
+            self.path = self.village.navmesh.find_path_a_star((self.x, self.y), self.destination)
+            self.path.append(Node(self.destination[0], self.destination[1]))
         self.lost = False
         if self.path is None:
             self.lost = True
@@ -219,15 +221,28 @@ class Villager(pygame.sprite.Sprite):
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
-                lumbermill = self.get_random_building_by_type("Lumber Mill")
+                lumbermill = self.get_random_building_by_type("lumbermill")
                 if lumbermill is None:
                     return self.get_random_building_edge(self.building)
                 return self.get_random_building_edge(lumbermill)
             elif self.current_destination_index == 2:
-                mine = self.get_random_building_by_type("Mine")
+                mine = self.get_random_building_by_type("mine")
                 if mine is None:
                     return self.get_random_building_edge(self.building)
                 return self.get_random_building_edge(mine)
+            
+        elif self.name == "shipwright":
+            self.current_destination_index %= 3
+            # Shipwrights will walk to the lumbermill and the river
+            if self.current_destination_index == 0:
+                return self.get_random_building_edge(self.building)
+            elif self.current_destination_index == 1:
+                lumbermill = self.get_random_building_by_type("lumbermill")
+                if lumbermill is None:
+                    return self.get_random_building_edge(self.building)
+                return self.get_random_building_edge(lumbermill)
+            elif self.current_destination_index == 2:
+                return defines.WORLD_WIDTH / 2 * defines.GRID_SIZE, defines.GRID_SIZE * 4
             
         else:
             self.current_destination_index %= 1
