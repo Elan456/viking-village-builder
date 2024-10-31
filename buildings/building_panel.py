@@ -52,7 +52,7 @@ class BuildingPanel:
 
 
             scale = 2*GRID_SIZE / image.get_height()
-            image = pygame.transform.scale(image, (int(image.get_width() * scale), image.get_height() * scale))
+            image = pygame.transform.scale(image, (int(image.get_width() * scale), int(image.get_height() * scale)))
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
 
