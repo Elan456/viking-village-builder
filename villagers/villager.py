@@ -202,7 +202,7 @@ class Villager(pygame.sprite.Sprite):
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
-                return 10 * defines.GRID_SIZE, 5 * defines.GRID_SIZE
+                return 0, defines.WORLD_HEIGHT * defines.GRID_SIZE
             
         elif self.name == "lumberjack":
             self.current_destination_index %= 2
@@ -210,7 +210,7 @@ class Villager(pygame.sprite.Sprite):
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
-                return -10 * defines.GRID_SIZE, 5 * defines.GRID_SIZE
+                return defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE
             
         elif self.name == "blacksmith":
             self.current_destination_index %= 3
