@@ -16,3 +16,6 @@ def add_initial_buildings(village):
 
     village.add_building(Building(village, origin_x, BldInfo.get_height("lumbermill") + 1 + origin_y, "mine"))
     village.add_building(Building(village, origin_x + BldInfo.get_width("mine") + 1, origin_y + BldInfo.get_height("lumbermill") + 1, "grainfield"))
+
+    # Add a buildershut
+    village.add_building(Building(village, origin_x + (BldInfo.get_width("lumbermill") + 1) * 2, origin_y, "buildershut"))

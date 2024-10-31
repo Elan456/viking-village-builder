@@ -106,7 +106,7 @@ class BuildingPanel:
             # If the mouse is up, then place the building
             if self.selected_building is not None:
                 if self.selected_can_be_placed:
-                    self.village.add_building(Building(self.village, self.selected_cell_x, self.selected_cell_y, ALL_BUILDINGS[self.selected_building]))
+                    self.village.construct_building(Building(self.village, self.selected_cell_x, self.selected_cell_y, ALL_BUILDINGS[self.selected_building]))
                 else:
                     announcement_handler.add_announcement(self.selected_can_be_placed_msg)
             self.selected_building = None

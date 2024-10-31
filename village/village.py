@@ -10,6 +10,7 @@ from effects.effect import Effect
 from villagers.navmesh import NavMesh
 from game.initial_village import add_initial_buildings
 from village.wall import Wall
+from buildings.construction import Construction
 
 class Village:
     """
@@ -37,7 +38,7 @@ class Village:
         self.navmesh = NavMesh(self)
 
         self.building_demolish_queue = []
-        self.building_construction_queue = []
+        self.building_construction_queue: List[Construction] = []
 
         self.wall = Wall(self)
 
@@ -63,6 +64,9 @@ class Village:
         for building in self.buildings:
             building.on_new_turn()
 
+        for construction in self.building_construction_queue:
+            construction.on_new_turn()
+
         self.random_events.on_new_turn()
 
     def construct_building(self, building: Building):
@@ -73,7 +77,7 @@ class Village:
         for resource, amount in building.construction_cost.items():
             self.resources[resource] -= amount
 
-        self.building_construction_queue.append(building)
+        self.building_construction_queue.append(Construction(building))
 
     def add_building(self, building: Building):
         """
@@ -118,6 +122,8 @@ class Village:
         for building in self.buildings:
             building.my_villager.draw(surface)
 
+        for construction in self.building_construction_queue:
+            construction.draw(surface)
 
         if defines.show_navmesh:    
             self.navmesh.draw(surface)
