@@ -32,6 +32,7 @@ python main.py
 
 - WASD / Arrow Keys / Middle-Click + Drag = Pan Camera
 - Mouse for interacting with and placing buildings
+- "N" to show the navigation mesh
 
 ### Building
 
@@ -43,5 +44,30 @@ If the construction fails, a message will appear in the center to tell you why.
 
 In the bottom-right corner there is a button to advance to the next turn. This will
 trigger each building to produce and consume their respective resources.
+Construction projects will advance and you might get a random event.
 
 You only get 100 turns till the end of the game to build your army and prepare for the invasion.
+
+## Milestone 2
+
+[Link to the full changelog](https://github.com/Elan456/viking-village-builder/commits/0.1)
+
+### Features added
+- Random event skeleton
+- Buttons
+- Main panel (turn and resource display)
+- Building panel (To drag and place buildings from)
+- Building collision and placement
+- Fully animated villagers (Idle + Walking)
+- Villager pathfinding using A* algorithm, navigation mesh, and quadtree optimizations
+- Ability to disable buildings
+- Button to demolish buildings
+- Placeholder building assets
+- Full set of resource assets
+- Resource production and consumption per building
+- Resource production prediction algorithm
+- Arrow key + WASD camera panning
+- Middle-click + drag camera panning
+- Villager speech bubbles
+- Building definition file as a JSON with parsing
+- Wall around the village
