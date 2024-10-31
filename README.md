@@ -18,7 +18,7 @@ python -m pip install -r requirements.txt
 
 This should install pygame and e-pyquadtree.
 
-> e-pyquadtree is a quadtree datas tructure package written by me, check it out on GitHub: https://github.com/Elan456/pyquadtree
+> e-pyquadtree is a quadtree data structure package written by me, check it out on GitHub: https://github.com/Elan456/pyquadtree
 
 ### 3. Running the game 
 
@@ -38,3 +38,10 @@ python main.py
 Click + drag on a building from the far-right panel to an empty space within your walls.
 
 If the construction fails, a message will appear in the center to tell you why.
+
+### Turn Management
+
+In the bottom-right corner there is a button to advance to the next turn. This will
+trigger each building to produce and consume their respective resources.
+
+You only get 100 turns till the end of the game to build your army and prepare for the invasion.
