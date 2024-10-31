@@ -3,6 +3,16 @@ from config import defines
 import random
 
 from pyquadtree import QuadTree
+import copy
+
+
+class CollisionRect:
+    def __init__(self, x, y, width, height) -> None:
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.rect = pygame.Rect(x, y, width, height)
 
 class Neighbor:
     def __init__(self, node, cost):
@@ -28,7 +38,8 @@ class NavMesh:
         x0, y0 = point1[0], point1[1]
         x1, y1 = point2[0], point2[1]
 
-        for building in self.village.buildings:
+        for building in self.village.buildings + self.village.wall.get_collision_rects():
+            # print(building.x, building.y, building.rect.width, building.rect.height, type(building))
             xmin = building.x - defines.GRID_SIZE + 2
             xmax = building.x + building.rect.width - 2
             ymin = building.y - defines.GRID_SIZE * 2 + 2
@@ -83,6 +94,11 @@ class NavMesh:
                 new_node = Node(x, y)
                 self.nodes.append(new_node)
                 self.nodes_quadtree.add(new_node, (x, y))
+
+        # Add the wall node 
+        wall_node = copy.deepcopy(self.village.wall.hole_node)
+        self.nodes.append(wall_node)
+        self.nodes_quadtree.add(wall_node, (wall_node.x, wall_node.y))
 
         
         # For every building, add the 4 corners as nodes

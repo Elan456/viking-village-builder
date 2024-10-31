@@ -3,6 +3,8 @@ pygame.init()
 
 SCALE = .8
 
+GRASS_GREEN = (0, 150, 0)
+
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGHT = 600
 

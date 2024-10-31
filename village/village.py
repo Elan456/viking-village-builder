@@ -99,7 +99,7 @@ class Village:
 
 
     def draw_background(self, surface: pygame.Surface):
-        pygame.draw.rect(surface, (0, 150, 0), (0 - camera_x, 0 - camera_y, DISPLAY_WIDTH, DISPLAY_HEIGHT))
+        pygame.draw.rect(surface, defines.GRASS_GREEN, (0 - camera_x, 0 - camera_y, DISPLAY_WIDTH, DISPLAY_HEIGHT))
         # river
         pygame.draw.rect(surface, (0, 0, 255), (0, self.river_top_cell * GRID_SIZE - defines.camera_y, DISPLAY_WIDTH, self.river_width_cells * GRID_SIZE))
 
