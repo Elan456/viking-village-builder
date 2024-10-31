@@ -11,9 +11,10 @@ from .resources import resource_to_icon
 class MainPanel:
     def __init__(self, village) -> None:
         self.village = village
+        self.next_turn_font = pygame.font.Font(FONT_PATH, 24)
         self.next_turn_button = Button(0, DISPLAY_HEIGHT - 100, 200, 100, "Next Turn",
                                         (0, 255, 0), (0, 0, 0),
-                                          FONT, self.next_turn)
+                                          self.next_turn_font, self.next_turn)
         
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
         self.resource_font = pygame.font.Font(FONT_PATH, 16)
@@ -33,7 +34,7 @@ class MainPanel:
         self.next_turn_button.draw(surface)
 
         current_turn_text = self.turn_font.render(f"Turn: {self.village.turn}", True, (0, 0, 0))
-        surface.blit(current_turn_text, (220, DISPLAY_HEIGHT - 100))
+        surface.blit(current_turn_text, (10, DISPLAY_HEIGHT - current_turn_text.get_height()))
 
         
         surface.blit(self.resource_box, (DISPLAY_WIDTH//2-self.resource_box_width//2, 0))
