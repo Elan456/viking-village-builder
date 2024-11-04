@@ -25,7 +25,7 @@ class BuildingHoverPanel:
         
 
         self.panel_width = 260
-        self.panel_height = 100
+        self.panel_height = 110
         self.panel_box = pygame.Surface((self.panel_width, self.panel_height), pygame.SRCALPHA)
         self.panel_box.fill((0, 150, 255, 180))
 
@@ -65,7 +65,8 @@ class BuildingHoverPanel:
         surface.blit(columns_text, (x + 10, y + 30))
 
         # Construction cost
-        self.draw_resource_dict(surface, x + 5, y + 50, BldInfo.get_construction_cost(building))
+        self.draw_resource_dict(surface, x + 5, y + 50, BldInfo.get_construction_cost(building),
+                                bottom_text=f"{BldInfo.get_construction_time(building)} Turns")
 
         # Resource production
         self.draw_resource_dict(surface, x + 100, y + 50, BldInfo.get_production(building))
@@ -84,17 +85,22 @@ class BuildingHoverPanel:
             self.demolish_button.move(self.real_building.x, self.real_building.y + defines.GRID_SIZE)
             self.demolish_button.draw(surface, defines.camera_x, defines.camera_y)
 
-    def draw_resource_dict(self, surface, x, y, cost: dict):
+    def draw_resource_dict(self, surface, x, y, cost: dict, bottom_text=None):
         """
         Draws the construction cost on the screen
         
         icon: amount
+        bottom_text: text to display at the bottom of the resource list
         """
         for i, resource in enumerate(cost.keys()):
             icon = get_icon(resource)
             surface.blit(icon, (x, y + i*20))
             resource_text = self.font.render(f"{cost[resource]}", True, (0, 0, 0))
             surface.blit(resource_text, (x + 24, y + i*20))
+
+        if bottom_text:
+            bottom_text = self.font.render(bottom_text, True, (0, 0, 0))
+            surface.blit(bottom_text, (x, y + 20 * len(cost.keys())))
 
 
     def update(self):
