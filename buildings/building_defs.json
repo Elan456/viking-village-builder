@@ -27,12 +27,12 @@
     },
     "lumbermill": {
         "name": "Lumber Mill",
-        "width": 2,
-        "height": 3,
+        "width": 4,
+        "height": 6,
         "villager_name": "lumberjack",
         "construction_time": 2,
         "construction": {
-            "wood": 20
+            "wood": 50
         },
         "production": {
             "wood": 5

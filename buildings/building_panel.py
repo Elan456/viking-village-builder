@@ -5,7 +5,7 @@ Shows the price of the building and what it produces when hovering over it.
 
 import pygame
 from typing import List, Tuple
-from config.defines import GRID_SIZE, DISPLAY_WIDTH, DISPLAY_HEIGHT
+from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT
 from config import defines 
 from buildings.building_info import BldInfo
 from buildings.building import Building
@@ -28,11 +28,11 @@ class BuildingPanel:
         self.selected_width_cell = 0
         self.selected_height_cell = 0
 
-        self.width = GRID_SIZE * 4
+        self.width = defines.GRID_SIZE * 4
         
 
         self.x = DISPLAY_WIDTH - self.width
-        self.y = GRID_SIZE * 2
+        self.y = defines.GRID_SIZE * 2
         self.height = DISPLAY_HEIGHT - self.y
 
         self.font = pygame.font.Font(None, 36)
@@ -51,7 +51,7 @@ class BuildingPanel:
             image = pygame.image.load(BldInfo.get_image_path(building))
 
 
-            scale = 2*GRID_SIZE / image.get_height()
+            scale = 2*defines.GRID_SIZE / image.get_height()
             image = pygame.transform.scale(image, (int(image.get_width() * scale), int(image.get_height() * scale)))
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
@@ -119,7 +119,7 @@ class BuildingPanel:
 
         # Check if the mouse is over a building
         for i, (building, image, highlighted_image) in enumerate(self.buildings):
-            if self.x < mouse_pos[0] < self.x + self.width and self.y + i * GRID_SIZE * 3 < mouse_pos[1] < self.y + (i + 1) * GRID_SIZE * 3:
+            if self.x < mouse_pos[0] < self.x + self.width and self.y + i * defines.GRID_SIZE * 3 < mouse_pos[1] < self.y + (i + 1) * defines.GRID_SIZE * 3:
                 self.hovered_building = i
                 break
         else:
@@ -141,8 +141,8 @@ class BuildingPanel:
             y = y + defines.camera_y - image.get_height() // 2
 
             # Get the top left corner of the building
-            self.selected_cell_x = round(x / GRID_SIZE) - 1
-            self.selected_cell_y = round(y / GRID_SIZE) - 1
+            self.selected_cell_x = round(x / defines.GRID_SIZE) - 1
+            self.selected_cell_y = round(y / defines.GRID_SIZE) - 1
 
             # Check if the building can be placed
             self.selected_can_be_placed, self.selected_can_be_placed_msg = self.check_selected_can_be_placed()
@@ -196,8 +196,8 @@ class BuildingPanel:
 
             # Draw the building
             pygame.draw.rect(surface, color,
-                              (self.selected_cell_x * GRID_SIZE - defines.camera_x, self.selected_cell_y * GRID_SIZE - defines.camera_y,
-                                self.selected_width_cell * GRID_SIZE, self.selected_height_cell * GRID_SIZE), 5)
+                              (self.selected_cell_x * defines.GRID_SIZE - defines.camera_x, self.selected_cell_y * defines.GRID_SIZE - defines.camera_y,
+                                self.selected_width_cell * defines.GRID_SIZE, self.selected_height_cell * defines.GRID_SIZE), 5)
 
 
         temp_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
@@ -212,9 +212,9 @@ class BuildingPanel:
             x = (self.width - building[1].get_width()) // 2
             # Check if hovered
             if self.hovered_building == i:
-                temp_surface.blit(building[2], (x, i * GRID_SIZE * 3))
+                temp_surface.blit(building[2], (x, i * defines.GRID_SIZE * 3))
             else:
-                temp_surface.blit(building[1], (x, i * GRID_SIZE * 3))
+                temp_surface.blit(building[1], (x, i * defines.GRID_SIZE * 3))
 
         surface.blit(temp_surface, (self.x, self.y))
 

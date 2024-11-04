@@ -31,8 +31,8 @@ class Button:
     def change_color(self, color):
         self.color = color
 
-    def change_text(self, text):
-        self.text = text
+    def change_text(self, new_text:str):
+        self.text = self.font.render(new_text, True, self.text_color)
 
     def update(self, cam_x=0, cam_y=0):
         """

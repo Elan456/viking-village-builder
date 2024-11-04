@@ -130,6 +130,7 @@ class Village:
         if defines.show_navmesh:    
             self.navmesh.draw(surface)
 
+        self.wall.upgrade_button.draw(surface)
         self.building_panel.draw(surface)
         self.main_panel.draw(surface)
         self.random_events.display(surface)

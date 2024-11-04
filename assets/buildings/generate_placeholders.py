@@ -1,12 +1,12 @@
 from PIL import Image, ImageDraw, ImageFont
 
-from config.defines import GRID_SIZE
+from config import defines 
 from buildings.building_info import BldInfo
 
 def generate_placeholder(grid_width, grid_height, text, output_file):
     # Create a new image with white background
-    width = grid_width * GRID_SIZE
-    height = grid_height * GRID_SIZE
+    width = grid_width * defines.GRID_SIZE
+    height = grid_height * defines.GRID_SIZE
     image = Image.new('RGB', (width, height), color='white')
     
     # Initialize ImageDraw

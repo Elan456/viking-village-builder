@@ -9,6 +9,9 @@ from config.defines import GRID_SIZE
 from config import defines 
 from villagers.navmesh import CollisionRect
 from villagers.navmesh import Node
+from utils.button import Button 
+from game.resources import get_icon
+from events.announcements import announcement_handler
 
 class Wall(pygame.sprite.Sprite):
     def __init__(self, village) -> None:
@@ -27,7 +30,45 @@ class Wall(pygame.sprite.Sprite):
         ### 
         # Setup collision rects 
         ### 
+        self.calculate_walls()
 
+        
+        self.upgrade_button_font = pygame.font.Font(defines.FONT_PATH, 20)
+        self.upgrade_button = Button(self.x ,
+                                     self.y * GRID_SIZE + self.height * GRID_SIZE + 10,
+                                     180, 30, "Upgrade Wall", (100, 100, 100), (0, 0, 0), self.upgrade_button_font, self.try_upgrade)
+        
+        self.upgrade_cost = {
+            "wood": 100,
+            "ore": 25
+        }
+
+    def draw(self, surface: pygame.Surface):
+        """
+        Draws the wall on the screen
+        """
+        
+        for wall in self.walls:
+            pygame.draw.rect(surface, self.color, (wall.x - defines.camera_x, wall.y - defines.camera_y, wall.width, wall.height))
+
+        # Draw next to the button the icons and amount of resources needed to upgrade the wall
+        for i, (resource, amount) in enumerate(self.upgrade_cost.items()):
+            icon = get_icon(resource)
+            icon = pygame.transform.scale(icon, (20, 20))
+            surface.blit(icon, (self.upgrade_button.x + self.upgrade_button.width + i * 80, self.upgrade_button.y + 5))
+            text = self.upgrade_button_font.render(str(amount), True, (0, 0, 0))
+            surface.blit(text, (self.upgrade_button.x + self.upgrade_button.width + 20 + i * 80, self.upgrade_button.y + 5))
+
+    def update(self):
+        """
+        Updates the wall
+        """
+        self.upgrade_button.update()
+        self.upgrade_button.move(
+            -defines.camera_x - self.thickness, -defines.camera_y - self.upgrade_button.height - self.thickness
+        )
+
+    def calculate_walls(self):
         self.left_wall = CollisionRect(self.x * GRID_SIZE - self.thickness,
                                   self.y * GRID_SIZE - self.thickness,
                                   self.thickness, self.height * GRID_SIZE + 2 * self.thickness)
@@ -55,14 +96,6 @@ class Wall(pygame.sprite.Sprite):
                                       Node(self.x * GRID_SIZE + self.width * GRID_SIZE + self.thickness + 5, self.y * GRID_SIZE + self.height * GRID_SIZE + self.thickness + 5)]
 
 
-    def draw(self, surface: pygame.Surface):
-        """
-        Draws the wall on the screen
-        """
-        
-        for wall in self.walls:
-            pygame.draw.rect(surface, self.color, (wall.x - defines.camera_x, wall.y - defines.camera_y, wall.width, wall.height))
-
 
     def get_collision_rects(self):
         """
@@ -70,12 +103,24 @@ class Wall(pygame.sprite.Sprite):
         left wall, top wall, right wall, left-side bottom wall, right-side bottom wall
         """
         return self.walls
+    
+    def try_upgrade(self):
+        """
+        Tries to upgrade the wall
+        """
+        if self.can_upgrade():
+            self.upgrade()
+        else:
+            announcement_handler.add_announcement("Not enough resources to upgrade the wall")
 
     def can_upgrade(self):
         """
         Checks if the wall can be upgraded
         """
-        return self.village.resources["wood"] >= 100
+        for item in self.upgrade_cost.keys():
+            if self.village.resources[item] < self.upgrade_cost[item]:
+                return False
+        return True
     
     def upgrade(self):
         """
@@ -83,6 +128,14 @@ class Wall(pygame.sprite.Sprite):
         """
         self.width += 5
         self.height += 5
+        self.calculate_walls()
+
+        for item in self.upgrade_cost.keys():
+            self.village.resources[item] -= self.upgrade_cost[item]
+            self.upgrade_cost[item] *= 1.5
+            self.upgrade_cost[item] = int(self.upgrade_cost[item])
+
+        self.village.navmesh.generate_navmesh()
 
     def can_build(self, x, y, width, height):
         """
