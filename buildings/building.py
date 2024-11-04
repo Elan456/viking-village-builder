@@ -1,6 +1,7 @@
 import pygame
 from config import defines 
 from villagers.villager import Villager
+from villagers.builder import Builder
 from buildings.building_info import BldInfo
 
 class Building(pygame.sprite.Sprite):
@@ -35,7 +36,7 @@ class Building(pygame.sprite.Sprite):
 
         self.villager_name = BldInfo.get_villager_name(name)
 
-        self.my_villager = Villager(self)
+        self.my_villager = Villager(self) if self.villager_name != "builder" else Builder(self)
         self.disabled = False
 
     def draw(self, surface: pygame.Surface):
