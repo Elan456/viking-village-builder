@@ -106,7 +106,7 @@ class NavMesh:
 
         
         # For every building, add the 4 corners as nodes
-        for building in self.village.buildings:
+        for building in self.village.buildings + [c.building for c in self.village.builder_manager.construction_queue]:
             x, y = building.x, building.y
             n1 = Node(x - 1 - defines.GRID_SIZE, y - 1 - defines.GRID_SIZE * 2)
             n2 = Node(x + building.rect.width + 1, y - 1 - defines.GRID_SIZE * 2)

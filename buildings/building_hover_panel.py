@@ -25,7 +25,7 @@ class BuildingHoverPanel:
         
 
         self.panel_width = 260
-        self.panel_height = 200
+        self.panel_height = 100
         self.panel_box = pygame.Surface((self.panel_width, self.panel_height), pygame.SRCALPHA)
         self.panel_box.fill((0, 150, 255, 180))
 

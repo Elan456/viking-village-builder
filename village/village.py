@@ -41,8 +41,10 @@ class Village:
 
         self.wall = Wall(self)
 
-        add_initial_buildings(self)
         self.builder_manager = BuilderManager(self)
+
+        add_initial_buildings(self)
+        
 
     def on_new_turn(self):
         """
@@ -77,6 +79,7 @@ class Village:
             self.resources[resource] -= amount
 
         self.builder_manager.start_construction(building)
+        self.navmesh.generate_navmesh()
 
     def add_building(self, building: Building):
         """
