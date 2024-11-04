@@ -157,7 +157,7 @@ class BuildingPanel:
         :param selected_height_cell: height of the selected building in cells
         """
 
-        for building in self.village.buildings:
+        for building in self.village.buildings + [c.building for c in self.village.builder_manager.construction_queue]:
             if building is self:
                 continue
 

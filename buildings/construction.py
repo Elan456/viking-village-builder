@@ -119,3 +119,4 @@ class BuilderManager:
 
         # Remove all finished constructions
         self.construction_queue = [construction for construction in self.construction_queue if not construction.is_finished()]
+        self.handle_assignments()
