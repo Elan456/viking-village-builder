@@ -56,7 +56,21 @@ class BuildingPanel:
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
 
-            self.buildings.append((building, image, highlighted_image))
+            # Can't afford image
+            not_afford_image = image.copy()
+            pygame.draw.rect(not_afford_image, (100, 0, 0), (0, 0, image.get_width(), image.get_height()), 5)
+
+
+            self.buildings.append((building, image, highlighted_image, not_afford_image))
+
+    def is_enough_resources(self, building: str):
+        """
+        Check if there are enough resources to build the building
+        """
+        for resource, amount in BldInfo.get_construction_cost(building).items():
+            if self.village.resources[resource] < amount:
+                return False
+        return True
 
     def check_selected_can_be_placed(self):
         """
@@ -85,9 +99,8 @@ class BuildingPanel:
         
         # Check if there are enough resources
         building = ALL_BUILDINGS[self.selected_building]
-        for resource, amount in BldInfo.get_construction_cost(building).items():
-            if self.village.resources[resource] < amount:
-                return False, f"Not enough {resource}"
+        if not self.is_enough_resources(building):
+            return False, "Not enough resources to build the building"
 
         return True, "Building can be placed"
     
@@ -118,7 +131,7 @@ class BuildingPanel:
         self.building_hover_panel.update()
 
         # Check if the mouse is over a building
-        for i, (building, image, highlighted_image) in enumerate(self.buildings):
+        for i, (building, image, highlighted_image, _) in enumerate(self.buildings):
             if self.x < mouse_pos[0] < self.x + self.width and self.y + i * defines.GRID_SIZE * 3 < mouse_pos[1] < self.y + (i + 1) * defines.GRID_SIZE * 3:
                 self.hovered_building = i
                 break
@@ -214,13 +227,16 @@ class BuildingPanel:
             if self.hovered_building == i:
                 temp_surface.blit(building[2], (x, i * defines.GRID_SIZE * 3))
             else:
-                temp_surface.blit(building[1], (x, i * defines.GRID_SIZE * 3))
+                if not self.is_enough_resources(building[0]):
+                    temp_surface.blit(building[3], (x, i * defines.GRID_SIZE * 3))
+                else:
+                    temp_surface.blit(building[1], (x, i * defines.GRID_SIZE * 3))
 
         surface.blit(temp_surface, (self.x, self.y))
 
         # Draw the selected building centered on the mouse
         if self.selected_building is not None:
-            _, image, _ = self.buildings[self.selected_building]
+            _, image, _, _ = self.buildings[self.selected_building]
             x, y = pygame.mouse.get_pos()
             x -= image.get_width() // 2
             y -= image.get_height() // 2
