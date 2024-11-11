@@ -5,10 +5,11 @@ SCALE = .8
 
 GRASS_GREEN = (0, 150, 0)
 
-DISPLAY_WIDTH = 800
-DISPLAY_HEIGHT = 600
+DISPLAY_WIDTH = pygame.display.Info().current_w
+DISPLAY_HEIGHT = pygame.display.Info().current_h
 
 print(DISPLAY_WIDTH, DISPLAY_HEIGHT)  
+print(f"Aspect ratio: {DISPLAY_WIDTH / DISPLAY_HEIGHT}")
 
 GRID_SIZE = int(100 * SCALE * .3)
 

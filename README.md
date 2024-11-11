@@ -34,6 +34,9 @@ python main.py
 - Mouse for interacting with and placing buildings
 - "N" to show the navigation mesh
 
+### Win Condition
+- To win, you must generate 250 soldiers and 10 ships within 100 turns.
+
 ### Building
 
 Click + drag on a building from the far-right panel to an empty space within your walls.

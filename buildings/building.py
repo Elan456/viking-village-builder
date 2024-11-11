@@ -58,31 +58,29 @@ class Building(pygame.sprite.Sprite):
         """
         self.my_villager.update()
 
-    def get_current_production(self):
+    def get_change_in_resources(self, available_resources):
         """
-        Returns a dictionary of what resources the building can produce next turn
+        Based on the available resources, calculate how the net change in resources will be next turn.
         """
-        current_production = {} 
-        if not self.disabled:
-            if all(self.village.resources[resource] >= amount for resource, amount in self.cost.items()):
-                for resource, amount in self.production.items():
-                    current_production[resource] = amount * self.village.production_multipliers[resource]
+        if self.disabled:
+            return {}
 
-        return current_production
+        can_produce = all(available_resources[resource] >= amount for resource, amount in self.cost.items())
+        
+        if not can_produce:
+            return {}
+        
+        change_in_resources = {}
+        for resource in list(self.production.keys()) + list(self.cost.keys()):
+            change_in_resources[resource] = self.production.get(resource, 0) - self.cost.get(resource, 0)
+
+        return change_in_resources
 
     def on_new_turn(self):
         """
         Called when a new turn occurs
-        """
-
-        cp = self.get_current_production()
-        if cp: # If we can produce resources
-            # Consume resources
-            for resource, amount in self.cost.items():
-                self.village.resources[resource] -= amount
-            # Produce resources
-            for resource, amount in cp.items():
-                self.village.resources[resource] += amount
+        """ 
+        pass 
 
     def disable(self):
         """

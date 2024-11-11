@@ -103,6 +103,12 @@ class Villager(pygame.sprite.Sprite):
         if self.destination is None:
             self.destination = self.choose_destination()
             self.path = self.village.navmesh.find_path_a_star((self.x, self.y), self.destination)
+            if self.path is None:
+                self.lost = True
+                self.current_action = "idle"
+                self.current_time = self.idle_time
+                self.destination = None
+                return
             self.path.append(Node(self.destination[0], self.destination[1]))
         self.lost = False
         if self.path is None:

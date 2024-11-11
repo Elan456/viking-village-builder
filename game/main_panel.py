@@ -43,13 +43,21 @@ class MainPanel:
 
         v_spacing = 25
 
+        resources_change = self.village.calculate_turn_change_resources()
+
+
         for i, resource in enumerate(resource_to_icon.keys()):
             icon = get_icon(resource)
             surface.blit(icon, (self.resource_box_x, 0 + i*v_spacing))
-            # Incoming resources
-            incoming = sum([building.get_current_production().get(resource, 0) for building in self.village.buildings])
-
-            resource_string = f"{self.village.resources[resource]} + {incoming}"
+            
+            delta = resources_change.get(resource, 0)
+            if delta > 0:
+                delta = "+ " + str(delta)
+            elif delta == 0:
+                delta = ""
+            else:
+                delta = f"- {abs(delta)}"
+            resource_string = f"{self.village.resources[resource]} {delta}"
 
             multiplication_value = self.village.production_multipliers[resource]
 

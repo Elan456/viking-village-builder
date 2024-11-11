@@ -44,6 +44,18 @@ class Village:
         self.builder_manager = BuilderManager(self)
 
         add_initial_buildings(self)
+
+    
+    def calculate_turn_change_resources(self) -> dict:
+        """
+        Goes through each building and calculates the resources it produces and consumes
+        """
+        change_in_resources = {}
+        for building in self.buildings:
+            for resource, amount in building.get_change_in_resources(self.resources).items():
+                change_in_resources[resource] = change_in_resources.get(resource, 0) + amount
+
+        return change_in_resources
         
 
     def on_new_turn(self):
@@ -65,6 +77,13 @@ class Village:
         # Call the on_new_turn method of all buildings
         for building in self.buildings:
             building.on_new_turn()
+
+        # Calculate the change in resources
+        change_in_resources = self.calculate_turn_change_resources()
+
+        # Apply the change in resources
+        for resource, amount in change_in_resources.items():
+            self.resources[resource] += amount
 
         self.builder_manager.on_new_turn()
 
