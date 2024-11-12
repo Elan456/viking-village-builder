@@ -8,8 +8,8 @@ class Announcement:
 
     def __init__(self, text) -> None:
         self.text = text
-        self.fade_in_duration = 10  # Duration of fade-in (ticks)
-        self.fade_out_duration = 100  # Duration of fade-out (ticks)
+        self.fade_in_duration = 20  # Duration of fade-in (ticks)
+        self.fade_out_duration = 200  # Duration of fade-out (ticks)
         self.max_tick = self.fade_in_duration + self.fade_out_duration
         self.tick = self.max_tick  # Start with the full tick for both phases
 
@@ -26,11 +26,11 @@ class Announcement:
         opacity = int(255 * fade_factor)
 
         # Render the text without color, just using grayscale or original color
-        text = Announcement.font.render(self.text, True, (0, 0, 0))  # Render with solid white
+        text = Announcement.font.render(self.text, True, (255, 255, 255))  # Render with solid white
 
         # Create a surface to control opacity
         text_surface = pygame.Surface(text.get_size(), pygame.SRCALPHA)
-        text_surface.fill((255, 255, 255, 128))  # Transparent surface
+        text_surface.fill((0, 0, 0, 200))  # Transparent surface
 
         # Blit the text onto the transparent surface
         text_surface.blit(text, (0, 0))
@@ -40,7 +40,7 @@ class Announcement:
 
         # Blit the text surface onto the main surface
         text_height = text.get_height()
-        surface.blit(text_surface, (DISPLAY_WIDTH // 2 - text.get_width() // 2, DISPLAY_HEIGHT // 2 - text.get_height() // 2 + i * (text_height + 10)))
+        surface.blit(text_surface, (DISPLAY_WIDTH // 2 - text.get_width() // 2, DISPLAY_HEIGHT // 2 - text.get_height() // 2 + i * (text_height + 10) + 100))
 
     def update(self):
         # Decrease the tick over time, capping it at 0
