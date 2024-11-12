@@ -24,7 +24,7 @@ class Village:
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
-        self.river_top_cell = 3
+        self.river_top_cell = 0
         self.river_width_cells = 3
 
         self.width_cell = defines.WORLD_WIDTH

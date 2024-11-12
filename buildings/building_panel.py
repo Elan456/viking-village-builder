@@ -96,6 +96,9 @@ class BuildingPanel:
         # Check if the building collides with the wall
         if not self.village.wall.can_build(self.selected_cell_x, self.selected_cell_y, self.selected_width_cell, self.selected_height_cell):
             return False, "Building is outside the wall"
+
+        if ALL_BUILDINGS[self.selected_building] == "shipyard" and not self.check_along_river(self.selected_cell_x, self.selected_cell_y, self.selected_width_cell, self.selected_height_cell):
+            return False, "Shipyard must be placed along the river"
         
         # Check if there are enough resources
         building = ALL_BUILDINGS[self.selected_building]
@@ -199,6 +202,21 @@ class BuildingPanel:
         if (selected_y < river_max_y_cell and
             selected_y + selected_height_cell > river_min_y_cell):
             return True
+
+    def check_along_river(self, selected_x, selected_y, selected_width_cell, selected_height_cell):
+        """
+        Returns true if the building is along the river i.e. the building is touching the river.
+        """
+
+        river_min_y_cell = self.village.river_top_cell
+        river_max_y_cell = river_min_y_cell + self.village.river_width_cells
+
+        # If the building is touching the river, then return true
+        if (selected_y == river_max_y_cell or
+            selected_y + selected_height_cell == river_min_y_cell):
+            return True
+
+        return False
 
     
     def draw(self, surface: pygame.Surface):
