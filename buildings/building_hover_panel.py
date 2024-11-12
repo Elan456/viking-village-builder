@@ -45,7 +45,16 @@ class BuildingHoverPanel:
             building = self.real_building.name
             in_shop = False
 
-        
+        if not in_shop:
+            if self.real_building.disabled:
+                self.enable_button.move(self.real_building.x, self.real_building.y)
+                self.enable_button.draw(surface, defines.camera_x, defines.camera_y)
+            else:
+                self.disable_button.move(self.real_building.x, self.real_building.y)
+                self.disable_button.draw(surface, defines.camera_x, defines.camera_y)
+            self.demolish_button.move(self.real_building.x, self.real_building.y + defines.GRID_SIZE)
+            self.demolish_button.draw(surface, defines.camera_x, defines.camera_y)
+            
         # Draw the panel box relative to the mouse position
         mouse_pos = pygame.mouse.get_pos()
         x, y = mouse_pos
@@ -75,15 +84,7 @@ class BuildingHoverPanel:
         if BldInfo.get_cost(building):
             self.draw_resource_dict(surface, x + 200, y + 50, BldInfo.get_cost(building))
 
-        if not in_shop:
-            if self.real_building.disabled:
-                self.enable_button.move(self.real_building.x, self.real_building.y)
-                self.enable_button.draw(surface, defines.camera_x, defines.camera_y)
-            else:
-                self.disable_button.move(self.real_building.x, self.real_building.y)
-                self.disable_button.draw(surface, defines.camera_x, defines.camera_y)
-            self.demolish_button.move(self.real_building.x, self.real_building.y + defines.GRID_SIZE)
-            self.demolish_button.draw(surface, defines.camera_x, defines.camera_y)
+        
 
     def draw_resource_dict(self, surface, x, y, cost: dict, bottom_text=None):
         """
