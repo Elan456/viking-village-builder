@@ -57,7 +57,7 @@ class MainPanel:
                 delta = ""
             else:
                 delta = f"- {abs(delta)}"
-            resource_string = f"{self.village.resources[resource]} {delta}"
+            resource_string = f"{round(self.village.resources[resource],2)} {delta}"
 
             multiplication_value = self.village.production_multipliers[resource]
 
