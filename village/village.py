@@ -101,6 +101,11 @@ class Village:
 
         self.world.on_new_turn()
 
+        # Update all the villagers 100 times, to show a lot of time has passed
+        for _ in range(200):
+            for building in self.buildings:
+                building.my_villager.update()
+
     def construct_building(self, building: Building):
         """
         Adds a building to the construction queue, while it is being built 

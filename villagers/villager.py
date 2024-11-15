@@ -173,7 +173,7 @@ class Villager(pygame.sprite.Sprite):
 
     def draw(self, surface):
         surface.blit(self.get_image(), (self.x - defines.camera_x, self.y - defines.camera_y))
-        self.draw_path(surface)
+        # self.draw_path(surface)
 
         if self.lost:
             # Draw a red X over the villager
