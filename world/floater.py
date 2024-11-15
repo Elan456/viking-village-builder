@@ -17,7 +17,7 @@ class Floater:
 
     def __init__(self):
         self.x = -defines.DISPLAY_WIDTH + random.uniform(-defines.GRID_SIZE, defines.GRID_SIZE)
-        self.speed = random.uniform(1.3, 1.8)
+        self.speed = random.uniform(.8, 1.3)
         self.age = 0
         self.alpha = 0
         image_name = random.choice(self.IMAGE_PATHS)
