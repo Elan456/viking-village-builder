@@ -11,7 +11,7 @@ from villagers.navmesh import NavMesh
 from game.initial_village import add_initial_buildings
 from village.wall import Wall
 from buildings.construction import Construction, BuilderManager
-from village.world import World 
+from world.world import World 
 
 class Village:
     """
@@ -25,7 +25,7 @@ class Village:
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
-        self.world = World()
+        self.world = World(self)
 
         self.width_cell = defines.WORLD_WIDTH
         self.height_cell = defines.WORLD_HEIGHT

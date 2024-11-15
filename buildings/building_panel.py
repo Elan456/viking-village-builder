@@ -195,8 +195,8 @@ class BuildingPanel:
         :param selected_height_cell: height of the selected building in cells
         """
 
-        river_min_y_cell = self.village.river_top_cell
-        river_max_y_cell = river_min_y_cell + self.village.river_width_cells
+        river_min_y_cell = defines.RIVER_TOP_CELL
+        river_max_y_cell = defines.RIVER_BOTTOM_CELL
 
         # If the y of the building overlaps with the river, then return true
         if (selected_y < river_max_y_cell and
@@ -208,8 +208,8 @@ class BuildingPanel:
         Returns true if the building is along the river i.e. the building is touching the river.
         """
 
-        river_min_y_cell = self.village.river_top_cell
-        river_max_y_cell = river_min_y_cell + self.village.river_width_cells
+        river_min_y_cell = defines.RIVER_TOP_CELL
+        river_max_y_cell = defines.RIVER_BOTTOM_CELL
 
         # If the building is touching the river, then return true
         if (selected_y == river_max_y_cell or
@@ -234,7 +234,7 @@ class BuildingPanel:
         temp_surface = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
 
         # Draw the background
-        pygame.draw.rect(temp_surface, (0, 100, 0, 200), (0, 0, self.width, self.height))
+        pygame.draw.rect(temp_surface, (50, 50, 50, 200), (0, 0, self.width, self.height))
 
         # Draw each building, one after the other vertically
         
