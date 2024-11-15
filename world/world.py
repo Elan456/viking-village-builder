@@ -16,6 +16,8 @@ class World:
         self.village = village 
         self.ripples = []
         self.floating_objects = []
+        self.trees = []
+        self.trees.append(Tree(100, 100))
 
         # Add initial floaters
         for _ in range(10):
@@ -93,3 +95,6 @@ class World:
         self.update_floating_objects()
         self.update_ripples()
         self.draw_river(surface)
+
+        for tree in self.trees:
+            tree.draw(surface)
