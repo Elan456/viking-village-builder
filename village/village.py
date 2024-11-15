@@ -11,6 +11,7 @@ from villagers.navmesh import NavMesh
 from game.initial_village import add_initial_buildings
 from village.wall import Wall
 from buildings.construction import Construction, BuilderManager
+from village.world import World 
 
 class Village:
     """
@@ -24,8 +25,7 @@ class Village:
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
-        self.river_top_cell = 0
-        self.river_width_cells = 3
+        self.world = World()
 
         self.width_cell = defines.WORLD_WIDTH
         self.height_cell = defines.WORLD_HEIGHT
@@ -122,20 +122,8 @@ class Village:
         self.wall.update()
 
 
-
-    def draw_background(self, surface: pygame.Surface):
-        pygame.draw.rect(surface, defines.GRASS_GREEN, (0 - camera_x, 0 - camera_y, DISPLAY_WIDTH, DISPLAY_HEIGHT))
-        # river
-        pygame.draw.rect(surface, (0, 0, 255), (0, self.river_top_cell * GRID_SIZE - defines.camera_y, DISPLAY_WIDTH, self.river_width_cells * GRID_SIZE))
-
-        # Draw a grid
-        # for x in range(0, defines.WORLD_WIDTH * GRID_SIZE + GRID_SIZE, GRID_SIZE):
-        #     pygame.draw.line(surface, (0, 0, 0), (x - defines.camera_x, 0 - defines.camera_y), (x - defines.camera_x, defines.WORLD_HEIGHT * GRID_SIZE - defines.camera_y))
-        # for y in range(0, defines.WORLD_HEIGHT * GRID_SIZE + GRID_SIZE, GRID_SIZE):
-        #     pygame.draw.line(surface, (0, 0, 0), (0 - defines.camera_x, y - defines.camera_y), (defines.WORLD_WIDTH * GRID_SIZE - defines.camera_x, y - defines.camera_y))
-    
     def draw(self, surface: pygame.Surface):
-        self.draw_background(surface)
+        self.world.draw_background(surface, self.turn)
         self.wall.draw(surface)
         for building in self.buildings:
             building.draw(surface)
