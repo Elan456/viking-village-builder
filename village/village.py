@@ -123,7 +123,7 @@ class Village:
 
 
     def draw(self, surface: pygame.Surface):
-        self.world.draw_background(surface, self.turn)
+        self.world.draw(surface, self.turn)
         self.wall.draw(surface)
         for building in self.buildings:
             building.draw(surface)
