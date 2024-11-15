@@ -86,11 +86,15 @@ class NavMesh:
         """
 
         self.nodes = []
-        self.nodes_quadtree = QuadTree((0, 0, defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE))
+        self.nodes_quadtree = QuadTree((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
+                                         -defines.WORLD_HEIGHT * .25 * defines.GRID_SIZE,
+                                         defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE))
 
         # Adds some basic nodes to the navmesh
-        for x in range(0, defines.WORLD_WIDTH * defines.GRID_SIZE, defines.GRID_SIZE * 15):
-            for y in range(0, defines.WORLD_HEIGHT * defines.GRID_SIZE, defines.GRID_SIZE * 15):
+        for x in range(int(-defines.WORLD_WIDTH * defines.GRID_SIZE * .25),
+                        defines.WORLD_WIDTH * defines.GRID_SIZE, defines.GRID_SIZE * 15):
+            for y in range(int(-defines.WORLD_HEIGHT * defines.GRID_SIZE * .25),
+                            defines.WORLD_HEIGHT * defines.GRID_SIZE, defines.GRID_SIZE * 15):
                 new_node = Node(x, y)
                 self.nodes.append(new_node)
                 self.nodes_quadtree.add(new_node, (x, y))

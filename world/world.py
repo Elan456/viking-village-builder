@@ -17,13 +17,55 @@ class World:
         self.ripples = []
         self.floating_objects = []
         self.trees = []
-        self.trees.append(Tree(100, 100))
+        self.month = 0
 
         # Add initial floaters
+        self.spawn_floaters()
+
+        self.spawn_trees()
+
+    def on_new_turn(self):
+        # Reset the floaters to make the river look different each time
+        # This sells that a big chunk of time passed between turns 
+        self.floating_objects = []
+        self.spawn_floaters()
+        self.cull_trees()
+
+        for tree in self.trees:
+            tree.on_new_turn(self.month)
+        
+        # Re-sort the trees so that they are drawn in the correct order
+        # Because the trees move after they die
+        self.trees.sort(key=lambda tree: tree.y)
+
+    def on_wall_upgrade(self):
+        # Cut down trees that are now within the wall
+        self.cull_trees()
+
+    def spawn_floaters(self):
         for _ in range(10):
             f = Floater()
             f.x = random.uniform(-defines.DISPLAY_WIDTH, defines.DISPLAY_WIDTH)
             self.floating_objects.append(f)
+
+    def spawn_trees(self):
+        for _ in range(200):
+            t = Tree(self.village)
+            self.trees.append(t)
+
+        self.cull_trees()
+        # Z-order the trees so that they are drawn in the correct order
+        self.trees.sort(key=lambda tree: tree.y)
+
+    def cull_trees(self):
+        # Removes trees if they are within the wall
+        self.trees = [tree for tree in self.trees if not tree.check_within_wall()]
+
+    def get_random_mature_tree(self):
+        mature_trees = [tree for tree in self.trees if tree.age > 6 and tree.age < 7]
+        if len(mature_trees) == 0:
+            return None
+        return random.choice(mature_trees)
 
     def update_ripples(self):
         # Add a new ripple randomly
@@ -69,13 +111,13 @@ class World:
             floater.draw(surface)
 
     def draw_background(self, surface: pygame.Surface, turn: int):
-        month = turn % 12
+        self.month = turn % 12
         num_colors = len(defines.BACKGROUND_COLORS)
         transition_length = 12 // num_colors
 
-        base_index = month // transition_length    # e.g. month 1 --> 0, month 2 --> 0, month 5 --> 1, month 9 --> 2
+        base_index = self.month // transition_length    # e.g. month 1 --> 0, month 2 --> 0, month 5 --> 1, month 9 --> 2
         next_index = (base_index + 1) % num_colors
-        percent_progress_to_next = month / transition_length - base_index
+        percent_progress_to_next = self.month / transition_length - base_index
 
         base_color = defines.BACKGROUND_COLORS[base_index]
         next_color = defines.BACKGROUND_COLORS[next_index]
@@ -95,6 +137,5 @@ class World:
         self.update_floating_objects()
         self.update_ripples()
         self.draw_river(surface)
-
         for tree in self.trees:
             tree.draw(surface)

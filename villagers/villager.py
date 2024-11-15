@@ -166,9 +166,14 @@ class Villager(pygame.sprite.Sprite):
         for i in range(len(path) - 1):
             pygame.draw.line(surface, (255, 0, 0), (path[i].x - defines.camera_x, path[i].y - defines.camera_y), (path[i + 1].x - defines.camera_x, path[i + 1].y - defines.camera_y), 8)
 
+        # Draw an open red circle at the destination
+        if self.destination is not None:
+            pygame.draw.circle(surface, (255, 0, 0), (self.destination[0] - defines.camera_x, self.destination[1] - defines.camera_y), 20, 2)
+
+
     def draw(self, surface):
         surface.blit(self.get_image(), (self.x - defines.camera_x, self.y - defines.camera_y))
-        # self.draw_path(surface)
+        self.draw_path(surface)
 
         if self.lost:
             # Draw a red X over the villager
@@ -218,7 +223,8 @@ class Villager(pygame.sprite.Sprite):
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
-                return defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE
+                tree = self.village.world.get_random_mature_tree()
+                return tree.x + 32, tree.y + 112
             
         elif self.name == "blacksmith":
             self.current_destination_index %= 3

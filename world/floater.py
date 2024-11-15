@@ -19,7 +19,7 @@ class Floater:
         self.x = -defines.DISPLAY_WIDTH + random.uniform(-defines.GRID_SIZE, defines.GRID_SIZE)
         self.speed = random.uniform(.8, 1.3)
         self.age = 0
-        self.alpha = 0
+        self.alpha = 128
         image_name = random.choice(self.IMAGE_PATHS)
         
         # Create a scaled image if it doesn't exist

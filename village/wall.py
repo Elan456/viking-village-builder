@@ -136,6 +136,7 @@ class Wall(pygame.sprite.Sprite):
             self.upgrade_cost[item] = int(self.upgrade_cost[item])
 
         self.village.navmesh.generate_navmesh()
+        self.village.world.on_wall_upgrade()
 
     def can_build(self, x, y, width, height):
         """

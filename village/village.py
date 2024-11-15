@@ -25,8 +25,6 @@ class Village:
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
-        self.world = World(self)
-
         self.width_cell = defines.WORLD_WIDTH
         self.height_cell = defines.WORLD_HEIGHT
 
@@ -40,10 +38,22 @@ class Village:
         self.building_demolish_queue = []
 
         self.wall = Wall(self)
+        self.world = World(self)
 
         self.builder_manager = BuilderManager(self)
 
         add_initial_buildings(self)
+
+        self.event_handler.register_event(pygame.KEYDOWN, pygame.K_c, self.cheat_resources)
+
+    def cheat_resources(self):
+        """
+        Adds a lot of resources to the village
+        """
+        self.resources["food"] += 1000
+        self.resources["wood"] += 1000
+        self.resources["ore"] += 1000
+        self.resources["people"] += 1000
 
     
     def calculate_turn_change_resources(self) -> dict:
@@ -88,6 +98,8 @@ class Village:
         self.builder_manager.on_new_turn()
 
         self.random_events.on_new_turn()
+
+        self.world.on_new_turn()
 
     def construct_building(self, building: Building):
         """

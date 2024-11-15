@@ -24,8 +24,10 @@ print(f"Aspect ratio: {DISPLAY_WIDTH / DISPLAY_HEIGHT}")
 GRID_SIZE = int(100 * SCALE * .3)
 
 # The world size for building in cells
-WORLD_WIDTH = 50
-WORLD_HEIGHT = 50
+WORLD_WIDTH = 60
+WORLD_HEIGHT = 60
+
+print("Full world:", WORLD_WIDTH * GRID_SIZE, WORLD_HEIGHT * GRID_SIZE)
 
 camera_x = 0
 camera_y = 0

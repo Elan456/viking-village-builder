@@ -10,12 +10,19 @@ class EventHandler:
     """
     def __init__(self) -> None:
         self.mouse_click_funcs = []
+        self.event_funcs = []  # event to function mapping
 
     def register_mouse_click(self, func):
         """
         When main mouse clicks, call this function
         """
         self.mouse_click_funcs.append(func)
+
+    def register_event(self, event_type, event_key, func):
+        """
+        Register a function to be called when a certain event occurs
+        """
+        self.event_funcs.append((event_type, event_key, func))
 
     def handle(self, event):
         if event.type == pygame.QUIT:
@@ -39,6 +46,11 @@ class EventHandler:
         if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
             for func in self.mouse_click_funcs:
                 func(event)
+
+        # Event functions
+        for event_type, event_key, func in self.event_funcs:
+            if event.type == event_type and event.key == event_key:
+                func()
 
         return event
     
@@ -71,6 +83,17 @@ class EventHandler:
             defines.camera_y -= CAMERA_SPEED * frame_rate_speed_scale
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             defines.camera_y += CAMERA_SPEED * frame_rate_speed_scale
+
+        # Enforce camera bounds
+        if defines.camera_x < defines.WORLD_WIDTH * -defines.GRID_SIZE * .25 - 100:
+            defines.camera_x = defines.WORLD_WIDTH * -defines.GRID_SIZE * .25 - 100
+        if defines.camera_y < defines.WORLD_HEIGHT * -defines.GRID_SIZE * .25 - 100:
+            defines.camera_y = defines.WORLD_HEIGHT * -defines.GRID_SIZE * .25 - 100
+
+        if defines.camera_x > defines.WORLD_WIDTH * defines.GRID_SIZE - defines.DISPLAY_WIDTH + 100:
+            defines.camera_x = defines.WORLD_WIDTH * defines.GRID_SIZE - defines.DISPLAY_WIDTH + 100
+        if defines.camera_y > defines.WORLD_HEIGHT * defines.GRID_SIZE - defines.DISPLAY_HEIGHT + 100:
+            defines.camera_y = defines.WORLD_HEIGHT * defines.GRID_SIZE - defines.DISPLAY_HEIGHT + 100
 
     def camera_mouse_pan(self):
         x, y = pygame.mouse.get_rel()
