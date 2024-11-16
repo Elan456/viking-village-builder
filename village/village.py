@@ -12,6 +12,7 @@ from game.initial_village import add_initial_buildings
 from village.wall import Wall
 from buildings.construction import Construction, BuilderManager
 from world.world import World 
+from villagers.dirt_path import DirtPath
 
 class Village:
     """
@@ -32,12 +33,12 @@ class Village:
         self.main_panel = MainPanel(self)
         self.random_events = RandomEventHandler(self)
         self.active_effects: List[Effect] = []  # Effects which are currently active
+        self.wall = Wall(self)
+        self.dirt_path = DirtPath(self)
 
         self.navmesh = NavMesh(self)
 
         self.building_demolish_queue = []
-
-        self.wall = Wall(self)
         self.world = World(self)
 
         self.builder_manager = BuilderManager(self)
@@ -150,6 +151,7 @@ class Village:
 
     def draw(self, surface: pygame.Surface):
         self.world.draw(surface, self.turn)
+        # self.dirt_path.draw(surface)
         self.wall.draw(surface)
         for building in self.buildings:
             building.draw(surface)

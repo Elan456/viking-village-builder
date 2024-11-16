@@ -144,6 +144,8 @@ class NavMesh:
             self.nodes.remove(node)
             self.nodes_quadtree.delete(node)
 
+        self.village.dirt_path.on_navmesh_change({node: node.neighbors for node in self.nodes})
+
     def find_path_a_star(self, start_pnt, end_pnt):
         """
         Finds a path from start to end using the A* algorithm

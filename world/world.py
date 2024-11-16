@@ -131,6 +131,17 @@ class World:
 
         pygame.draw.rect(surface, color, (0, 0, defines.DISPLAY_WIDTH, defines.DISPLAY_HEIGHT))
 
+    def draw_grid(self, surface: pygame.Surface):
+        min_x = self.village.wall.x 
+        min_y = self.village.wall.y
+        max_x = self.village.wall.x + self.village.wall.width * defines.GRID_SIZE 
+        max_y = self.village.wall.y + self.village.wall.height * defines.GRID_SIZE 
+
+        for x in range(min_x, max_x, defines.GRID_SIZE):
+            pygame.draw.line(surface, (100, 100, 100), (x - defines.camera_x, min_y - defines.camera_y), (x - defines.camera_x, max_y - defines.camera_y))
+        for y in range(min_y, max_y + defines.GRID_SIZE, defines.GRID_SIZE):
+            pygame.draw.line(surface, (100, 100, 100), (min_x - defines.camera_x, y - defines.camera_y), (max_x - defines.camera_x, y - defines.camera_y))
+
     def draw(self, surface: pygame.Surface, turn):
         self.draw_background(surface, turn)
 

@@ -223,6 +223,10 @@ class BuildingPanel:
         # Draw onto the main surface, a green or red outline of where the building will be placed
         if self.selected_building is not None:
 
+            self.village.world.draw_grid(surface)
+            for building in self.village.buildings:
+                building.draw_outline(surface)
+
             color = (0, 255, 0) if self.selected_can_be_placed else (255, 0, 0)
 
             # Draw the building

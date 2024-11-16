@@ -4,6 +4,7 @@ from villagers.villager import Villager
 from villagers.builder import Builder
 from buildings.building_info import BldInfo
 from events.announcements import announcement_handler
+from config.defines import GRID_SIZE
 
 
 class Building(pygame.sprite.Sprite):
@@ -42,12 +43,21 @@ class Building(pygame.sprite.Sprite):
         self.disabled = False
         self.being_demolished = False
 
+    def draw_outline(self, surface: pygame.Surface):
+        """
+        Draw a black outline around the building to make it easier when placing new buildings
+        """
+        pygame.draw.rect(surface, (0, 0, 0), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 1)
+
     def draw(self, surface: pygame.Surface):
         """
         Draws the building on the screen.
 
         :param surface: The surface to draw the building on
         """
+        # Draw a brown path on the ground around the building
+        # pygame.draw.rect(surface, (227, 186, 116), (self.x - defines.camera_x - GRID_SIZE, self.y - defines.camera_y - GRID_SIZE, self.rect.width + GRID_SIZE * 2, self.rect.height + GRID_SIZE * 2), GRID_SIZE)
+
         # print(camera_x, camera_y)
         if not self.being_demolished:
             surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
