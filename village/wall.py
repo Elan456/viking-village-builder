@@ -57,9 +57,9 @@ class Wall(pygame.sprite.Sprite):
         for i, (resource, amount) in enumerate(self.upgrade_cost.items()):
             icon = get_icon(resource)
             icon = pygame.transform.scale(icon, (20, 20))
-            surface.blit(icon, (self.upgrade_button.x + self.upgrade_button.width + i * 80, self.upgrade_button.y + 5))
+            surface.blit(icon, (self.upgrade_button.x + self.upgrade_button.width + i * 100, self.upgrade_button.y + 5))
             text = self.upgrade_button_font.render(str(amount), True, (0, 0, 0))
-            surface.blit(text, (self.upgrade_button.x + self.upgrade_button.width + 20 + i * 80, self.upgrade_button.y + 5))
+            surface.blit(text, (self.upgrade_button.x + self.upgrade_button.width + 20 + i * 100, self.upgrade_button.y + 5))
 
     def update(self):
         """

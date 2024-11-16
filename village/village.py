@@ -128,6 +128,15 @@ class Village:
         # Update the Villager's navmesh
         self.navmesh.generate_navmesh()
 
+    def remove_building(self, building: Building):
+        """
+        Removes a building from the village
+        """
+        self.buildings.remove(building)
+
+        # Update the Villager's navmesh
+        self.navmesh.generate_navmesh()
+
     def update(self):
         mouse_pos = pygame.mouse.get_pos()
 

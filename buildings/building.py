@@ -3,6 +3,7 @@ from config import defines
 from villagers.villager import Villager
 from villagers.builder import Builder
 from buildings.building_info import BldInfo
+from events.announcements import announcement_handler
 
 class Building(pygame.sprite.Sprite):
     """
@@ -38,6 +39,7 @@ class Building(pygame.sprite.Sprite):
 
         self.my_villager = Villager(self) if self.villager_name != "builder" else Builder(self)
         self.disabled = False
+        self.being_demolished = False
 
     def draw(self, surface: pygame.Surface):
         """
@@ -46,7 +48,8 @@ class Building(pygame.sprite.Sprite):
         :param surface: The surface to draw the building on
         """
         # print(camera_x, camera_y)
-        surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
+        if not self.being_demolished:
+            surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
 
         # Draw a grey rectangle if the building is disabled
         if self.disabled:
@@ -100,8 +103,16 @@ class Building(pygame.sprite.Sprite):
         """
         Adds this building to the demolish queue
         """
-        if self not in self.village.building_demolish_queue: 
-            self.village.building_demolish_queue.append(self)
+        if not self.being_demolished:
+            self.being_demolished = True
+            self.village.builder_manager.start_demolition(self)
+        else:
+            # Cancel the demolition
+            self.being_demolished = False
+            self.village.builder_manager.cancel(self)
+            announcement_handler.add_announcement("Demolition cancelled")
+            
+
 
     def get_cell_width(self):
         return self.rect.width // defines.GRID_SIZE

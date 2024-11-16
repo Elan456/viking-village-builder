@@ -10,10 +10,11 @@ class Construction:
     """
     Class for keeping track of a building's construction progress.
     """
-    def __init__(self, building):
+    def __init__(self, building, demolition=False):
         self.building = building
         self.turns_left = BldInfo.get_construction_time(building.name)
         self.is_being_worked_on = False
+        self.demolition = demolition
 
         self.font = pygame.font.Font(FONT_PATH, 30)
 
@@ -27,6 +28,9 @@ class Construction:
         construction_surface.blit(self.building.image, (0, 0))
         construction_surface.fill((255, 255, 255, 128), None, pygame.BLEND_RGBA_MULT)
 
+        if self.demolition:
+            construction_surface.fill((255, 0, 0, 128), None, pygame.BLEND_RGBA_MULT)
+
         # Draw the construction progress (just the number)
         text = self.font.render(str(self.turns_left), True, (0, 0, 0))
         text_rect = text.get_rect(center=(self.building.rect.width // 2, self.building.rect.height // 2))
@@ -34,7 +38,10 @@ class Construction:
 
         # Draw brown rectangle around the building if it's being worked on
         if self.is_being_worked_on:
-            pygame.draw.rect(construction_surface, (150, 75, 0), (0, 0, self.building.rect.width, self.building.rect.height), 5)
+            if not self.demolition:
+                pygame.draw.rect(construction_surface, (150, 75, 0), (0, 0, self.building.rect.width, self.building.rect.height), 5)
+            else:
+                pygame.draw.rect(construction_surface, (255, 0, 0), (0, 0, self.building.rect.width, self.building.rect.height), 5)
 
         # Blit the construction surface to the main surface
         surface.blit(construction_surface, (self.building.x - defines.camera_x, self.building.y - defines.camera_y))
@@ -70,6 +77,28 @@ class BuilderManager:
         self.construction_queue.append(Construction(building))
         self.handle_assignments()
 
+    def start_demolition(self, building):
+        """
+        Adds a building to the construction queue
+        """
+        self.construction_queue.append(Construction(building, demolition=True))
+        self.handle_assignments()
+
+    def cancel(self, building):
+        """
+        Cancels the construction job of a building
+        """
+        for construction in self.construction_queue:
+            if construction.building == building:
+                self.construction_queue.remove(construction)
+                self.handle_assignments()
+                # Unassign the builder
+                for building in self.village.buildings:
+                    if building.villager_name == "builder" and building.my_villager.construction_target == construction:
+                        building.my_villager.construction_target = None
+                        break
+                break
+
     def is_builder_assigned(self, builders, construction: Construction):
         """
         Returns if the builder is already assigned to the construction job
@@ -84,6 +113,10 @@ class BuilderManager:
         for building in self.village.buildings:
             if building.villager_name == "builder":
                 current_builders.append(building.my_villager)
+
+        for builder in current_builders:
+            if not hasattr(builder, "construction_target"):
+                builder.construction_target = None
 
         # Ensure that none of the builders are assigned to a construction job that is already finished
         for builder in current_builders:
@@ -114,7 +147,13 @@ class BuilderManager:
             construction.on_new_turn()
 
             if construction.is_finished():
-                self.village.add_building(construction.building)
+                if construction.demolition:
+                    self.village.remove_building(construction.building)
+                    # Reinburse the construction resources / 2
+                    for item in construction.building.cost.keys():
+                        self.village.resources[item] += construction.building.cost[item] // 2
+                else:
+                    self.village.add_building(construction.building)
                 self.handle_assignments()  # Reassign builders
 
         # Remove all finished constructions
