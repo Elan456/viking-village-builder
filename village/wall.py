@@ -19,7 +19,7 @@ class Wall(pygame.sprite.Sprite):
 
         # All defined in cells 
         self.width = 20
-        self.height = 20
+        self.height = 16
         self.x = 0
         self.y = 0
 
@@ -39,9 +39,11 @@ class Wall(pygame.sprite.Sprite):
                                      180, 30, "Upgrade Wall", (100, 100, 100), (0, 0, 0), self.upgrade_button_font, self.try_upgrade)
         
         self.upgrade_cost = {
-            "wood": 100,
-            "ore": 25
+            "wood": 150,
+            "ore": 100
         }
+
+        self.wall_cost_multiplier = 3
 
     def draw(self, surface: pygame.Surface):
         """
@@ -132,7 +134,7 @@ class Wall(pygame.sprite.Sprite):
 
         for item in self.upgrade_cost.keys():
             self.village.resources[item] -= self.upgrade_cost[item]
-            self.upgrade_cost[item] *= 1.5
+            self.upgrade_cost[item] *= self.wall_cost_multiplier
             self.upgrade_cost[item] = int(self.upgrade_cost[item])
 
         self.village.navmesh.generate_navmesh()
