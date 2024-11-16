@@ -23,6 +23,7 @@ class World:
         self.spawn_floaters()
 
         self.spawn_trees()
+        self.background_color = (0, 0, 0)
 
     def on_new_turn(self):
         # Reset the floaters to make the river look different each time
@@ -127,6 +128,8 @@ class World:
             int(base_color[1] + (next_color[1] - base_color[1]) * percent_progress_to_next),
             int(base_color[2] + (next_color[2] - base_color[2]) * percent_progress_to_next)
         )
+
+        self.background_color = color
 
 
         pygame.draw.rect(surface, color, (0, 0, defines.DISPLAY_WIDTH, defines.DISPLAY_HEIGHT))
