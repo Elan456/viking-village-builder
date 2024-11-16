@@ -1,7 +1,24 @@
 import json 
+import pygame 
+from config.defines import GRID_SIZE
+
+def load_images():
+    """
+    Load each image from it's path and then scale it to the correct size based on the json file
+    """
+     
+    images = {}
+    with open("buildings/building_defs.json") as f:
+        data = json.load(f)
+        for building in data:
+            image = pygame.image.load(f"assets/buildings/{building}.png")
+            image = pygame.transform.scale(image, (GRID_SIZE * data[building]["width"], GRID_SIZE * data[building]["height"]))
+            images[building] = image
+    return images
 
 class BldInfo:
     info = json.load(open("buildings/building_defs.json"))
+    images = load_images()
 
     @staticmethod
     def get_all_keys():

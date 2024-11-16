@@ -5,6 +5,7 @@ from villagers.builder import Builder
 from buildings.building_info import BldInfo
 from events.announcements import announcement_handler
 
+
 class Building(pygame.sprite.Sprite):
     """
     Handles the building's rendering after it has been placed on the map.
@@ -25,7 +26,7 @@ class Building(pygame.sprite.Sprite):
         self.y_cell = y_cell
         self.x = x_cell * defines.GRID_SIZE
         self.y = y_cell * defines.GRID_SIZE
-        self.image = pygame.image.load(BldInfo.get_image_path(name))
+        self.image = BldInfo.images[name]
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 

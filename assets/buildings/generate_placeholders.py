@@ -35,10 +35,10 @@ def generate_placeholder(grid_width, grid_height, text, output_file):
 
 # Generate each building
 
-all_buildings = BldInfo.get_all_keys()
-for building in all_buildings:
-    width = BldInfo.get_width(building)
-    height = BldInfo.get_height(building)
-    name = BldInfo.get_name(building)
-    generate_placeholder(width, height, name, f"{building}.png")
+# all_buildings = BldInfo.get_all_keys()
+# for building in all_buildings:
+#     width = BldInfo.get_width(building)
+#     height = BldInfo.get_height(building)
+#     name = BldInfo.get_name(building)
+#     generate_placeholder(width, height, name, f"{building}.png")
 

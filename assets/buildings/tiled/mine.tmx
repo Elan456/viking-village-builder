@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="15" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Animation_Campfire.tsx"/>
+ <tileset firstgid="33" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Objects_Props.tsx"/>
+ <tileset firstgid="52" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Tileset_RockSlope.tsx"/>
+ <tileset firstgid="4148" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Atlas_Buildings.tsx"/>
+ <tileset firstgid="4590" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Atlas_Props.tsx"/>
+ <tileset firstgid="4770" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Atlas_Rocks.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="15" height="10">
+  <data encoding="csv">
+4770,4771,0,0,0,0,0,0,0,0,0,0,0,4592,4593,
+4781,4782,0,0,4149,4150,4151,4152,4153,4154,4155,4592,4593,4610,4611,
+0,0,4770,4771,4162,4163,4164,4165,4166,4167,4168,4610,4611,0,0,
+0,0,4781,4782,4175,4176,4177,4178,4179,4180,4181,0,0,4592,4593,
+0,0,0,0,4188,4189,4190,4191,4192,4193,4194,4592,4593,4610,4611,
+0,0,0,0,4201,4202,4203,4204,4205,4206,4207,4610,4611,0,0,
+0,0,0,0,4214,4215,4216,4217,4218,4219,4220,0,0,4592,4593,
+0,0,0,0,0,0,0,0,0,0,0,0,0,4610,4611,
+0,0,0,0,0,0,0,0,0,0,0,0,0,4651,4652,
+0,0,0,0,0,0,0,0,4214,0,0,0,0,4669,4670
+</data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="15" height="10">
+  <data encoding="csv">
+0,0,0,4592,4593,0,0,0,0,4770,4771,0,0,0,0,
+0,4659,4660,4610,4611,0,0,0,0,4781,4782,0,0,0,4657,
+0,4677,4678,0,0,0,0,0,0,0,0,0,0,0,4675,
+0,4695,4696,0,0,0,0,0,0,0,0,0,0,0,0,
+0,4713,4714,0,0,0,0,0,0,0,0,0,0,4657,0,
+0,4770,4771,0,0,0,0,0,0,0,0,0,0,4675,0,
+0,4781,4782,0,0,0,0,0,0,0,0,0,0,0,0,
+0,4592,4593,4770,4771,0,0,0,0,0,4770,4771,0,0,0,
+0,4610,4611,4781,4782,0,0,0,0,0,4781,4782,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+ <tileset firstgid="1" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Atlas_Buildings.tsx"/>
+ <tileset firstgid="443" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Atlas_Props.tsx"/>
+ <tileset firstgid="623" source="../../../../../Downloads/The Fan-tasy Tileset (Free) 1.4.0/The Fan-tasy Tileset (Free)/Tiled/Tilesets/Atlas_Trees_Bushes.tsx"/>
+ <layer id="1" name="Tile Layer 1" width="10" height="10">
+  <data encoding="csv">
+93,94,95,96,97,98,99,100,101,102,
+106,107,108,109,110,111,112,113,114,115,
+119,120,121,122,123,124,125,126,127,128,
+132,133,134,135,136,137,138,139,140,141,
+145,146,147,148,149,150,151,152,153,154,
+497,498,499,161,162,163,164,165,166,167,
+515,516,517,174,175,176,177,178,179,180,
+533,534,535,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="2" name="Tile Layer 2" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+569,570,571,0,0,0,0,0,0,0,
+587,588,589,0,0,0,0,0,0,0,
+605,606,607,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="3" name="Tile Layer 3" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,
+0,407,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

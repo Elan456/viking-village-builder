@@ -18,8 +18,8 @@ class Wall(pygame.sprite.Sprite):
         self.village = village
 
         # All defined in cells 
-        self.width = 20
-        self.height = 16
+        self.width = 40
+        self.height = 32
         self.x = 0
         self.y = 0
 

@@ -3,7 +3,6 @@ import pygame
 from village.village import Village
 from events.event_handler import EventHandler
 from config.defines import *
-import assets.buildings.generate_placeholders
 from events.announcements import announcement_handler
 
 pygame.init()
