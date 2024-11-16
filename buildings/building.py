@@ -56,10 +56,16 @@ class Building(pygame.sprite.Sprite):
         :param surface: The surface to draw the building on
         """
         # Get the background color from the world and make it a bit darker for the pad of the building
-        background_color = self.village.world.get_background_color(self.x_cell, self.y_cell)
-        darker_color = tuple([max(0, color - 50) for color in background_color])
+        background_color = self.village.world.background_color
+        darker_color = tuple([max(0, color - 10) for color in background_color])
 
-        pygame.draw.rect(surface, darker_color, (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height))
+        # Get the bound for the ground pad but truncate based if the wall is really close
+        x_min = max(self.village.wall.x, self.x - defines.GRID_SIZE)
+        y_min = max(self.village.wall.y, self.y - defines.GRID_SIZE)
+        x_max = min(self.village.wall.x + self.village.wall.width * GRID_SIZE, self.x + self.rect.width + defines.GRID_SIZE)
+        y_max = min(self.village.wall.y + self.village.wall.height * GRID_SIZE, self.y + self.rect.height + defines.GRID_SIZE)
+
+        pygame.draw.rect(surface, darker_color, (x_min - defines.camera_x, y_min - defines.camera_y, x_max - x_min, y_max - y_min))
 
         # print(camera_x, camera_y)
         if not self.being_demolished:
