@@ -62,9 +62,12 @@ class Village:
         Goes through each building and calculates the resources it produces and consumes
         """
         change_in_resources = {}
+        available_resources = self.resources.copy()
         for building in self.buildings:
-            for resource, amount in building.get_change_in_resources(self.resources).items():
+            change = building.get_change_in_resources(available_resources)
+            for resource, amount in change.items():
                 change_in_resources[resource] = change_in_resources.get(resource, 0) + amount
+                available_resources[resource] += amount
 
         return change_in_resources
         
