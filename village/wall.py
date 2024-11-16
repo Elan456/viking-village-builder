@@ -19,7 +19,7 @@ class Wall(pygame.sprite.Sprite):
 
         # All defined in cells 
         self.width = 40
-        self.height = 32
+        self.height = 35
         self.x = 0
         self.y = 0
 

@@ -8,7 +8,7 @@ Spawns the initial village buildings
 
 def add_initial_buildings(village):
     origin_x = 0
-    origin_y = 7
+    origin_y = 10
 
     village.add_building(Building(village, origin_x, origin_y, "lumbermill"))
     # village.add_building(Building(village,
