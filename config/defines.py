@@ -40,3 +40,8 @@ FONT_PATH = "assets/fonts/Oldenburg-Regular.ttf"
 FONT = pygame.font.Font("assets/fonts/Oldenburg-Regular.ttf", 64)
 
 show_navmesh = False
+
+WIN_CONDITION = {
+    "warriors": 250,
+    "ships": 10,
+}
