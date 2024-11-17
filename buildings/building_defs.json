@@ -54,7 +54,8 @@
         },
         "production": {
             "weapons": 3
-        }
+        },
+        "boost_buildings": ["mine", "lumbermill"]
     },
     "shipyard": {
         "name": "Shipyard",
@@ -72,7 +73,8 @@
         },
         "production": {
             "ships": 0.1
-        }
+        },
+        "boost_buildings": ["mine", "lumbermill"]
     },
     "barracks": {
         "name": "Barracks",
@@ -90,7 +92,8 @@
         },
         "production": {
             "warriors": 2
-        }
+        },
+        "boost_buildings": ["blacksmith", "grainfield"]
     },
     "buildershut": {
         "name": "Builder's Hut",

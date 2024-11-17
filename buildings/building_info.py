@@ -63,3 +63,7 @@ class BldInfo:
     @staticmethod
     def get_villager_name(name):
         return BldInfo.get_info(name).get("villager_name", None)
+    
+    @staticmethod
+    def get_boost_buildings(name):
+        return BldInfo.get_info(name).get("boost_buildings", [])

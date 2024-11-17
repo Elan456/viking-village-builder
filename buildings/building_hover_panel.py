@@ -24,8 +24,8 @@ class BuildingHoverPanel:
         self.font = pygame.font.Font(FONT_PATH, 16)
         
 
-        self.panel_width = 260
-        self.panel_height = 110
+        self.panel_width = 340
+        self.panel_height = 120
         self.panel_box = pygame.Surface((self.panel_width, self.panel_height), pygame.SRCALPHA)
         self.panel_box.fill((0, 150, 255, 180))
 
@@ -78,7 +78,11 @@ class BuildingHoverPanel:
                                 bottom_text=f"{BldInfo.get_construction_time(building)} Turns")
 
         # Resource production
-        self.draw_resource_dict(surface, x + 100, y + 50, BldInfo.get_production(building))
+        if not in_shop:
+            production = self.real_building.get_boosted_production()
+        else:
+            production = BldInfo.get_production(building)
+        self.draw_resource_dict(surface, x + 100, y + 50, production)
 
         # Resource consumption
         if BldInfo.get_cost(building):
@@ -96,12 +100,12 @@ class BuildingHoverPanel:
         for i, resource in enumerate(cost.keys()):
             icon = get_icon(resource)
             surface.blit(icon, (x, y + i*20))
-            resource_text = self.font.render(f"{cost[resource]}", True, (0, 0, 0))
+            resource_text = self.font.render(f"{round(cost[resource], 2)}", True, (0, 0, 0))
             surface.blit(resource_text, (x + 24, y + i*20))
 
         if bottom_text:
             bottom_text = self.font.render(bottom_text, True, (0, 0, 0))
-            surface.blit(bottom_text, (x, y + 20 * len(cost.keys())))
+            surface.blit(bottom_text, (x, y + 22 * len(cost.keys())))
 
 
     def update(self):

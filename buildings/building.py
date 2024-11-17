@@ -42,6 +42,7 @@ class Building(pygame.sprite.Sprite):
         self.my_villager = Villager(self) if self.villager_name != "builder" else Builder(self)
         self.disabled = False
         self.being_demolished = False
+        self.boost = 1, []  # Boost multiplier and nearest boost buildings
 
     def draw_outline(self, surface: pygame.Surface):
         """
@@ -83,6 +84,12 @@ class Building(pygame.sprite.Sprite):
         """
         self.my_villager.update()
 
+    def get_boosted_production(self):
+        """
+        Returns the boosted production of the building
+        """
+        return {resource: amount * self.boost[0] for resource, amount in self.production.items()}
+
     def get_change_in_resources(self, available_resources):
         """
         Based on the available resources, calculate how the net change in resources will be next turn.
@@ -97,15 +104,16 @@ class Building(pygame.sprite.Sprite):
         
         change_in_resources = {}
         for resource in list(self.production.keys()) + list(self.cost.keys()):
-            change_in_resources[resource] = self.production.get(resource, 0) - self.cost.get(resource, 0)
+            produce = self.production.get(resource, 0) * self.boost[0]
+            change_in_resources[resource] = produce - self.cost.get(resource, 0)
 
         return change_in_resources
 
     def on_new_turn(self):
-        """
-        Called when a new turn occurs
-        """ 
-        pass 
+        pass
+
+    def on_new_building(self):
+        self.boost = self.calculate_boost()
 
     def disable(self):
         """
@@ -147,4 +155,54 @@ class Building(pygame.sprite.Sprite):
             raise NotImplementedError("Villager name not defined")
         
         return self.villager_name
+    
+    def calculate_boost(self):
+        return Building.calculate_boost_static(self.village, self.name, self.x_cell, self.y_cell)
+    
+    @staticmethod
+    def calculate_boost_static(village, name, x_cell, y_cell):
+        """
+        Calculate the boost multiplier for this building
+        Returns the boost multiplier and the nearest boost buildings (so lines can be drawn to them)
+
+        return: (boost_multiplier: float, nearest_boost_buildings: List[Building])
+        """
+
+        boost_buildings = BldInfo.get_boost_buildings(name)
+        if len(boost_buildings) == 0:
+            return 1, []
+
+        nearest_boost_buildings = []  # Each index corresponds to the index of the boost building in the boost_buildings list
+
+        # Find the nearest of each boost building
+        for boost_building in boost_buildings:
+            nearest_building = None
+            nearest_distance = float("inf")
+            for building in village.buildings:
+                if building.name == boost_building:
+                    # manhattan distance
+                    distance = abs(building.x_cell - x_cell) + abs(building.y_cell - y_cell)
+                    if distance < nearest_distance:
+                        nearest_distance = distance
+                        nearest_building = building
+
+            nearest_boost_buildings.append((nearest_building, nearest_distance))
+
+        # Calculate the boost multiplier
+        boost_multiplier = 1
+        max_individual_boost = 0.2  # Maximum boost from a single building
+        max_distance = 30
+        for building, distance in nearest_boost_buildings:
+            if building is not None and distance <= max_distance:
+                proximity_factor = max(0, (max_distance - distance) / max_distance)
+                individual_boost = proximity_factor * max_individual_boost
+                boost_multiplier += individual_boost
+
+        # Cap the total boost multiplier at 2x
+        boost_multiplier = min(boost_multiplier, 2.0)
+
+        # Extract the list of nearest boost buildings
+        nearest_buildings_list = [building for building, _ in nearest_boost_buildings if building is not None]
+
+        return boost_multiplier, nearest_buildings_list
 

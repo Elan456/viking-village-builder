@@ -39,8 +39,8 @@ class Wall(pygame.sprite.Sprite):
                                      180, 30, "Upgrade Wall", (100, 100, 100), (0, 0, 0), self.upgrade_button_font, self.try_upgrade)
         
         self.upgrade_cost = {
-            "wood": 150,
-            "ore": 100
+            "wood": 200,
+            "ore": 150
         }
 
         self.wall_cost_multiplier = 3
@@ -128,7 +128,7 @@ class Wall(pygame.sprite.Sprite):
         """
         Upgrades the wall to increase the size of the village
         """
-        self.width += 5
+        self.width += 8
         self.height += 5
         self.calculate_walls()
 
