@@ -3,7 +3,7 @@ import random
 
 from utils.button import Button 
 from config.defines import * 
-from events.random_event import RandomEvent, Effect, random_events
+from events.random_event import possible_events
 
 class RandomEventHandler:
     """
@@ -16,8 +16,10 @@ class RandomEventHandler:
 
     def __init__(self, village) -> None:
         
+        self.village = village
         self.showing_event = False 
         self.font = pygame.font.Font(None, 64)
+        self.active_events = []
 
 
     ####### 
@@ -26,14 +28,22 @@ class RandomEventHandler:
     def update(self):
         pass 
 
-    def display(self, surface):
-        pass 
-        # # In the top left corner of the screen, display all the current active effects
-        # for i, effect in enumerate(self.effects):
-        #     text = self.font.render(effect.name + " " + str(effect.duration) + " turns left", True, (0, 0, 0))
-        #     surface.blit(text, (10, 10 + i * 60))
+    def draw(self, surface):
+        for i, event in enumerate(self.active_events):
+            event.draw(surface, i)
 
     def on_new_turn(self):
+        # on new turn for each event
+        for event in self.active_events:
+            event.on_new_turn()
+
         # When a new turn occurs, there is a chance for a random event to occur
-        if random.random() < RANDOM_EVENT_CHANCE:
-            self.showing_event = True
+        if random.random() < 0.1:
+            event = random.choice(possible_events)(self.village)
+            self.active_events.append(event)
+
+
+        
+
+        # Remove events that have expired
+        self.active_events = [event for event in self.active_events if event.duration > 0]

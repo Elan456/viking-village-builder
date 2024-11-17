@@ -83,13 +83,6 @@ class Village:
         # Setting the production multipliers to 1 again
         # The random events can then change them 
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
-        
-        # Apply all active effects to get the new production multipliers
-        self.active_effects = [effect for effect in self.active_effects if effect.duration > 0]
-        for effect in self.active_effects:
-            effect.apply(self)
-            # Reduce the duration of all effects
-            effect.duration -= 1
 
         # Call the on_new_turn method of all buildings
         for building in self.buildings:
@@ -183,7 +176,7 @@ class Village:
         self.wall.upgrade_button.draw(surface)
         self.building_panel.draw(surface)
         self.main_panel.draw(surface)
-        self.random_events.display(surface)
+        self.random_events.draw(surface)
 
         for i in range(len(self.active_effects)):
             self.active_effects[i].draw(surface, i)
