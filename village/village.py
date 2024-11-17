@@ -141,10 +141,13 @@ class Village:
         """
         Removes a building from the village
         """
-        self.buildings.remove(building)
+        try:
+            self.buildings.remove(building)
 
-        # make sure it's removed from the construction queue
-        self.builder_manager.cancel(building)
+            # make sure it's removed from the construction queue
+            self.builder_manager.cancel(building)
+        except ValueError:
+            pass 
 
         # Update the Villager's navmesh
         self.navmesh.generate_navmesh()

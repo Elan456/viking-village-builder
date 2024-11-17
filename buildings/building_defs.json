@@ -40,8 +40,8 @@
     },
     "blacksmith": {
         "name": "Blacksmith",
-        "width": 8,
-        "height": 8,
+        "width": 7,
+        "height": 7,
         "villager_name": "blacksmith",
         "construction_time": 5,
         "construction": {
@@ -81,7 +81,7 @@
         "width": 6,
         "height": 6,
         "villager_name": "hersir",
-        "construction_time": 6,
+        "construction_time": 5,
         "construction": {
             "wood": 120,
             "ore": 60

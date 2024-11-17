@@ -5,6 +5,8 @@ from config.defines import FONT_PATH, GRID_SIZE
 from config import defines 
 from events.announcements import announcement_handler
 
+from buildings.building_info import BldInfo
+
 class RandomEvent:
     """
     A random event can happen every time the player starts a new turn.
@@ -144,7 +146,12 @@ class Blight(RandomEvent):
         super().on_new_turn()
     
     def get_change_in_resources(self, available_resources):
-        food_removal = min(30, available_resources["food"])
+        # Grab production from all grain fields
+        grain_production = 0 
+        for building in self.village.buildings:
+            grain_production += BldInfo.get_production(building.name).get("food", 0)
+
+        food_removal = min(grain_production + 30, available_resources["food"])
         return {"food": -food_removal}
     
 class Plague(RandomEvent):
@@ -159,7 +166,7 @@ class Plague(RandomEvent):
 
     def initial_effect(self):
         # Immediate population loss
-        initial_loss = int(min(self.village.resources["warriors"], 5))
+        initial_loss = int(min(self.village.resources["warriors"], random.randint(5, 25)))
         self.village.resources["warriors"] -= initial_loss
         announcement_handler.add_announcement(f"The plague has claimed {initial_loss} warriors!")
 
@@ -171,7 +178,8 @@ class Plague(RandomEvent):
     
     def on_new_turn(self):
         super().on_new_turn()
-        announcement_handler.add_announcement(f"The plague has claimed {self.removal} more warriors!")
+
+        # announcement_handler.add_announcement(f"The plague has claimed {self.removal} more warriors!")
 
     def draw(self, surface, i):
         super().draw(surface, i)
@@ -189,15 +197,24 @@ class TradeCaravan(RandomEvent):
         
 
     def initial_effect(self):
+        rewards = ["wood", "ore", "food"]
+
+        least = 0
+        least_amount = float("inf")
+        for i in range(len(rewards)):
+            has = self.village.resources[rewards[i]]
+            if has < least_amount:
+                least_amount = has
+                least = i 
+
         received_resources = {
-            "food": random.randint(10, 50),
-            "wood": random.randint(10, 50),
-            "ore": random.randint(10, 50)
+            rewards[least]: random.randint(30, 1000)
         }
+
         # Add resources to village
         for res, amount in received_resources.items():
             self.village.resources[res] += amount
             announcement_handler.add_announcement(f"You have received {amount} {res} from the trade caravan!")
 
 
-possible_events = [VillageFire, Blight, TradeCaravan, Plague]
+possible_events = [VillageFire, Blight, TradeCaravan, Plague, TradeCaravan]

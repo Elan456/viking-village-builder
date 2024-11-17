@@ -43,7 +43,7 @@ class Wall(pygame.sprite.Sprite):
             "ore": 150
         }
 
-        self.wall_cost_multiplier = 3
+        self.wall_cost_multiplier = 2.2
 
     def draw(self, surface: pygame.Surface):
         """
