@@ -25,7 +25,7 @@ class BuildingHoverPanel:
         
 
         self.panel_width = 340
-        self.panel_height = 120
+        self.panel_height = 140
         self.panel_box = pygame.Surface((self.panel_width, self.panel_height), pygame.SRCALPHA)
         self.panel_box.fill((0, 150, 255, 180))
 
@@ -69,12 +69,15 @@ class BuildingHoverPanel:
         name_text = self.font.render(BldInfo.get_name(building), True, (0, 0, 0))
         surface.blit(name_text, (x + 10, y + 10))
 
+        description_text = self.font.render(BldInfo.get_description(building), True, (0, 0, 0))
+        surface.blit(description_text, (x + 10, y + 30))
+
         # Column text
         columns_text = self.small_font.render("Build Cost | Production | Consumption", True, (0, 0, 0))
-        surface.blit(columns_text, (x + 10, y + 30))
+        surface.blit(columns_text, (x + 10, y + 50))
 
         # Construction cost
-        self.draw_resource_dict(surface, x + 5, y + 50, BldInfo.get_construction_cost(building),
+        self.draw_resource_dict(surface, x + 5, y + 70, BldInfo.get_construction_cost(building),
                                 bottom_text=f"{BldInfo.get_construction_time(building)} Turns")
 
         # Resource production
@@ -82,11 +85,11 @@ class BuildingHoverPanel:
             production = self.real_building.get_boosted_production()
         else:
             production = BldInfo.get_production(building)
-        self.draw_resource_dict(surface, x + 100, y + 50, production)
+        self.draw_resource_dict(surface, x + 100, y + 70, production)
 
         # Resource consumption
         if BldInfo.get_cost(building):
-            self.draw_resource_dict(surface, x + 200, y + 50, BldInfo.get_cost(building))
+            self.draw_resource_dict(surface, x + 200, y + 70, BldInfo.get_cost(building))
 
         
 

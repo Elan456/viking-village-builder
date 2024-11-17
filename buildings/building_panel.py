@@ -52,7 +52,7 @@ class BuildingPanel:
             image = pygame.image.load(BldInfo.get_image_path(building))
 
 
-            scale = 2*defines.GRID_SIZE / image.get_height()
+            scale = 3*defines.GRID_SIZE / image.get_height()
             image = pygame.transform.scale(image, (int(image.get_width() * scale), int(image.get_height() * scale)))
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
@@ -136,7 +136,7 @@ class BuildingPanel:
 
         # Check if the mouse is over a building
         for i, (building, image, highlighted_image, _) in enumerate(self.buildings):
-            if self.x < mouse_pos[0] < self.x + self.width and self.y + i * defines.GRID_SIZE * 3 < mouse_pos[1] < self.y + (i + 1) * defines.GRID_SIZE * 3:
+            if self.x < mouse_pos[0] < self.x + self.width and self.y + i * defines.GRID_SIZE * 4 < mouse_pos[1] < self.y + (i + 1) * defines.GRID_SIZE * 4:
                 self.hovered_building = i
                 break
         else:
@@ -251,12 +251,12 @@ class BuildingPanel:
             x = (self.width - building[1].get_width()) // 2
             # Check if hovered
             if self.hovered_building == i:
-                temp_surface.blit(building[2], (x, i * defines.GRID_SIZE * 3))
+                temp_surface.blit(building[2], (x, i * defines.GRID_SIZE * 4))
             else:
                 if not self.is_enough_resources(building[0]):
-                    temp_surface.blit(building[3], (x, i * defines.GRID_SIZE * 3))
+                    temp_surface.blit(building[3], (x, i * defines.GRID_SIZE * 4))
                 else:
-                    temp_surface.blit(building[1], (x, i * defines.GRID_SIZE * 3))
+                    temp_surface.blit(building[1], (x, i * defines.GRID_SIZE * 4))
 
         surface.blit(temp_surface, (self.x, self.y))
 
