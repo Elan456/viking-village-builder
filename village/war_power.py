@@ -63,7 +63,7 @@ class WarPower:
             surface.blit(WarPower.ship_image, (start_x - defines.camera_x + i * boat_spacing + sway, start_y - defines.camera_y))
 
         max_num_soldiers_width = int((self.village.wall.width * GRID_SIZE) / (WarPower.warrior_spacing) - 2)
-        max_num_soldiers_width = 25
+        max_num_soldiers_width = 50
 
         start_y = self.village.wall.y - GRID_SIZE * 5
 

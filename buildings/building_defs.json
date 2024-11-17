@@ -53,7 +53,7 @@
             "ore": 10
         },
         "production": {
-            "weapons": 3
+            "weapons": 1.5
         },
         "boost_buildings": ["mine", "lumbermill"]
     },
@@ -64,8 +64,8 @@
         "villager_name": "shipwright",
         "construction_time": 6,
         "construction": {
-            "wood": 30,
-            "ore": 20
+            "wood": 60,
+            "ore": 80
         },
         "cost": {
             "wood": 30,
@@ -91,7 +91,7 @@
             "food": 25
         },
         "production": {
-            "warriors": 2
+            "warriors": 1
         },
         "boost_buildings": ["blacksmith", "grainfield"]
     },

@@ -48,7 +48,7 @@ class Building(pygame.sprite.Sprite):
         """
         Draw a black outline around the building to make it easier when placing new buildings
         """
-        pygame.draw.rect(surface, (0, 0, 0), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 1)
+        pygame.draw.rect(surface, (0, 0, 0), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
 
     def draw(self, surface: pygame.Surface):
         """
@@ -190,7 +190,7 @@ class Building(pygame.sprite.Sprite):
 
         # Calculate the boost multiplier
         boost_multiplier = 1
-        max_individual_boost = 0.2  # Maximum boost from a single building
+        max_individual_boost = 0.4  # Maximum boost from a single building
         max_distance = 30
         for building, distance in nearest_boost_buildings:
             if building is not None and distance <= max_distance:
