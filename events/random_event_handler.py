@@ -38,7 +38,7 @@ class RandomEventHandler:
             event.on_new_turn()
 
         # When a new turn occurs, there is a chance for a random event to occur
-        if random.random() < 0.5:
+        if random.random() < 0.1:
             event = random.choice(possible_events)(self.village)
             # If this type of event is already active, don't add it again
             if any(isinstance(e, type(event)) for e in self.active_events):

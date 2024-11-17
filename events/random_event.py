@@ -51,7 +51,7 @@ class RandomEvent:
         """
         # Draw the name and duration left in the top left corner
         text = self.font.render(f"{self.name} - {self.duration} turns left", True, (255, 255, 255))
-        surface.blit(text, (10, 300 + i * 20))
+        surface.blit(text, (10, 300 + i * 40))
 
     def get_change_in_resources(self, available_resources):
         """
@@ -79,16 +79,25 @@ class VillageFire(RandomEvent):
 
 
     def __init__(self, village):
-        super().__init__(village, "Fire!", 2, "A fire has broken out in the village, some buildings are burning!")
+        burnable_buildings = village.buildings.copy()
 
-        burnable_buildings = [building for building in village.buildings if building.name != "buildershut"]
+        # Remove a single builder's hut (to prevent the player from losing the game)
+        for building in burnable_buildings:
+            if building.name == "buildershut":
+                burnable_buildings.remove(building)
 
         if len(burnable_buildings) == 0:
             self.duration = 0
             return
 
-        self.fire_buildings = random.sample(burnable_buildings, random.randint(1, min(3, len(burnable_buildings))))
+        self.fire_buildings = random.sample(burnable_buildings, random.randint(1, max(int(len(burnable_buildings) / 2), 1)))
+        if len(self.fire_buildings) == 0:
+            self.duration = 0
+            return
 
+        self.duration = int(len(self.fire_buildings) / 2 + 1)  # Save half the buildings
+
+        super().__init__(village, "Fire!", self.duration, "A fire has broken out in the village, some buildings are burning!")
         self.draw_tick = 0
 
     def can_activate(self):
@@ -106,7 +115,7 @@ class VillageFire(RandomEvent):
     def on_new_turn(self):
         super().on_new_turn()
 
-        if len(self.fire_buildings) > 0 and self.duration < 3:
+        if len(self.fire_buildings) > 0:
             building = self.fire_buildings.pop()
             self.village.remove_building(building)
 

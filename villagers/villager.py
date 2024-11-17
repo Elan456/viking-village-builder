@@ -224,6 +224,8 @@ class Villager(pygame.sprite.Sprite):
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
                 tree = self.village.world.get_random_mature_tree()
+                if tree is None:
+                    return self.get_random_building_edge(self.building)
                 return tree.x + 32, tree.y + 112
             
         elif self.name == "blacksmith":
