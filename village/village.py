@@ -13,6 +13,7 @@ from village.wall import Wall
 from buildings.construction import Construction, BuilderManager
 from world.world import World 
 from villagers.dirt_path import DirtPath
+from village.war_power import WarPower
 
 class Village:
     """
@@ -46,6 +47,8 @@ class Village:
         add_initial_buildings(self)
 
         self.event_handler.register_event(pygame.KEYDOWN, pygame.K_c, self.cheat_resources)
+
+        self.war_power = WarPower(self)
 
     def cheat_resources(self):
         """
@@ -154,10 +157,13 @@ class Village:
 
     def draw(self, surface: pygame.Surface):
         self.world.draw(surface, self.turn)
+        
         # self.dirt_path.draw(surface)
         self.wall.draw(surface)
         for building in self.buildings:
             building.draw(surface)
+
+        self.war_power.draw(surface)
 
         for building in self.buildings:
             building.my_villager.draw(surface)
