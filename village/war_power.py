@@ -66,6 +66,10 @@ class WarPower:
         max_num_soldiers_width = 50
 
         start_y = self.village.wall.y - GRID_SIZE * 5
+        # To center
+        army_width = max_num_soldiers_width * WarPower.warrior_spacing
+
+        start_x = self.village.wall.x + (self.village.wall.width * GRID_SIZE - army_width) / 2
 
         # Draw a box outline showing where the soldiers will be drawn
         pygame.draw.rect(surface, (100, 100, 100), (start_x - defines.camera_x, start_y - defines.camera_y + GRID_SIZE - GRID_SIZE * (250 // max_num_soldiers_width), max_num_soldiers_width * WarPower.warrior_spacing,
