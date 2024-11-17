@@ -62,6 +62,8 @@ class Building(pygame.sprite.Sprite):
         # Get the bound for the ground pad but truncate based if the wall is really close
         x_min = max(self.village.wall.x, self.x - defines.GRID_SIZE)
         y_min = max(self.village.wall.y, self.y - defines.GRID_SIZE)
+        # Also watch out for the river
+        y_min = max(defines.RIVER_BOTTOM_CELL * GRID_SIZE, y_min)
         x_max = min(self.village.wall.x + self.village.wall.width * GRID_SIZE, self.x + self.rect.width + defines.GRID_SIZE)
         y_max = min(self.village.wall.y + self.village.wall.height * GRID_SIZE, self.y + self.rect.height + defines.GRID_SIZE)
 
