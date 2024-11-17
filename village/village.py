@@ -66,6 +66,12 @@ class Village:
         """
         change_in_resources = {}
         available_resources = self.resources.copy()
+
+        # Calculate the change in resources from the random events first 
+        event_change = self.random_events.calculate_turn_change_resources(available_resources)
+        for resource, amount in event_change.items():
+            change_in_resources[resource] = change_in_resources.get(resource, 0) + amount
+
         for building in self.buildings:
             change = building.get_change_in_resources(available_resources)
             for resource, amount in change.items():

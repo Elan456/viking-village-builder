@@ -53,6 +53,14 @@ class RandomEvent:
         text = self.font.render(f"{self.name} - {self.duration} turns left", True, (255, 255, 255))
         surface.blit(text, (10, 300 + i * 20))
 
+    def get_change_in_resources(self, available_resources):
+        """
+        This method should return a dictionary with the change in resources that will occur next turn for this event.
+        Use this method to affect the resources of the village.
+        This is called on every new turn.
+        """
+        return {}
+
 
 
 class VillageFire(RandomEvent):
@@ -111,4 +119,76 @@ class VillageFire(RandomEvent):
         for building in self.fire_buildings:
             surface.blit(self.fire_images[self.draw_tick], (building.x - defines.camera_x + building.rect.width / 2 - VillageFire.width / 2, building.y - defines.camera_y + building.rect.height / 2 - VillageFire.height / 2))
 
-possible_events = [VillageFire]
+
+class Blight(RandomEvent):
+
+    def __init__(self, village):
+        super().__init__(village, "Blight", 3, "A blight has struck the village, crops are dying!")
+
+    def can_activate(self):
+        return self.village.resources["food"] > 0
+
+    def initial_effect(self):
+        self.village.resources["food"] = max(0, self.village.resources["food"] - 50)
+
+    def on_new_turn(self):
+        super().on_new_turn()
+    
+    def get_change_in_resources(self, available_resources):
+        food_removal = min(30, available_resources["food"])
+        return {"food": -food_removal}
+    
+class Plague(RandomEvent):
+
+    def __init__(self, village):
+        super().__init__(village, "Plague", 3, "A plague is spreading amongst your army!")
+        self.warrior_loss_per_turn = 1
+
+    def can_activate(self):
+        # Can activate if village has population and there isn't already a plague
+        return self.village.resources["warriors"] > 0 
+
+    def initial_effect(self):
+        # Immediate population loss
+        initial_loss = int(min(self.village.resources["warriors"], 5))
+        self.village.resources["warriors"] -= initial_loss
+        announcement_handler.add_announcement(f"The plague has claimed {initial_loss} warriors!")
+
+    def get_change_in_resources(self, available_resources):
+        # No resource changes
+        self.removal = int(min(self.warrior_loss_per_turn, available_resources["warriors"]))
+        
+        return {"warriors": -self.removal}
+    
+    def on_new_turn(self):
+        super().on_new_turn()
+        announcement_handler.add_announcement(f"The plague has claimed {self.removal} more warriors!")
+
+    def draw(self, surface, i):
+        super().draw(surface, i)
+        # Optionally draw plague effects
+    
+class TradeCaravan(RandomEvent):
+
+    def __init__(self, village):
+        super().__init__(village, "Trade Caravan", 1, "A trade caravan has passed by, leaving some goods!")
+
+    def can_activate(self):
+        # Can activate if not already active
+        no_trade = not any(isinstance(event, TradeCaravan) for event in self.village.random_events.active_events)
+        return no_trade
+        
+
+    def initial_effect(self):
+        received_resources = {
+            "food": random.randint(10, 50),
+            "wood": random.randint(10, 50),
+            "ore": random.randint(10, 50)
+        }
+        # Add resources to village
+        for res, amount in received_resources.items():
+            self.village.resources[res] += amount
+            announcement_handler.add_announcement(f"You have received {amount} {res} from the trade caravan!")
+
+
+possible_events = [VillageFire, Blight, TradeCaravan, Plague]
