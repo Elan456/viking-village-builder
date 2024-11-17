@@ -63,8 +63,13 @@ class WarPower:
             surface.blit(WarPower.ship_image, (start_x - defines.camera_x + i * boat_spacing + sway, start_y - defines.camera_y))
 
         max_num_soldiers_width = int((self.village.wall.width * GRID_SIZE) / (WarPower.warrior_spacing) - 2)
+        max_num_soldiers_width = 25
 
         start_y = self.village.wall.y - GRID_SIZE * 5
+
+        # Draw a box outline showing where the soldiers will be drawn
+        pygame.draw.rect(surface, (100, 100, 100), (start_x - defines.camera_x, start_y - defines.camera_y + GRID_SIZE - GRID_SIZE * (250 // max_num_soldiers_width), max_num_soldiers_width * WarPower.warrior_spacing,
+                                            GRID_SIZE * (250 // max_num_soldiers_width + 1)), 3)
 
         # Draw the soldiers in neat rows along the bottom of the river
         for i in range(num_soldiers):

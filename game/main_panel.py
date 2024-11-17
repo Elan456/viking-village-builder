@@ -78,7 +78,7 @@ class MainPanel:
                 win_condition = int(WIN_CONDITION[resource])
                 projected_value = int(final_resources[resource])
                 win_condition_text = self.resource_font.render(f"Projection: {projected_value}/{win_condition}", True, (0, 0, 0))
-                surface.blit(win_condition_text, (self.resource_box_x + 120, 0 + i*v_spacing))
+                surface.blit(win_condition_text, (self.resource_box_x + 180, 0 + i*v_spacing))
 
     def next_turn(self):
         self.village.on_new_turn()
