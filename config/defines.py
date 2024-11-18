@@ -1,4 +1,6 @@
 import pygame 
+import platform 
+
 pygame.init()
 
 SCALE = .8
@@ -12,11 +14,12 @@ WINTER_WHITE = (255, 255, 255)
 
 BACKGROUND_COLORS = [SPRING_GREEN, SUMMER_GREEN, FALL_GREEN, FALL_BROWN, WINTER_GREEN, WINTER_WHITE]
 
-DISPLAY_WIDTH = pygame.display.Info().current_w
-DISPLAY_HEIGHT = pygame.display.Info().current_h
-
-# DISPLAY_WIDTH = 800
-# DISPLAY_HEIGHT = 600
+if platform.system() == "Windows":
+    DISPLAY_WIDTH = pygame.display.Info().current_w
+    DISPLAY_HEIGHT = pygame.display.Info().current_h
+else:
+    DISPLAY_WIDTH = 1500
+    DISPLAY_HEIGHT = 900
 
 RIVER_TOP_CELL = 0
 RIVER_BOTTOM_CELL = 3
