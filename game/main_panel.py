@@ -5,6 +5,8 @@ The main panel lives on the bottom of the screen and gives the player a button t
 import pygame
 from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FONT, FONT_PATH, WIN_CONDITION
 from utils.button import Button
+from utils.style_button import StyleButton
+from assets.ui.button_mapping import GREEN_NEXT
 from .resources import get_icon
 from .resources import resource_to_icon
 
@@ -12,9 +14,7 @@ class MainPanel:
     def __init__(self, village) -> None:
         self.village = village
         self.next_turn_font = pygame.font.Font(FONT_PATH, 24)
-        self.next_turn_button = Button(0, DISPLAY_HEIGHT - 100, 200, 100, "Next Turn",
-                                        (0, 255, 0), (0, 0, 0),
-                                          self.next_turn_font, self.next_turn)
+        self.next_turn_button = StyleButton(50, DISPLAY_HEIGHT - 150, 100, 100, GREEN_NEXT, self.next_turn)
         
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
         self.resource_font = pygame.font.Font(FONT_PATH, 16)
@@ -33,10 +33,15 @@ class MainPanel:
     def draw(self, surface):
         # alpha
         surface.convert_alpha()
+
+        background = pygame.Surface((200, 200), pygame.SRCALPHA)
+        pygame.draw.rect(background, (255, 255, 255, 100), (0, 0, 200, 200))
+        surface.blit(background, (0, DISPLAY_HEIGHT - 200))
+
         self.next_turn_button.draw(surface)
 
         current_turn_text = self.turn_font.render(f"{100 - self.village.turn} turns left", True, (0, 0, 0))
-        surface.blit(current_turn_text, (10, DISPLAY_HEIGHT - current_turn_text.get_height()))
+        surface.blit(current_turn_text, (10, DISPLAY_HEIGHT - 190))
 
         
         surface.blit(self.resource_box, (self.resource_box_x, self.resource_box_y))

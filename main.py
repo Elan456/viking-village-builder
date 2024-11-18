@@ -37,5 +37,5 @@ class Game:
 
 
 if __name__ == "__main__":
-    StartMenu().start()
+    # StartMenu().start()
     Game().start()
