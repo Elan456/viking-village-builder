@@ -15,25 +15,24 @@ WINTER_WHITE = (255, 255, 255)
 BACKGROUND_COLORS = [SPRING_GREEN, SUMMER_GREEN, FALL_GREEN, FALL_BROWN, WINTER_GREEN, WINTER_WHITE]
 
 if platform.system() == "Windows":
+    import os
+    os.environ['SDL_VIDEO_WINDOW_POS'] = '%d,%d' % (0,0)
     DISPLAY_WIDTH = pygame.display.Info().current_w
     DISPLAY_HEIGHT = pygame.display.Info().current_h
+    FULL_SCREEN = False
 else:
     DISPLAY_WIDTH = 1500
     DISPLAY_HEIGHT = 900
+    FULL_SCREEN = False
 
 RIVER_TOP_CELL = 0
 RIVER_BOTTOM_CELL = 3
-
-print(DISPLAY_WIDTH, DISPLAY_HEIGHT)  
-print(f"Aspect ratio: {DISPLAY_WIDTH / DISPLAY_HEIGHT}")
 
 GRID_SIZE = int(100 * SCALE * .3)
 
 # The world size for building in cells
 WORLD_WIDTH = 120
 WORLD_HEIGHT = 120
-
-print("Full world:", WORLD_WIDTH * GRID_SIZE, WORLD_HEIGHT * GRID_SIZE)
 
 camera_x = 0
 camera_y = 0

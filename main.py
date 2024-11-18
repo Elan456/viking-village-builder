@@ -2,8 +2,9 @@ import pygame
 
 from village.village import Village
 from events.event_handler import EventHandler
-from config.defines import *
+from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FULL_SCREEN
 from events.announcements import announcement_handler
+from game.start_menu import StartMenu
 
 pygame.init()
 pygame.font.init()
@@ -36,4 +37,5 @@ class Game:
 
 
 if __name__ == "__main__":
+    StartMenu().start()
     Game().start()

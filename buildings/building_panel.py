@@ -33,6 +33,7 @@ class BuildingPanel:
         
 
         self.x = DISPLAY_WIDTH - self.width
+
         self.y = defines.GRID_SIZE * 2
         self.height = DISPLAY_HEIGHT - self.y
 

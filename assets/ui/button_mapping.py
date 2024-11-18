@@ -1,0 +1,3 @@
+GREEN_PLAY = (1, 0)
+RED_EXIT = (4, 4)
+GREEN_NEXT = (0, 2)

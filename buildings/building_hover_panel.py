@@ -3,7 +3,6 @@ Defines the panel that shows when the user hovers over a building
 """
 import pygame 
 
-from .building import Building
 from utils.button import Button
 from config.defines import FONT_PATH
 from config import defines 
