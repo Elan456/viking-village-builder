@@ -85,6 +85,9 @@ class Village:
         """
         Called when a new turn occurs
         """
+        if self.turn == 100:
+            return 
+
         self.turn += 1 
         # Setting the production multipliers to 1 again
         # The random events can then change them 
@@ -161,6 +164,9 @@ class Village:
         for building in self.buildings:
             building.update()
 
+        if self.turn == 100:
+            return 
+
         self.building_panel.update(mouse_pos)
         self.main_panel.update()
         self.wall.update()
@@ -174,13 +180,15 @@ class Village:
         for building in self.buildings:
             building.draw(surface)
 
-        self.war_power.draw(surface)
-
         for building in self.buildings:
             building.my_villager.draw(surface)
 
         for construction in self.builder_manager.construction_queue:
             construction.draw(surface)
+
+        self.random_events.draw(surface)
+
+        self.war_power.draw(surface)
 
         if defines.show_navmesh:    
             self.navmesh.draw(surface)
@@ -188,7 +196,6 @@ class Village:
         self.wall.upgrade_button.draw(surface)
         self.building_panel.draw(surface)
         self.main_panel.draw(surface)
-        self.random_events.draw(surface)
 
         for i in range(len(self.active_effects)):
             self.active_effects[i].draw(surface, i)

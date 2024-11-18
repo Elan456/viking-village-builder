@@ -1,6 +1,6 @@
 import pygame 
 from config import defines
-from config.defines import GRID_SIZE
+from config.defines import GRID_SIZE, FONT_PATH
 import math 
 import random
 
@@ -41,6 +41,8 @@ class WarPower:
 
         # Tick offsets
         self.tick_offsets = [random.randint(0, 100) for _ in range(300)]
+
+        self.font = pygame.font.Font(FONT_PATH, 48)
 
     @staticmethod
     def sway_function(x):
@@ -83,3 +85,31 @@ class WarPower:
 
             my_tick = (self.draw_tick + self.tick_offsets[i % 300]) // 8
             surface.blit(WarPower.warrior_images[my_tick % 8], (x - defines.camera_x, y - defines.camera_y))
+
+        if self.village.turn >= 100:
+            self.draw_end_game(surface)
+
+    def draw_end_game(self, surface):
+        end_game_surface = pygame.Surface((defines.DISPLAY_WIDTH, defines.DISPLAY_HEIGHT), pygame.SRCALPHA)
+        end_game_surface.fill((255, 255, 255, 50))
+        surface.blit(end_game_surface, (0, 0))
+
+        won = self.village.resources["warriors"] >= 250 and self.village.resources["ships"] >= 10
+        if won:
+            text = "You have won!"
+        else:
+            text = "You have lost!"
+
+        text = self.font.render(text, True, (0, 0, 0))
+        surface.blit(text, (defines.DISPLAY_WIDTH // 2 - text.get_width() // 2, defines.DISPLAY_HEIGHT // 2 - text.get_height() // 2 - 100))
+        warrior_count = int(self.village.resources["warriors"])
+        ship_count = int(self.village.resources["ships"])
+        stats = {
+            "Warriors": f"{warrior_count}/250",
+            "Ships": f"{ship_count}/10",
+            "Buildings": len(self.village.buildings),
+        }
+
+        for i, (key, value) in enumerate(stats.items()):
+            text = self.font.render(f"{key}: {value}", True, (0, 0, 0))
+            surface.blit(text, (defines.DISPLAY_WIDTH // 2 - text.get_width() // 2, defines.DISPLAY_HEIGHT // 2 - text.get_height() // 2 + (i + 1) * 70))
