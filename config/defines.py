@@ -1,5 +1,6 @@
 import pygame 
 import platform 
+import os
 
 pygame.init()
 
@@ -14,15 +15,16 @@ WINTER_WHITE = (255, 255, 255)
 
 BACKGROUND_COLORS = [SPRING_GREEN, SUMMER_GREEN, FALL_GREEN, FALL_BROWN, WINTER_GREEN, WINTER_WHITE]
 
+os.environ['SDL_VIDEO_WINDOW_POS'] = '%d,%d' % (0,0)
+
 if platform.system() == "Windows":
-    import os
-    os.environ['SDL_VIDEO_WINDOW_POS'] = '%d,%d' % (0,0)
     DISPLAY_WIDTH = pygame.display.Info().current_w
     DISPLAY_HEIGHT = pygame.display.Info().current_h
     FULL_SCREEN = False
 else:
-    DISPLAY_WIDTH = 1500
-    DISPLAY_HEIGHT = 900
+    os.environ['SDL_VIDEO_X11_DPI_AWARE'] = "1"  # Enable DPI scaling
+    DISPLAY_WIDTH = 1920
+    DISPLAY_HEIGHT = 1080
     FULL_SCREEN = False
 
 RIVER_TOP_CELL = 0

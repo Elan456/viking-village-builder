@@ -11,7 +11,7 @@ pygame.font.init()
 
 class Game:
     def __init__(self) -> None:
-        self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT))
+        self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT), pygame.FULLSCREEN if FULL_SCREEN else 0)
         # Enable alpha channel for transparency
         self.screen.set_alpha(None)
         self.event_handler = EventHandler()
