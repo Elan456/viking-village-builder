@@ -44,6 +44,8 @@ class Building(pygame.sprite.Sprite):
         self.being_demolished = False
         self.boost = 1, []  # Boost multiplier and nearest boost buildings
 
+        self.deprived_of = []  # List of resources that this building is deprived of
+
     def draw_outline(self, surface: pygame.Surface):
         """
         Draw a black outline around the building to make it easier when placing new buildings
@@ -100,6 +102,8 @@ class Building(pygame.sprite.Sprite):
         can_produce = all(available_resources[resource] >= amount for resource, amount in self.cost.items())
         
         if not can_produce:
+            # Update self.deprived_of
+            self.deprived_of = [resource for resource, amount in self.cost.items() if available_resources[resource] < amount]
             return {}
         
         change_in_resources = {}

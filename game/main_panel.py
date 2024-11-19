@@ -51,6 +51,11 @@ class MainPanel:
 
         resources_change = self.village.calculate_turn_change_resources()
 
+        # Collect what each building is deprived of, so those resources can be highlighted in red
+        deprived_of = set()
+        for building in self.village.buildings:
+            deprived_of.update(building.deprived_of)
+
         turns_left = 100 - self.village.turn
 
         # Projected final resources
@@ -76,7 +81,11 @@ class MainPanel:
 
             resource_string += f" x {multiplication_value:.2f}" if multiplication_value != 1 else ""
 
-            resource_text = self.resource_font.render(resource_string, True, (0, 0, 0))
+            resource_color = (0, 0, 0)
+            if resource in deprived_of:
+                resource_color = (200, 0, 0)
+
+            resource_text = self.resource_font.render(resource_string, True, resource_color)
             surface.blit(resource_text, (self.resource_box_x + 30, 0 + i*v_spacing))
 
             # If the resource is in the win condition, show the win condition and the current projection
