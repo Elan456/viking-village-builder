@@ -12,8 +12,8 @@ class StartMenu:
         self.screen = pygame.display.set_mode((800, 600))
         # Scale image to size 
         self.image = pygame.transform.scale(start_screen_image, (800, 600))
-        self.play_button = StyleButton(275, 400, 100, 100, GREEN_PLAY, self.start_game)
-        self.exit_button = StyleButton(425, 400, 100, 100, RED_EXIT, self.exit_game)
+        self.play_button = StyleButton(275, 400, 100, 100, GREEN_PLAY, self.start_game, hover_text="Start Game")
+        self.exit_button = StyleButton(425, 400, 100, 100, RED_EXIT, self.exit_game, hover_text="Exit Game")
         self.running = True 
 
         self.title_line_1 = self.font.render("Invasion of London", True, (0, 0, 0))

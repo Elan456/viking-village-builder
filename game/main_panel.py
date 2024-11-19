@@ -14,7 +14,8 @@ class MainPanel:
     def __init__(self, village) -> None:
         self.village = village
         self.next_turn_font = pygame.font.Font(FONT_PATH, 24)
-        self.next_turn_button = StyleButton(50, DISPLAY_HEIGHT - 150, 100, 100, GREEN_NEXT, self.next_turn)
+        self.next_turn_button = StyleButton(50, DISPLAY_HEIGHT - 150, 100, 100, GREEN_NEXT, self.next_turn,
+                                            hover_text="Next Turn" )
         
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
         self.resource_font = pygame.font.Font(FONT_PATH, 16)

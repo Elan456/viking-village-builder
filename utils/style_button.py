@@ -1,5 +1,5 @@
 import pygame 
-
+from config.defines import FONT_PATH
 from utils.button import Button 
 
 class StyleButton(Button):
@@ -8,7 +8,7 @@ class StyleButton(Button):
     def __init__(self, x, y,
                  width, height,
                  button_select,
-                 action):
+                 action, hover_text=None):
         
         """
         Button select is a tuple of (col, row) in the sprite sheet
@@ -17,6 +17,8 @@ class StyleButton(Button):
         self.width = width 
         self.height = height
         self.button_select_col, self.button_select_row = button_select
+
+        self.hover_text = hover_text
 
         self.action = action
 
@@ -39,9 +41,20 @@ class StyleButton(Button):
         self.rect.y = y
 
         self.clicked = False 
+        
+        if self.hover_text:
+            self.hover_text = pygame.font.Font(FONT_PATH, 24).render(self.hover_text, True, (0, 0, 0))
     
     def draw(self, surface):
-        surface.blit(self.hovered_image if self.is_hovered(pygame.mouse.get_pos()) else self.image, self.rect)
+        is_hovered = self.is_hovered(pygame.mouse.get_pos())
+        surface.blit(self.hovered_image if is_hovered else self.image, self.rect)
+
+        # Write the hover text directly under the button (centered)
+        if is_hovered and self.hover_text:
+            text_surface = pygame.Surface((self.hover_text.get_width() + 20, self.hover_text.get_height() + 10), pygame.SRCALPHA)
+            text_surface.fill((255, 255, 255, 200))
+            surface.blit(text_surface, (self.rect.x + self.width // 2 - text_surface.get_width() // 2, self.rect.y + self.height))
+            surface.blit(self.hover_text, (self.rect.x + self.width // 2 - self.hover_text.get_width() // 2, self.rect.y + self.height + 5))
 
 
 
