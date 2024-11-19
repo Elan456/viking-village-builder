@@ -113,6 +113,7 @@ class Building(pygame.sprite.Sprite):
         pass
 
     def on_new_building(self):
+        pass 
         self.boost = self.calculate_boost()
 
     def disable(self):

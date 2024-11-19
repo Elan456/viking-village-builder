@@ -1,5 +1,6 @@
 import pygame
 from config import defines
+from config.defines import GRID_SIZE
 import random
 
 from pyquadtree import QuadTree
@@ -34,11 +35,26 @@ class NavMesh:
         self.village = village
         self.nodes = None
 
+        # Quadtree that holds all the buildings for can_see
+        self.building_quadtree = None 
+
     def can_see(self, point1, point2):
         x0, y0 = point1[0], point1[1]
         x1, y1 = point2[0], point2[1]
 
-        for building in self.village.buildings + self.village.wall.get_collision_rects():
+        buildings_to_check = self.building_quadtree.query((min(x0, x1) - 2 * GRID_SIZE,
+                                                           min(y0, y1) -  2 * GRID_SIZE,
+                                                           max(x0, x1) +  2 * GRID_SIZE,
+                                                           max(y0, y1) +  2 * GRID_SIZE))
+        # Add in the 5 nearest buildings to the query
+        # buildings_to_check = self.building_quadtree.nearest_neighbors(point1, number_of_neighbors=5)
+        # buildings_to_check += self.building_quadtree.nearest_neighbors(point2, number_of_neighbors=5)
+
+        buildings_to_check = [e.item[0] for e in buildings_to_check]
+
+        buildings_to_check = list(set(buildings_to_check))
+
+        for building in buildings_to_check + self.village.wall.get_collision_rects():
             # print(building.x, building.y, building.rect.width, building.rect.height, type(building))
             xmin = building.x - defines.GRID_SIZE + 2
             xmax = building.x + building.rect.width - 2
@@ -80,10 +96,36 @@ class NavMesh:
 
         return True  # Line segment intersects the rectangle
 
+    def generate_building_quadtree(self):
+        """
+        Generates a quadtree which holds all the buildings for
+        quick lookup for can_see 
+        """
+        self.building_quadtree = QuadTree((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
+                                           -defines.WORLD_HEIGHT * .25 * defines.GRID_SIZE,
+                                           defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE))
+
+        for building in self.village.buildings + [c.building for c in self.village.builder_manager.construction_queue]:
+            # Add each corner of the building to the quadtree
+            # Turning each building a tuple because the quadtree can't store duplicates
+            self.building_quadtree.add((building, 1), (building.x - GRID_SIZE, building.y - GRID_SIZE))
+            self.building_quadtree.add((building, 2), (building.x + building.rect.width + GRID_SIZE, building.y - GRID_SIZE))
+            self.building_quadtree.add((building, 3), (building.x - GRID_SIZE, building.y + building.rect.height + GRID_SIZE))
+            self.building_quadtree.add((building, 4), (building.x + building.rect.width + GRID_SIZE, building.y + building.rect.height + GRID_SIZE))
+
+            # Add points in the middle
+            self.building_quadtree.add((building, 5), (building.x + building.rect.width // 2, building.y - GRID_SIZE))
+            self.building_quadtree.add((building, 6), (building.x + building.rect.width // 2, building.y + building.rect.height + GRID_SIZE))
+            self.building_quadtree.add((building, 7), (building.x - GRID_SIZE, building.y + building.rect.height // 2))
+            self.building_quadtree.add((building, 8), (building.x + building.rect.width + GRID_SIZE, building.y + building.rect.height // 2))
+
+
     def generate_navmesh(self):
         """
         Generates/updates a navigation mesh for the village
         """
+
+        self.generate_building_quadtree()
 
         self.nodes = []
         self.nodes_quadtree = QuadTree((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
@@ -204,11 +246,19 @@ class NavMesh:
         if self.nodes is None:
             return
 
-        all_bbox = self.nodes_quadtree.get_all_bbox()
+        # all_bbox = self.nodes_quadtree.get_all_bbox()
+        all_bbox = self.building_quadtree.get_all_bbox()
         for bbox in all_bbox:
-            pygame.draw.rect(surface, (255, 0, 0), (bbox[0] - defines.camera_x, bbox[1] - defines.camera_y, bbox[2] - bbox[0], bbox[3] - bbox[1]), 1)
-            
+            pygame.draw.rect(surface, (255, 0, 0), (bbox[0] - defines.camera_x, bbox[1] - defines.camera_y, bbox[2] - bbox[0], bbox[3] - bbox[1]), 2)
+
+        # Draw the villager routes
         for node in self.nodes:
-            pygame.draw.circle(surface, (0, 0, 255), (node.x - defines.camera_x, node.y - defines.camera_y), 5)
+            for neighbor in node.neighbors:
+                pygame.draw.line(surface, (0, 255, 0), (node.x - defines.camera_x, node.y - defines.camera_y), (neighbor.node.x - defines.camera_x, neighbor.node.y - defines.camera_y))
+            pygame.draw.circle(surface, (0, 255, 0), (node.x - defines.camera_x, node.y - defines.camera_y), 5)
+        # Draw the building corners  
+        for point in [v.point for v in self.building_quadtree.get_all_elements()]:
+            node = Node(point[0], point[1])
+            pygame.draw.circle(surface, (0, 255, 255), (node.x - defines.camera_x, node.y - defines.camera_y), 5)
             for neighbor in node.neighbors:
                 pygame.draw.line(surface, (0, 0, 255), (node.x - defines.camera_x, node.y - defines.camera_y), (neighbor.node.x - defines.camera_x, neighbor.node.y - defines.camera_y))

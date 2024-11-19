@@ -51,6 +51,8 @@ Construction projects will advance and you might get a random event.
 
 You only get 100 turns till the end of the game to build your army and prepare for the invasion.
 
+## Mileston 3
+
 ## Milestone 2
 
 [Link to the full changelog](https://github.com/Elan456/viking-village-builder/commits/0.1)

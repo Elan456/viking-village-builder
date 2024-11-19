@@ -50,6 +50,9 @@ class Village:
 
         self.war_power = WarPower(self)
 
+        self.navmesh.generate_navmesh()
+        self.need_to_regen_navmesh = False
+
     def cheat_resources(self):
         """
         Adds a lot of resources to the village
@@ -93,6 +96,10 @@ class Village:
         # The random events can then change them 
         self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
+        if self.need_to_regen_navmesh:
+            self.navmesh.generate_navmesh()
+            self.need_to_regen_navmesh = False
+
         # Call the on_new_turn method of all buildings
         for building in self.buildings:
             building.on_new_turn()
@@ -124,7 +131,7 @@ class Village:
             self.resources[resource] -= amount
 
         self.builder_manager.start_construction(building)
-        self.navmesh.generate_navmesh()
+        self.need_to_regen_navmesh = True
 
     def add_building(self, building: Building):
         """
@@ -135,7 +142,7 @@ class Village:
         self.buildings.append(building)
 
         # Update the Villager's navmesh
-        self.navmesh.generate_navmesh()
+        self.need_to_regen_navmesh = True
 
         for building in self.buildings:
             building.on_new_building()
@@ -153,7 +160,7 @@ class Village:
             pass 
 
         # Update the Villager's navmesh
-        self.navmesh.generate_navmesh()
+        self.need_to_regen_navmesh = True
 
         for building in self.buildings:
             building.on_new_building()
