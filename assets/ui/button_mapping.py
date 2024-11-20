@@ -1,3 +1,5 @@
 GREEN_PLAY = (1, 0)
 RED_EXIT = (4, 4)
+RED_PAUSE = (5,3)
 GREEN_NEXT = (0, 2)
+BLUE_PLAY = (7, 6)

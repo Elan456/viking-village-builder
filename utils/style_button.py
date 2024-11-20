@@ -45,16 +45,16 @@ class StyleButton(Button):
         if self.hover_text:
             self.hover_text = pygame.font.Font(FONT_PATH, 24).render(self.hover_text, True, (0, 0, 0))
     
-    def draw(self, surface):
-        is_hovered = self.is_hovered(pygame.mouse.get_pos())
-        surface.blit(self.hovered_image if is_hovered else self.image, self.rect)
+    def draw(self, surface, cam_x=0, cam_y=0):
+        is_hovered = self.is_hovered(pygame.mouse.get_pos(), cam_x=cam_x, cam_y=cam_y)
+        surface.blit(self.hovered_image if is_hovered else self.image, (self.rect.x - cam_x, self.rect.y - cam_y))
 
         # Write the hover text directly under the button (centered)
         if is_hovered and self.hover_text:
             text_surface = pygame.Surface((self.hover_text.get_width() + 20, self.hover_text.get_height() + 10), pygame.SRCALPHA)
             text_surface.fill((255, 255, 255, 200))
-            surface.blit(text_surface, (self.rect.x + self.width // 2 - text_surface.get_width() // 2, self.rect.y + self.height))
-            surface.blit(self.hover_text, (self.rect.x + self.width // 2 - self.hover_text.get_width() // 2, self.rect.y + self.height + 5))
+            surface.blit(text_surface, (self.rect.x + self.width // 2 - text_surface.get_width() // 2 - cam_x, self.rect.y + self.height - cam_y))
+            surface.blit(self.hover_text, (self.rect.x + self.width // 2 - self.hover_text.get_width() // 2 - cam_x, self.rect.y + self.height + 5 - cam_y))
 
 
 

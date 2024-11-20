@@ -4,6 +4,8 @@ Defines the panel that shows when the user hovers over a building
 import pygame 
 
 from utils.button import Button
+from utils.style_button import StyleButton
+from assets.ui.button_mapping import RED_EXIT, GREEN_PLAY, RED_PAUSE, BLUE_PLAY
 from config.defines import FONT_PATH
 from config import defines 
 from game.resources import get_icon
@@ -16,9 +18,12 @@ class BuildingHoverPanel:
         self.village = village
 
         self.small_font = pygame.font.Font(FONT_PATH, 12)
-        self.disable_button = Button(0, 0, defines.GRID_SIZE * 3, defines.GRID_SIZE, "Disable", (255, 0, 0), (0, 0, 0), self.small_font, None)
-        self.enable_button = Button(0, 0, defines.GRID_SIZE * 3, defines.GRID_SIZE, "Enable", (0, 255, 255), (0, 0, 0), self.small_font, None)
-        self.demolish_button = Button(0, 0, defines.GRID_SIZE * 3, defines.GRID_SIZE, "Demolish", (255, 0, 0), (0, 0, 0), self.small_font, None)
+
+        self.button_size = defines.GRID_SIZE * 2
+
+        self.disable_button = StyleButton(0, 0, self.button_size, self.button_size, RED_PAUSE, None, hover_text="Disable")
+        self.enable_button = StyleButton(0, 0, self.button_size, self.button_size, BLUE_PLAY, None, hover_text="Enable")
+        self.demolish_button = StyleButton(0, 0, self.button_size, self.button_size, RED_EXIT, None, hover_text="Demolish")
 
         self.font = pygame.font.Font(FONT_PATH, 16)
         
@@ -45,13 +50,16 @@ class BuildingHoverPanel:
             in_shop = False
 
         if not in_shop:
+            br_x = self.real_building.x + self.real_building.rect.width
+            br_y = self.real_building.y + self.real_building.rect.height
+
             if self.real_building.disabled:
-                self.enable_button.move(self.real_building.x, self.real_building.y)
+                self.enable_button.move(br_x - self.button_size, br_y - self.button_size)
                 self.enable_button.draw(surface, defines.camera_x, defines.camera_y)
             else:
-                self.disable_button.move(self.real_building.x, self.real_building.y)
+                self.disable_button.move(br_x - self.button_size, br_y - self.button_size)
                 self.disable_button.draw(surface, defines.camera_x, defines.camera_y)
-            self.demolish_button.move(self.real_building.x, self.real_building.y + defines.GRID_SIZE)
+            self.demolish_button.move(br_x - self.button_size * 2, br_y - self.button_size)
             self.demolish_button.draw(surface, defines.camera_x, defines.camera_y)
             
         # Draw the panel box relative to the mouse position
