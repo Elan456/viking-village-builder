@@ -45,19 +45,51 @@ If the construction fails, a message will appear in the center to tell you why.
 
 ### Turn Management
 
-In the bottom-right corner there is a button to advance to the next turn. This will
+In the bottom-left corner there is a button to advance to the next turn. This will
 trigger each building to produce and consume their respective resources.
 Construction projects will advance and you might get a random event.
 
 You only get 100 turns till the end of the game to build your army and prepare for the invasion.
 
-## Mileston 3
+## Milestone 3 (10/31 - 11/20)
 
-## Milestone 2
+### Features Added (with Point Values Adding to 100)
+1. Add construction phases to buildings (7)
+2. Move the resource panel to the top-left (2)
+3. Have the builders walk to construction sites (4)
+4. Add a builder assignment manager (7)
+5. Show how many turns are needed for a building to be completed to the hover panel (3)
+6. Add a button to upgrade the wall and show the cost to do so (3)
+7. Indicate buildings that are too expensive with a red rectangle (3)
+8. Add an "along river" check for shipyards (3)
+9. Improve the contrast of announcements (2)
+10. Have the background color change with the seasons (5)
+11. Add debris that float down the river and ripples to make the river more lively (5)
+12. Add trees that grow over time and the lumberjacks navigate to them (6)
+13. Advance the villagers by a few updates each turn to indicate the passage of time (4)
+14. Add building demolition, requires turns just like construction (4)
+15. Draw all the building assets (10)
+16. Fix some resource consumption and production bugs (3)
+17. Add a win condition prediction calculation, so the player knows if they are on track (5)
+18. Render boats on the river as more are built (3)
+19. Make the boats sway in the water (3)
+20. Render soldiers in a box as the army grows (4)
+21. Add a fire random event that destroys buildings (5)
+22. Add plague, caravan, and blight random events (5)
+23. Add descriptions to the buildings' hover panel (3)
+24. Improve the Linux resolution (2)
+25. Add a more stylized button (2)
+26. Add a start screen with a button to start the game (3)
+27. Add a win/lose screen with stats (3)
+28. Navmesh optimizations using an additional quadtree (6)
+29. Resource text changes color if it's over demanded (2)
+30. Building panel shows icons for the buildings instead of the building itself (2)
+
+## Milestone 2 (9/17 - 10/30)
 
 [Link to the full changelog](https://github.com/Elan456/viking-village-builder/commits/0.1)
 
-### Features added
+### Features Added
 - Random event skeleton
 - Buttons
 - Main panel (turn and resource display)
