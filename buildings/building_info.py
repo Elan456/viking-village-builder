@@ -71,3 +71,7 @@ class BldInfo:
     @staticmethod
     def get_boost_buildings(name):
         return BldInfo.get_info(name).get("boost_buildings", [])
+    
+    @staticmethod 
+    def get_icon_path(name):
+        return BldInfo.get_info(name).get("icon_path", None)

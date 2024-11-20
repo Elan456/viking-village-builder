@@ -5,6 +5,7 @@
         "height": 4,
         "villager_name": "farmer",
         "description": "Produces food",
+        "icon_path": "assets/resources/food.png",
         "construction_time": 2,
         "construction": {
             "wood": 20
@@ -19,6 +20,7 @@
         "height": 4,
         "villager_name": "miner",
         "description": "Produces ore",
+        "icon_path": "assets/resources/ore.png",
         "construction_time": 2,
         "construction": {
             "wood": 15
@@ -33,6 +35,7 @@
         "height": 12,
         "villager_name": "lumberjack",
         "description": "Produces wood",
+        "icon_path": "assets/resources/wood.png",
         "construction_time": 3,
         "construction": {
             "wood": 60
@@ -47,6 +50,7 @@
         "height": 7,
         "villager_name": "blacksmith",
         "description": "Produces weapons from wood and ore",
+        "icon_path": "assets/resources/axe.png",
         "construction_time": 5,
         "construction": {
             "wood": 60,
@@ -67,6 +71,7 @@
         "height": 6,
         "villager_name": "shipwright",
         "description": "Produces ships from wood and ore",
+        "icon_path": "assets/resources/ship.png",
         "construction_time": 6,
         "construction": {
             "wood": 60,
@@ -87,6 +92,7 @@
         "height": 6,
         "villager_name": "hersir",
         "description": "Trains warriors",
+        "icon_path": "assets/resources/warrior.png",
         "construction_time": 5,
         "construction": {
             "wood": 120,
@@ -107,6 +113,7 @@
         "height": 4,
         "villager_name": "builder",
         "description": "Adds another builder",
+        "icon_path": "assets/misc/hammer.png",
         "construction_time": 3,
         "construction": {
             "wood": 50,

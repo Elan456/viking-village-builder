@@ -50,7 +50,7 @@ class BuildingPanel:
     def load_buildings(self):
         # Populate buildings with (building, image) tuples
         for building in ALL_BUILDINGS:
-            image = pygame.image.load(BldInfo.get_image_path(building))
+            image = pygame.image.load(BldInfo.get_icon_path(building))
 
 
             scale = 3*defines.GRID_SIZE / image.get_height()
