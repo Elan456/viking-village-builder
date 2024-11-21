@@ -80,10 +80,11 @@ You only get 100 turns till the end of the game to build your army and prepare f
 24. Improve the Linux resolution (2)
 25. Add a more stylized button (2)
 26. Add a start screen with a button to start the game (3)
-27. Add a win/lose screen with stats (3)
-28. Navmesh optimizations using an additional quadtree (6)
+27. Add a win/lose screen with stats (2)
+28. Navmesh optimizations using an additional quadtree (5)
 29. Resource text changes color if it's over demanded (2)
 30. Building panel shows icons for the buildings instead of the building itself (2)
+31. Change disable, enable, and demolish buttons to be more stylied (2)
 
 ## Milestone 2 (9/17 - 10/30)
 
