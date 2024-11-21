@@ -51,6 +51,12 @@ Construction projects will advance and you might get a random event.
 
 You only get 100 turns till the end of the game to build your army and prepare for the invasion.
 
+### Resource Panel
+
+The panel in the top-left corner shows your current resources and how much you are producing and consuming.
+For the warriors and ships, a projection is shown to indicate how many you will have at the end of 100 turns assuming your current production rate stays the same. 
+A resource will turn red if buildings are unable to produce because of a lack of that resource. This is a warning that you need to build more of that resource-producing building.
+
 ## Milestone 3 (10/31 - 11/20)
 
 ### Features Added (with Point Values Adding to 100)
