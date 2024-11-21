@@ -14,6 +14,7 @@ from buildings.construction import Construction, BuilderManager
 from world.world import World 
 from villagers.dirt_path import DirtPath
 from village.war_power import WarPower
+from world.cloud import CloudHandler
 
 class Village:
     """
@@ -52,6 +53,8 @@ class Village:
 
         self.navmesh.generate_navmesh()
         self.need_to_regen_navmesh = False
+
+        self.cloud_handler = CloudHandler()
 
     def cheat_resources(self):
         """
@@ -116,6 +119,7 @@ class Village:
         self.random_events.on_new_turn()
 
         self.world.on_new_turn()
+        self.cloud_handler.on_new_turn()
 
         # Update all the villagers 100 times, to show a lot of time has passed
         for _ in range(200):
@@ -177,6 +181,7 @@ class Village:
         self.building_panel.update(mouse_pos)
         self.main_panel.update()
         self.wall.update()
+        self.cloud_handler.update()
 
 
     def draw(self, surface: pygame.Surface):
@@ -196,6 +201,8 @@ class Village:
         self.random_events.draw(surface)
 
         self.war_power.draw(surface)
+
+        self.cloud_handler.draw(surface)
 
         if defines.show_navmesh:    
             self.navmesh.draw(surface)
