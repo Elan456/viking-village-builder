@@ -60,7 +60,7 @@ class Building(pygame.sprite.Sprite):
         """
         # Get the background color from the world and make it a bit darker for the pad of the building
         background_color = self.village.world.background_color
-        darker_color = tuple([max(0, color - 10) for color in background_color])
+        darker_color = tuple([max(0, color - 20) for color in background_color])
 
         # Get the bound for the ground pad but truncate based if the wall is really close
         x_min = max(self.village.wall.x, self.x - defines.GRID_SIZE)

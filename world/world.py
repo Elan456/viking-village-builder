@@ -10,6 +10,58 @@ from world.floater import Floater
 from world.ripple import Ripple
 from world.tree import Tree 
 
+perlin_image = pygame.image.load("assets/misc/perlin.png")
+
+extra_scale = 1.35
+
+# scale the perlin image
+perlin_image = pygame.transform.scale(perlin_image, (defines.WORLD_WIDTH * extra_scale * defines.GRID_SIZE, defines.WORLD_HEIGHT * extra_scale * defines.GRID_SIZE))
+
+
+def generate_backgrounds():
+    """
+    For each background color, add noise to give a textured look and save it to a file 
+    """
+    backgrounds = []
+    for color in defines.BACKGROUND_COLORS:
+        background = pygame.Surface((defines.WORLD_WIDTH * extra_scale * defines.GRID_SIZE * .5,
+                                     defines.WORLD_HEIGHT * extra_scale * defines.GRID_SIZE * .5), pygame.SRCALPHA)
+
+        # If the image already exists with the correct dimensions, load it
+        try:
+            load_background = pygame.image.load(f"assets/backgrounds/background_{color[0]}_{color[1]}_{color[2]}.jpg")
+            # if load_background.get_width() == background.get_width() and load_background.get_height() == background.get_height():
+            #     print(f"Loaded background_{color[0]}_{color[1]}_{color[2]}")
+            backgrounds.append(load_background)
+            continue
+        except FileNotFoundError:
+            pass
+
+        for x in range(background.get_width()):
+            for y in range(background.get_height()):
+                noise_1 = perlin_image.get_at((x % perlin_image.get_width(), y % perlin_image.get_height()))
+                noise_2 = perlin_image.get_at(((x + 1) % perlin_image.get_width(), (y + 1) % perlin_image.get_height()))
+                noise_3 = perlin_image.get_at(((x - 1) % perlin_image.get_width(), (y - 1) % perlin_image.get_height()))
+
+                noise = ((noise_1[0] + noise_2[0] + noise_3[0]) // 3,
+                            (noise_1[1] + noise_2[1] + noise_3[1]) // 3,
+                            (noise_1[2] + noise_2[2] + noise_3[2]) // 3)
+                r, g, b = color
+                r += noise[0] * -.25
+                g += noise[1] * -.25
+                b += noise[2] * -.25
+                r = max(0, min(255, r))
+                g = max(0, min(255, g))
+                b = max(0, min(255, b))
+                background.set_at((x, y), (r, g, b, 255))    
+
+        # Save to a file
+        pygame.image.save(background, f"assets/backgrounds/background_{color[0]}_{color[1]}_{color[2]}.jpg")
+
+        backgrounds.append(background)
+
+    return backgrounds
+
 
 class World:
     def __init__(self, village):
@@ -24,6 +76,12 @@ class World:
 
         self.spawn_trees()
         self.background_color = (0, 0, 0)
+        self.background_surfaces = generate_backgrounds()
+
+        # Scale each one to the full size
+        for i, background in enumerate(self.background_surfaces):
+            self.background_surfaces[i] = pygame.transform.scale(background, (defines.WORLD_WIDTH * extra_scale * defines.GRID_SIZE,
+                                                                            defines.WORLD_HEIGHT * extra_scale * defines.GRID_SIZE))
 
     def on_new_turn(self):
         # Reset the floaters to make the river look different each time
@@ -112,27 +170,16 @@ class World:
             floater.draw(surface)
 
     def draw_background(self, surface: pygame.Surface, turn: int):
-        self.month = turn % 12
-        num_colors = len(defines.BACKGROUND_COLORS)
-        transition_length = 12 // num_colors
+        self.month = (turn % 12) // 2
+        self.background_color = defines.BACKGROUND_COLORS[self.month]
+      
+        # print("drawing background with dimensions", self.background_surfaces[self.month].get_width(), self.background_surfaces[self.month].get_height())
+        surface.blit(self.background_surfaces[self.month], (0 - defines.camera_x - defines.WORLD_WIDTH * defines.GRID_SIZE * .25 - 100,
+                                                            0 - defines.camera_y - defines.WORLD_HEIGHT * defines.GRID_SIZE * .25 - 100))
+        # print("Backsurface colors: ", self.background_surfaces[self.month].get_at((50, 50)))
 
-        base_index = self.month // transition_length    # e.g. month 1 --> 0, month 2 --> 0, month 5 --> 1, month 9 --> 2
-        next_index = (base_index + 1) % num_colors
-        percent_progress_to_next = self.month / transition_length - base_index
-
-        base_color = defines.BACKGROUND_COLORS[base_index]
-        next_color = defines.BACKGROUND_COLORS[next_index]
-
-        color = (
-            int(base_color[0] + (next_color[0] - base_color[0]) * percent_progress_to_next),
-            int(base_color[1] + (next_color[1] - base_color[1]) * percent_progress_to_next),
-            int(base_color[2] + (next_color[2] - base_color[2]) * percent_progress_to_next)
-        )
-
-        self.background_color = color
-
-
-        pygame.draw.rect(surface, color, (0, 0, defines.DISPLAY_WIDTH, defines.DISPLAY_HEIGHT))
+        # pygame.draw.rect(surface, self.background_color, (0 - defines.camera_x, 0 - defines.camera_y, defines.DISPLAY_WIDTH, defines.DISPLAY_HEIGHT))
+        # pygame.draw.circle(surface, (255, 0, 0), (defines.DISPLAY_WIDTH // 2, defines.DISPLAY_HEIGHT // 2), 10)
 
     def draw_grid(self, surface: pygame.Surface):
         min_x = self.village.wall.x 
