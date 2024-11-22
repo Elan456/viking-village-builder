@@ -96,6 +96,8 @@ class Building(pygame.sprite.Sprite):
         """
         Based on the available resources, calculate how the net change in resources will be next turn.
         """
+        self.deprived_of = []  # Reset the deprived_of list
+
         if self.disabled:
             return {}
 
