@@ -48,7 +48,7 @@ class Tree(pygame.sprite.Sprite):
 
         self.age = random.uniform(0, len(self.image_sets[0]) - 1)
         self.image = None 
-        self.on_new_turn(0)
+        self.on_new_turn()
         
         self.relocate()
 
@@ -79,13 +79,17 @@ class Tree(pygame.sprite.Sprite):
 
         return wall_rect.colliderect(tree_rect)
 
-    def on_new_turn(self, month):  
+    def on_new_turn(self):  
         self.age += .05
         if self.age >= len(self.image_sets[0]):
             self.age = 0
             self.relocate()
 
-        season = "summer" if month in [0, 1, 2, 3, 4, 11, 12] else "winter"
+        month = (self.village.turn % 12) // 2
+
+        
+
+        season = "summer" if month in [0, 1, 2] else "winter"
 
         if season == "summer":
             self.image = self.image_sets[0][int(self.age)]

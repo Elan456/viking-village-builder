@@ -91,7 +91,7 @@ class World:
         self.cull_trees()
 
         for tree in self.trees:
-            tree.on_new_turn(self.month)
+            tree.on_new_turn()
         
         # Re-sort the trees so that they are drawn in the correct order
         # Because the trees move after they die
