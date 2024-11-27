@@ -5,6 +5,7 @@ from events.event_handler import EventHandler
 from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FULL_SCREEN
 from events.announcements import announcement_handler
 from game.start_menu import StartMenu
+from game.lore_scroll import LoreScroll
 
 pygame.init()
 pygame.font.init()
@@ -16,6 +17,7 @@ class Game:
         self.screen.set_alpha(None)
         self.event_handler = EventHandler()
         self.village = Village(self.event_handler)
+        self.lore_scroll = LoreScroll(self.event_handler)
         self.clock = pygame.time.Clock()
 
     def start(self):
@@ -26,6 +28,7 @@ class Game:
 
             self.village.update()
             self.village.draw(self.screen)
+            self.lore_scroll.draw(self.screen)
 
             announcement_handler.update()
             announcement_handler.display(self.screen)
