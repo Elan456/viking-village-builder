@@ -154,7 +154,7 @@ class World:
         river_width_cells = defines.RIVER_BOTTOM_CELL - defines.RIVER_TOP_CELL
         pygame.draw.rect(
             surface,
-            (0, 0, 255),
+            (0, 100, 200),
             (
                 0,
                 defines.RIVER_TOP_CELL * defines.GRID_SIZE - defines.camera_y,

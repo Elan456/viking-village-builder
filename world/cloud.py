@@ -12,7 +12,7 @@ def create_cloud_surface():
     cloud_surface = pygame.Surface((600, 600), pygame.SRCALPHA)
     cloud_surface.fill((255, 255, 255, 0))
 
-    for i in range(random.randint(20, 50)):
+    for i in range(random.randint(30, 50)):
         oval_width = random.randint(50, 100)
         oval_height = random.randint(oval_width // 2, oval_width + 20)
         x = random.randint(oval_width, 300 - oval_width)
@@ -60,7 +60,7 @@ class CloudHandler:
 
     def on_new_turn(self):
         self.clouds = []
-        for _ in range(10):
+        for _ in range(8):
             self.clouds.append(Cloud(self.surfaces))
 
     def update(self):
