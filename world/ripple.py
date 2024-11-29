@@ -10,7 +10,7 @@ class Ripple:
         self.max_radius = random.randint(5, 20)
 
         self.x = random.randint(-defines.DISPLAY_WIDTH, defines.DISPLAY_WIDTH)
-        self.y = random.randint(defines.RIVER_TOP_CELL * defines.GRID_SIZE + self.max_radius, (defines.RIVER_BOTTOM_CELL) * defines.GRID_SIZE - self.max_radius)
+        self.y = random.randint(int(defines.RIVER_TOP_CELL * defines.GRID_SIZE + self.max_radius), int((defines.RIVER_BOTTOM_CELL) * defines.GRID_SIZE - self.max_radius))
     
     def update(self):
         self.radius = min(self.max_radius, self.radius + .1)

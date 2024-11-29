@@ -60,8 +60,8 @@ class Tree(pygame.sprite.Sprite):
             
 
     def goto_random_location(self):
-        self.x = random.randint(-defines.WORLD_WIDTH * GRID_SIZE * .25, defines.WORLD_WIDTH * GRID_SIZE)
-        self.y = random.randint(-defines.WORLD_HEIGHT * GRID_SIZE * .25, defines.WORLD_HEIGHT * GRID_SIZE)
+        self.x = random.randint(int(-defines.WORLD_WIDTH * GRID_SIZE * .25), int(defines.WORLD_WIDTH * GRID_SIZE))
+        self.y = random.randint(int(-defines.WORLD_HEIGHT * GRID_SIZE * .25), int(defines.WORLD_HEIGHT * GRID_SIZE))
 
     def check_on_river(self):
         bottom_y = self.y + self.rect.height - 20
