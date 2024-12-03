@@ -28,6 +28,7 @@ class Building(pygame.sprite.Sprite):
         self.x = x_cell * defines.GRID_SIZE
         self.y = y_cell * defines.GRID_SIZE
         self.image = BldInfo.images[name]
+        self.icon = BldInfo.icons[name]
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 
@@ -83,6 +84,8 @@ class Building(pygame.sprite.Sprite):
         if self.disabled:
             pygame.draw.rect(surface, (150, 150, 150), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
 
+        # Draw the icon
+        surface.blit(self.icon, (self.x - defines.camera_x, self.y - defines.camera_y))
     def update(self):
         """
         Updates the building's state. 

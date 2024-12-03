@@ -1,5 +1,6 @@
 import json 
 import pygame 
+import pygame.gfxdraw
 from config.defines import GRID_SIZE
 
 def load_images():
@@ -16,9 +17,36 @@ def load_images():
             images[building] = image
     return images
 
+def load_icons():
+    """
+    Load each image from it's path and then scale it to the correct size based on the json file
+    """
+     
+    images = {}
+    with open("buildings/building_defs.json") as f:
+        data = json.load(f)
+        for building in data:
+            image = pygame.image.load(data[building]['icon_path'])
+            image = pygame.transform.scale(image, (2 * GRID_SIZE, 2 * GRID_SIZE))
+            circle = pygame.Surface((2.8 * GRID_SIZE, 2.8 * GRID_SIZE), pygame.SRCALPHA)
+            circle_radius = int(GRID_SIZE * 1.25)
+            
+            
+            pygame.gfxdraw.aacircle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 255))
+            pygame.gfxdraw.aacircle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
+            pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
+            pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 128))
+            
+        
+            
+            circle.blit(image, (0.25 * GRID_SIZE, 0.25 * GRID_SIZE))
+            images[building] = circle
+    return images
+
 class BldInfo:
     info = json.load(open("buildings/building_defs.json"))
     images = load_images()
+    icons = load_icons()
 
     @staticmethod
     def get_all_keys():
