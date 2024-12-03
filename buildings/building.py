@@ -50,8 +50,10 @@ class Building(pygame.sprite.Sprite):
         """
         Draw a black outline around the building to make it easier when placing new buildings
         """
-        pygame.draw.rect(surface, (0, 0, 0), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
-
+        # pygame.draw.rect(surface, (0, 0, 0), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
+        pygame.draw.rect(surface, (100, 0, 0), (self.x - defines.camera_x - GRID_SIZE, self.y - defines.camera_y - GRID_SIZE,
+                                                 self.rect.width + 2 * GRID_SIZE, self.rect.height + 2 * GRID_SIZE), 1)
+    
     def draw(self, surface: pygame.Surface):
         """
         Draws the building on the screen.
@@ -60,17 +62,18 @@ class Building(pygame.sprite.Sprite):
         """
         # Get the background color from the world and make it a bit darker for the pad of the building
         background_color = self.village.world.background_color
-        darker_color = tuple([max(0, color - 20) for color in background_color])
+        darker_color = tuple([max(0, color - 50) for color in background_color])
 
         # Get the bound for the ground pad but truncate based if the wall is really close
         x_min = max(self.village.wall.x, self.x - defines.GRID_SIZE)
         y_min = max(self.village.wall.y, self.y - defines.GRID_SIZE)
+        
         # Also watch out for the river
         y_min = max(defines.RIVER_BOTTOM_CELL * GRID_SIZE, y_min)
         x_max = min(self.village.wall.x + self.village.wall.width * GRID_SIZE, self.x + self.rect.width + defines.GRID_SIZE)
         y_max = min(self.village.wall.y + self.village.wall.height * GRID_SIZE, self.y + self.rect.height + defines.GRID_SIZE)
 
-        pygame.draw.rect(surface, darker_color, (x_min - defines.camera_x, y_min - defines.camera_y, x_max - x_min, y_max - y_min))
+        pygame.draw.rect(surface, darker_color, (x_min - defines.camera_x, y_min - defines.camera_y, x_max - x_min, y_max - y_min), GRID_SIZE)
 
         # print(camera_x, camera_y)
         if not self.being_demolished:
