@@ -223,6 +223,22 @@ class BuildingPanel:
 
         return False
 
+    def draw_boost(self, surface, x, y, boost, boost_buildings):
+        """
+        Draw the boost of the building
+        """
+        for i, building in enumerate(boost_buildings):
+            # Draw a blue line to the building
+            pygame.draw.line(surface, (0, 0, 255), (x + 50, y + 50), (building.x_cell * defines.GRID_SIZE - defines.camera_x + building.get_cell_width() * defines.GRID_SIZE // 2, building.y_cell * defines.GRID_SIZE - defines.camera_y + building.get_cell_height() * defines.GRID_SIZE // 2), 5)
+
+        # Rectangle behind to improve contrast
+        boost_text_width = 220
+        boost_text_surface = pygame.Surface((boost_text_width, 50), pygame.SRCALPHA)
+        pygame.draw.rect(boost_text_surface, (255, 255, 255, 100), (0, 0, boost_text_width, 50))
+        boost_text = self.font.render(f"Boost: {boost:.2f}", True, (0, 50, 200))
+        boost_text_surface.blit(boost_text, (10, 10))
+        surface.blit(boost_text_surface, (x + 50, y + 50))
+
     
     def draw(self, surface: pygame.Surface):
         # Draw onto the main surface, a green or red outline of where the building will be placed
@@ -272,18 +288,7 @@ class BuildingPanel:
             # Draw the boost of the building
             if self.selected_boost is not None and len(self.selected_boost[1]) > 0:
                 boost, boost_builings = self.selected_boost
-                for i, building in enumerate(boost_builings):
-                    # Draw a blue line to the building
-                    pygame.draw.line(surface, (0, 0, 255), (x + image.get_width() // 2, y + image.get_height() + 30), (building.x_cell * defines.GRID_SIZE - defines.camera_x + building.get_cell_width() * defines.GRID_SIZE // 2, building.y_cell * defines.GRID_SIZE - defines.camera_y + building.get_cell_height() * defines.GRID_SIZE // 2), 5)
-
-
-                # Rectangle behind to improve contrast
-                boost_text_width = 220
-                boost_text_surface = pygame.Surface((boost_text_width, 50), pygame.SRCALPHA)
-                pygame.draw.rect(boost_text_surface, (255, 255, 255, 100), (0, 0, boost_text_width, 50))
-                boost_text = self.font.render(f"Boost: {boost:.2f}", True, (0, 50, 200))
-                boost_text_surface.blit(boost_text, (10, 10))
-                surface.blit(boost_text_surface, (x + image.get_width() // 2 - 100, y + image.get_height() + 30))
+                self.draw_boost(surface, x, y, boost, boost_builings)
 
                 
         # If a building is being hovered on, then draw the hover panel

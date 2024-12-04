@@ -37,8 +37,6 @@ def load_icons():
             pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
             pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 128))
             
-        
-            
             circle.blit(image, (0.25 * GRID_SIZE, 0.25 * GRID_SIZE))
             images[building] = circle
     return images
@@ -58,7 +56,10 @@ class BldInfo:
     
     @staticmethod
     def get_info(name):
-        return BldInfo.info[name]
+        try:
+            return BldInfo.info[name]
+        except KeyError:
+            raise ValueError(f"Building {name} not found in {BldInfo.info.keys()}")
     
     @staticmethod
     def get_width(name):

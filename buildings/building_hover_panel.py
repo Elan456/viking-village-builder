@@ -71,6 +71,15 @@ class BuildingHoverPanel:
         y = max(y, 0)
         x = min(x, DISPLAY_WIDTH - self.panel_width)
         y = min(y, DISPLAY_HEIGHT - self.panel_height)
+
+        if not in_shop:
+            boost, boost_buildings = self.real_building.calculate_boost()
+
+            # Draw lines to the buildings that are boosting this building
+            for i, bb in enumerate(boost_buildings):
+                pygame.draw.line(surface, (0, 0, 255), (x + self.panel_width - 10, y + self.panel_height - 10), (bb.x - defines.camera_x + bb.rect.width // 2, bb.y - defines.camera_y + bb.rect.height // 2), 5)
+
+
         surface.blit(self.panel_box, (x, y))
 
         name_text = self.font.render(BldInfo.get_name(building), True, (0, 0, 0))
@@ -97,6 +106,11 @@ class BuildingHoverPanel:
         # Resource consumption
         if BldInfo.get_cost(building):
             self.draw_resource_dict(surface, x + 200, y + 70, BldInfo.get_cost(building))
+
+        if not in_shop:
+            boost_text = self.font.render(f"Boost: {round(boost,2)}x", True, (0, 0, 0))
+            surface.blit(boost_text, (x + self.panel_width - boost_text.get_width() - 10, y + self.panel_height - boost_text.get_height() - 10))
+
 
         
 
