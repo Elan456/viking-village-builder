@@ -10,6 +10,7 @@ from utils.style_button import StyleButton
 from assets.ui.button_mapping import GREEN_NEXT
 from .resources import get_icon
 from .resources import resource_to_icon
+import math 
 
 class MainPanel:
     def __init__(self, village) -> None:
@@ -30,12 +31,15 @@ class MainPanel:
         self.resource_box_height = self.village.resources.keys().__len__() * (self.resource_font.get_height() + 3)
         self.resource_box = pygame.Surface((self.resource_box_width, self.resource_box_height), pygame.SRCALPHA)
         self.resource_box.fill((150, 150, 150, 150))
+        self.draw_tick = 0
     
         
     def update(self):
         self.next_turn_button.update()
 
     def draw(self, surface):
+        self.draw_tick += 1
+        self.draw_tick %= 10000
         # alpha
         surface.convert_alpha()
 
@@ -47,6 +51,19 @@ class MainPanel:
 
         current_turn_text = self.turn_font.render(f"{100 - self.village.turn} turns left", True, (0, 0, 0))
         surface.blit(current_turn_text, (10, DISPLAY_HEIGHT - 190))
+
+        if self.help:
+            # Text explaining the next turn button
+            help_text = [
+                "This shows the number of turns left until the end of the game.",
+                "Click the button to advance to the next turn,",
+                "which triggers the production of resource and construction of buildings.",
+            ]
+            for i, line in enumerate(help_text):
+                text = defines.HELP_FONT.render(line, True, defines.HELP_COLOR)
+                surface.blit(text, (200, DISPLAY_HEIGHT - 150 + i*(text.get_height() + 3)))
+                # Yellow border around the next turn area
+                pygame.draw.rect(surface, defines.HELP_COLOR, (50, DISPLAY_HEIGHT - 150, 100, 100), 2)
 
         
         surface.blit(self.resource_box, (self.resource_box_x, self.resource_box_y))
@@ -103,8 +120,7 @@ class MainPanel:
             help_text = [
                 "This is the main resource panel.",
                 "It shows the change in resources for the next turn.",
-                "For the bottom two resources,",
-                "it shows your projected totals at the end of the game.",
+                "Based on the current production rate, it predicts your final soldier and ship counts.",
                 "You need 250 soldiers and 10 ships on the final turn to win.",
             ]
 
@@ -114,6 +130,11 @@ class MainPanel:
                 surface.blit(text, (self.resource_box_x, self.resource_box_y + self.resource_box_height + 10 + i*(text.get_height() + 3)))
 
             pygame.draw.rect(surface, defines.HELP_COLOR, (self.resource_box_x, self.resource_box_y, self.resource_box_width, self.resource_box_height), 2)
+
+        # Add text in the bottom right saying press h for help
+        help_text = defines.HELP_FONT.render("Press H for help", True, defines.HELP_COLOR)
+        offset = math.sin(self.draw_tick / (2 * math.pi)) * 10
+        surface.blit(help_text, (DISPLAY_WIDTH - help_text.get_width() * 2, DISPLAY_HEIGHT - help_text.get_height() - 10 + offset))
 
     def next_turn(self):
         self.village.on_new_turn()

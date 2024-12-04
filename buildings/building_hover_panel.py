@@ -111,6 +111,32 @@ class BuildingHoverPanel:
             boost_text = self.font.render(f"Boost: {round(boost,2)}x", True, (0, 0, 0))
             surface.blit(boost_text, (x + self.panel_width - boost_text.get_width() - 10, y + self.panel_height - boost_text.get_height() - 10))
 
+        if self.village.building_panel.help:
+            # Add some explanation text off to the side
+            help_text = [
+                "This panel shows the details of the",
+                "building you are hovering over.",
+                "You can disable, enable, or demolish",
+                "the building. The blue lines show which ",
+                "buildings are boosting this building.",
+                "Disable a building to conserve the resource",
+                "it consumes, so you can use it elsewhere.",
+                "Demolish a building to make space for another", 
+                "when wall upgrades get expensive."
+            ]
+
+            # Draw a background for the help text
+            box_height = (len(help_text) + 1) * (defines.HELP_FONT.get_height() + 3)
+            box_width = max([defines.HELP_FONT.size(line)[0] for line in help_text]) + 10
+
+            help_box = pygame.Surface((box_width, box_height), pygame.SRCALPHA)
+            help_box.fill((0, 0, 0, 180))
+            surface.blit(help_box, (x - box_width // 3, y + self.panel_height))
+
+            for i, line in enumerate(help_text):
+                text = defines.HELP_FONT.render(line, True, defines.HELP_COLOR)
+                surface.blit(text, (x - box_width // 3, y + self.panel_height + i*(text.get_height() + 3)))
+
 
         
 
