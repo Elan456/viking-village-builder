@@ -44,6 +44,11 @@ class BuildingPanel:
         self.building_hover_panel = BuildingHoverPanel(self.village) 
         self.mouse_pos = (0, 0)
 
+        self.help = False 
+
+        # Lambda to toggle the help
+        self.village.event_handler.register_help(lambda: setattr(self, "help", not self.help))
+
         # Ensures that the a building is selected only when the mouse clicks
         self.village.event_handler.register_mouse_click(self.on_mouse_click)
 
@@ -250,6 +255,11 @@ class BuildingPanel:
 
             color = (0, 255, 0) if self.selected_can_be_placed else (255, 0, 0)
 
+            if not self.selected_can_be_placed and self.help:
+                help_text = self.selected_can_be_placed_msg
+                help_text_surface = defines.HELP_FONT.render(help_text, True, defines.HELP_COLOR)
+                surface.blit(help_text_surface, (self.mouse_pos[0], self.mouse_pos[1] + 100))
+
             # Draw the building
             pygame.draw.rect(surface, color,
                               (self.selected_cell_x * defines.GRID_SIZE - defines.camera_x, self.selected_cell_y * defines.GRID_SIZE - defines.camera_y,
@@ -297,3 +307,10 @@ class BuildingPanel:
             self.building_hover_panel.draw(surface, building)
         else:
             self.building_hover_panel.draw(surface)
+
+        # Draw the help
+        if self.help:
+            help_text = "Click and drag a building to place it on the map"
+            help_text_surface = defines.HELP_FONT.render(help_text, True, defines.HELP_COLOR)
+            surface.blit(help_text_surface, (self.x - help_text_surface.get_width(), 0))
+            pygame.draw.line(surface, defines.HELP_COLOR, (self.x - help_text_surface.get_width() // 2, self.y), (self.x, DISPLAY_HEIGHT // 2), 5)

@@ -13,6 +13,9 @@ FALL_BROWN = (122, 98, 56)
 WINTER_GREEN = (0, 100, 0)
 WINTER_WHITE = (255, 255, 255)
 
+# Yello for help
+HELP_COLOR = (255, 255, 0)
+
 BACKGROUND_COLORS = [SPRING_GREEN, SUMMER_GREEN, FALL_GREEN, FALL_BROWN, WINTER_GREEN, WINTER_WHITE]
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = '%d,%d' % (0,0)
@@ -45,6 +48,7 @@ RANDOM_EVENT_CHANCE = 0.1
 
 FONT_PATH = "assets/fonts/Oldenburg-Regular.ttf"
 FONT = pygame.font.Font("assets/fonts/Oldenburg-Regular.ttf", 64)
+HELP_FONT = pygame.font.Font("assets/fonts/Oldenburg-Regular.ttf", 24)
 
 show_navmesh = False
 

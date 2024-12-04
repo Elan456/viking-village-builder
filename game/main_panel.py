@@ -4,6 +4,7 @@ The main panel lives on the bottom of the screen and gives the player a button t
 
 import pygame
 from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FONT, FONT_PATH, WIN_CONDITION
+from config import defines
 from utils.button import Button
 from utils.style_button import StyleButton
 from assets.ui.button_mapping import GREEN_NEXT
@@ -19,6 +20,9 @@ class MainPanel:
         
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
         self.resource_font = pygame.font.Font(FONT_PATH, 16)
+
+        self.help = False 
+        self.village.event_handler.register_help(lambda: setattr(self, "help", not self.help))
 
         self.resource_box_x = 0
         self.resource_box_y = 0
@@ -94,6 +98,22 @@ class MainPanel:
                 projected_value = int(final_resources[resource])
                 win_condition_text = self.resource_font.render(f"Projection: {projected_value}/{win_condition}", True, (0, 0, 0))
                 surface.blit(win_condition_text, (self.resource_box_x + 180, 0 + i*v_spacing))
+
+        if self.help:
+            help_text = [
+                "This is the main resource panel.",
+                "It shows the change in resources for the next turn.",
+                "For the bottom two resources,",
+                "it shows your projected totals at the end of the game.",
+                "You need 250 soldiers and 10 ships on the final turn to win.",
+            ]
+
+
+            for i, line in enumerate(help_text):
+                text = defines.HELP_FONT.render(line, True, defines.HELP_COLOR)
+                surface.blit(text, (self.resource_box_x, self.resource_box_y + self.resource_box_height + 10 + i*(text.get_height() + 3)))
+
+            pygame.draw.rect(surface, defines.HELP_COLOR, (self.resource_box_x, self.resource_box_y, self.resource_box_width, self.resource_box_height), 2)
 
     def next_turn(self):
         self.village.on_new_turn()

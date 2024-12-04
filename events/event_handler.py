@@ -24,6 +24,12 @@ class EventHandler:
         """
         self.event_funcs.append((event_type, event_key, func))
 
+    def register_help(self, func):
+        """
+        This func will be called every time the player presses 'h'  
+        """
+        self.register_event(pygame.KEYDOWN, pygame.K_h, func)
+
     def handle(self, event):
         if event.type == pygame.QUIT:
             pygame.quit()
