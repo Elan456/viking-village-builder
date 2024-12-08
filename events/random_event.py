@@ -123,12 +123,14 @@ class VillageFire(RandomEvent):
 
     def draw(self, surface, i):
         super().draw(surface, i)
-        self.draw_tick += 1
-        self.draw_tick %= len(self.fire_images)
+        self.draw_tick += .4
+        image_index = int(self.draw_tick) % len(self.fire_images)
+        if self.draw_tick >= 1000:
+            self.draw_tick = 0
 
 
         for building in self.fire_buildings:
-            surface.blit(self.fire_images[self.draw_tick], (building.x - defines.camera_x + building.rect.width / 2 - VillageFire.width / 2, building.y - defines.camera_y + building.rect.height / 2 - VillageFire.height / 2))
+            surface.blit(self.fire_images[image_index], (building.x - defines.camera_x + building.rect.width / 2 - VillageFire.width / 2, building.y - defines.camera_y + building.rect.height / 2 - VillageFire.height / 2))
 
 
 class Blight(RandomEvent):

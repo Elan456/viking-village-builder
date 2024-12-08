@@ -10,7 +10,7 @@ def load_warrior_images():
     for i in range(8):
         image = pygame.surface.Surface((48, 48), pygame.SRCALPHA)
         image.blit(viking_sheet, (0, 0), (32 + i * 115, 25, 48, 48))
-        image = pygame.transform.scale(image, (GRID_SIZE * 1.5, GRID_SIZE * 1.5))
+        image = pygame.transform.scale(image, (int(GRID_SIZE * 1.5), int(GRID_SIZE * 1.5)))
         warrior_images.append(image)
 
     return warrior_images
