@@ -9,6 +9,7 @@ from game.lore_scroll import LoreScroll
 
 pygame.init()
 pygame.font.init()
+pygame.mixer.init()
 
 class Game:
     def __init__(self) -> None:

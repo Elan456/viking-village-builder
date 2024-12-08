@@ -23,6 +23,9 @@ class Village:
     def __init__(self, event_handler) -> None:
         self.event_handler = event_handler
 
+        pygame.mixer.music.load("assets/audio/calm.mp3")
+        pygame.mixer.music.play(-1)
+
         self.buildings: List[Building] = []
         self.turn = 0
         self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
@@ -125,6 +128,10 @@ class Village:
         for _ in range(200):
             for building in self.buildings:
                 building.my_villager.update()
+
+        if self.turn == 75:
+            pygame.mixer.music.load("assets/audio/scary.mp3")
+            pygame.mixer.music.play(-1)
 
     def construct_building(self, building: Building):
         """
