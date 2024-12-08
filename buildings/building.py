@@ -53,7 +53,7 @@ class Building(pygame.sprite.Sprite):
         """
         # pygame.draw.rect(surface, (0, 0, 0), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
         pygame.draw.rect(surface, (100, 0, 0), (self.x - defines.camera_x - GRID_SIZE, self.y - defines.camera_y - GRID_SIZE,
-                                                 self.rect.width + 2 * GRID_SIZE, self.rect.height + 2 * GRID_SIZE), 1)
+                                                 self.rect.width + 2 * GRID_SIZE, self.rect.height + 2 * GRID_SIZE), 2)
     
     def draw(self, surface: pygame.Surface):
         """
