@@ -3,9 +3,8 @@ The main panel lives on the bottom of the screen and gives the player a button t
 """
 
 import pygame
-from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FONT, FONT_PATH, WIN_CONDITION
+from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FONT_PATH, WIN_CONDITION
 from config import defines
-from utils.button import Button
 from utils.style_button import StyleButton
 from assets.ui.button_mapping import GREEN_NEXT
 from .resources import get_icon
@@ -20,17 +19,17 @@ class MainPanel:
                                             hover_text="Next Turn" )
         
         self.turn_font = pygame.font.Font(FONT_PATH, 24)
-        self.resource_font = pygame.font.Font(FONT_PATH, 16)
+        self.resource_font = pygame.font.Font(FONT_PATH, 24)
 
         self.help = False 
         self.village.event_handler.register_help(lambda: setattr(self, "help", not self.help))
 
-        self.resource_box_x = 0
+        self.resource_box_x = 25
         self.resource_box_y = 0
-        self.resource_box_width = 400
-        self.resource_box_height = self.village.resources.keys().__len__() * (self.resource_font.get_height() + 3)
+        self.resource_box_width = 550
+        self.resource_box_height = self.village.resources.keys().__len__() * (self.resource_font.get_height())
         self.resource_box = pygame.Surface((self.resource_box_width, self.resource_box_height), pygame.SRCALPHA)
-        self.resource_box.fill((150, 150, 150, 150))
+        self.resource_box.fill((150, 150, 150, 200))
         self.draw_tick = 0
     
         
@@ -87,7 +86,7 @@ class MainPanel:
 
         for i, resource in enumerate(resource_to_icon.keys()):
             icon = get_icon(resource)
-            surface.blit(icon, (self.resource_box_x, 0 + i*v_spacing))
+            surface.blit(icon, (self.resource_box_x + 10, 10 + i*v_spacing))
             
             delta = round(resources_change.get(resource, 0),2)
             if delta > 0:
@@ -104,17 +103,21 @@ class MainPanel:
 
             resource_color = (0, 0, 0)
             if resource in deprived_of:
-                resource_color = (200, 0, 0)
+                resource_color = (100, 0, 0)
 
             resource_text = self.resource_font.render(resource_string, True, resource_color)
-            surface.blit(resource_text, (self.resource_box_x + 30, 0 + i*v_spacing))
+            surface.blit(resource_text, (self.resource_box_x + 50, 10 + i*v_spacing))
 
             # If the resource is in the win condition, show the win condition and the current projection
             if resource in WIN_CONDITION:
                 win_condition = int(WIN_CONDITION[resource])
                 projected_value = int(final_resources[resource])
-                win_condition_text = self.resource_font.render(f"Projection: {projected_value}/{win_condition}", True, (0, 0, 0))
-                surface.blit(win_condition_text, (self.resource_box_x + 180, 0 + i*v_spacing))
+                win_condition_color = (0, 0, 0) if projected_value >= win_condition else (100, 0, 0)
+                win_condition_text = self.resource_font.render(f"Projection: {projected_value}/{win_condition}", True, win_condition_color)
+                surface.blit(win_condition_text, (self.resource_box_x + resource_text.get_width() + 80, 10 + i*v_spacing))
+
+        # Draw a border around the resource box
+        pygame.draw.rect(surface, (0, 0, 0), (self.resource_box_x, self.resource_box_y, self.resource_box_width, self.resource_box_height), 2)
 
         if self.help:
             help_text = [

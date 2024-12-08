@@ -28,8 +28,8 @@ class Village:
 
         self.buildings: List[Building] = []
         self.turn = 0
-        self.resources = {"food": 100, "wood": 100, "ore": 100, "people": 0, "weapons": 0, "warriors": 0, "ships": 0}
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
+        self.resources = {"food": 100, "wood": 100, "ore": 100, "weapons": 0, "warriors": 0, "ships": 0}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
         self.width_cell = defines.WORLD_WIDTH
         self.height_cell = defines.WORLD_HEIGHT
@@ -66,7 +66,6 @@ class Village:
         self.resources["food"] += 1000
         self.resources["wood"] += 1000
         self.resources["ore"] += 1000
-        self.resources["people"] += 1000
 
     
     def calculate_turn_change_resources(self) -> dict:
@@ -100,7 +99,7 @@ class Village:
         self.turn += 1 
         # Setting the production multipliers to 1 again
         # The random events can then change them 
-        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "people": 1, "weapons": 1, "warriors": 1, "ships": 1}
+        self.production_multipliers = {"food": 1, "wood": 1, "ore": 1, "weapons": 1, "warriors": 1, "ships": 1}
 
         if self.need_to_regen_navmesh:
             self.navmesh.generate_navmesh()
