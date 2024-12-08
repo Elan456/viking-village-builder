@@ -26,9 +26,9 @@ if platform.system() == "Windows":
     FULL_SCREEN = False
 else:
     os.environ['SDL_VIDEO_X11_DPI_AWARE'] = "1"  # Enable DPI scaling
-    DISPLAY_WIDTH = 1800
-    DISPLAY_HEIGHT = 900
-    FULL_SCREEN = False
+    DISPLAY_WIDTH = 1920
+    DISPLAY_HEIGHT = 1080
+    FULL_SCREEN = True
 
 RIVER_TOP_CELL = 0
 RIVER_BOTTOM_CELL = 3
