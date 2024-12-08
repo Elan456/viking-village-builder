@@ -250,7 +250,7 @@ class BuildingPanel:
         if self.selected_building is not None:
 
             self.village.world.draw_grid(surface)
-            for building in self.village.buildings:
+            for building in self.village.buildings + [c.building for c in self.village.builder_manager.construction_queue]:
                 building.draw_outline(surface)
 
             color = (0, 255, 0) if self.selected_can_be_placed else (255, 0, 0)
