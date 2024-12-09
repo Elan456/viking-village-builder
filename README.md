@@ -23,6 +23,7 @@ https://github.com/Elan456/viking-village-builder
     - [Building](#building)
     - [Turn Management](#turn-management)
     - [Resource Panel](#resource-panel)
+    - [Crafting Dependencies](#crafting-dependencies)
   - [Credits](#credits)
     - [Programming](#programming)
     - [Music](#music)
@@ -85,13 +86,15 @@ Your village has been selected to aid in the invasion of London. By placing buil
 #### Getting Raw Resources
 
 1. Your village starts with a few buildings and a wall.
-2. You need to start accumulating basic resources: wood, ore, and food to craft weapons, warriors, and ships later
+2. You need to start accumulating basic resources: wood ![wood](assets/resources/wood.png), ore ![ore](assets/resources/ore.png), and food ![food](assets/resources/food.png) to craft weapons ![weapons](assets/resources/axe.png), warriors ![warrior](assets/resources/warrior.png), and ships ![ship](assets/resources/ship.png) later
 3. Click and drag the lumberyard building from the right panel to an empty space within your walls.
-4. The ghost of the building will appear with a number indicating how many turns are left until it is built. The orange outline indicates that the building is currently being worked on. 
+![Lumberyard](assets/tutorial/placing_lumberyard.png)
+1. The ghost of the building will appear with a number indicating how many turns are left until it is built. The orange outline indicates that the building is currently being worked on. 
 
 #### Building More Buildings
 1. With more builder's huts, you can build more buildings at once.
-2. Click and drag the builder's hut from the right panel (hammer icon) to an empty space within your walls.
+2. Click and drag the builder's hut from the right panel (hammer icon) ![Builder's Hut](assets/misc/hammer.png) to an empty space within your walls.
+
 
 #### Advanced Resources
 The buildings which produce Aadvanced resources such as weapons, warriors, and ships can have their production boosted by other buildings.
@@ -135,6 +138,14 @@ You only get 100 turns till the end of the game to build your army and prepare f
 The panel in the top-left corner shows your current resources and how much you are producing and consuming.
 For the warriors and ships, a projection is shown to indicate how many you will have at the end of 100 turns assuming your current production rate stays the same. 
 A resource will turn red if buildings are unable to produce because of a lack of that resource. This is a warning that you need to build more of that resource-producing building.
+
+### Crafting Dependencies
+
+Production | Cost
+--- | ---
+![warrior](assets/resources/warrior.png) | ![weapons](assets/resources/axe.png), ![food](assets/resources/food.png)
+![ship](assets/resources/ship.png) | ![wood](assets/resources/wood.png), ![ore](assets/resources/ore.png)
+![weapons](assets/resources/axe.png) | ![wood](assets/resources/wood.png), ![ore](assets/resources/ore.png)
 
 ## Credits
 
