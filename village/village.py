@@ -198,6 +198,8 @@ class Village:
         for building in self.buildings:
             building.draw(surface)
 
+        self.war_power.draw(surface)
+
         for building in self.buildings:
             building.my_villager.draw(surface)
 
@@ -205,8 +207,6 @@ class Village:
             construction.draw(surface)
 
         self.random_events.draw(surface)
-
-        self.war_power.draw(surface)
 
         self.cloud_handler.draw(surface)
 
