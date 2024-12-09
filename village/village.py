@@ -219,3 +219,6 @@ class Village:
 
         for i in range(len(self.active_effects)):
             self.active_effects[i].draw(surface, i)
+
+        if self.turn == 100:
+            self.war_power.draw_end_game(surface)

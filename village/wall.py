@@ -49,6 +49,10 @@ class Wall(pygame.sprite.Sprite):
         """
         Draws the wall on the screen
         """
+
+        self.upgrade_button.move(
+            -defines.camera_x - self.thickness, -defines.camera_y - self.upgrade_button.height - self.thickness
+        )
         
         for wall in self.walls:
             pygame.draw.rect(surface, self.color, (wall.x - defines.camera_x, wall.y - defines.camera_y, wall.width, wall.height))
@@ -66,9 +70,6 @@ class Wall(pygame.sprite.Sprite):
         Updates the wall
         """
         self.upgrade_button.update()
-        self.upgrade_button.move(
-            -defines.camera_x - self.thickness, -defines.camera_y - self.upgrade_button.height - self.thickness
-        )
 
     def calculate_walls(self):
         self.left_wall = CollisionRect(self.x * GRID_SIZE - self.thickness,
