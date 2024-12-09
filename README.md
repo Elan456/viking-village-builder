@@ -2,16 +2,64 @@
 ![Thumbnail](assets/misc/thumbnail.png)
 https://github.com/Elan456/viking-village-builder
 
+## Table of Contents
+# Table of Contents
+
+1. [Setup Instructions](#setup-instructions)  
+   1.1. [Downloading the Game (If you don't already have it)](#downloading-the-game-if-you-dont-already-have-it)  
+      1.1.1. [Using Git](#using-git)  
+      1.1.2. [Downloading the ZIP](#downloading-the-zip)  
+   1.2. [Dependency Installation](#dependency-installation)  
+   1.3. [Running the Game](#running-the-game)  
+2. [Gameplay Instructions](#gameplay-instructions)  
+   2.1. [Objective](#objective)  
+   2.2. [First Steps](#first-steps)  
+      2.2.1. [Getting Raw Resources](#getting-raw-resources)  
+   2.3. [Building More Buildings](#building-more-buildings)  
+   2.4. [Advanced Resources](#advanced-resources)  
+   2.5. [Controls](#controls)  
+   2.6. [Win Condition](#win-condition)  
+   2.7. [Building](#building)  
+   2.8. [Turn Management](#turn-management)  
+   2.9. [Resource Panel](#resource-panel)  
+3. [Credits](#credits)  
+   3.1. [Programming](#programming)  
+   3.2. [Music](#music)  
+   3.3. [Art](#art)  
+   3.4. [Tooling](#tooling)  
+4. [Milestone Feature Breakdown](#milestone-feature-breakdown)  
+   4.1. [Final Project Milestone (11/21 - 12/9)](#final-project-milestone-1121---1209)  
+      4.1.1. [Notable Changes / Additions](#notable-changes--additions)  
+   4.2. [Milestone 3 (10/31 - 11/20)](#milestone-3-1031---1120)  
+      4.2.1. [Features Added (with Point Values Adding to 100)](#features-added-with-point-values-adding-to-100)  
+   4.3. [Milestone 2 (9/17 - 10/30)](#milestone-2-917---1030)  
+      4.3.1. [Link to the Full Changelog](#link-to-the-full-changelog)  
+      4.3.2. [Features Added](#features-added)  
+
+---
+
 ## Setup instructions
-Currently, the game is not built into an exe. To play, you must use Python and install the necessary dependencies.
+Currently, the game is not packaged into an executable, so you will need to run it from the source code.
 
 ### 1. Downloading the Game (If you don't already have it)
+
+#### Using Git
 ```sh
 git clone https://github.com/Elan456/viking-village-builder.git
 cd viking-village-builder
 ```
 
+#### Downloading the ZIP
+
+Visit the GitHub repository at [viking-village-builder](https://github.com/Elan456/viking-village-builder)
+
+1. Click the green "Code" button on the top right of the repository
+2. Click "Download ZIP"
+3. Extract the ZIP to a folder
+
 ### 2. Dependency Installation
+
+> Note: You may need to install Python 3.8 or higher to run the game. You can download it from https://www.python.org/downloads/
 
 ```sh
 python -m pip install -r requirements.txt
@@ -29,6 +77,30 @@ python main.py
 
 ## Gameplay Instructions 
 
+### Objective
+
+Your village has been selected to aid in the invasion of London. By placing buildings and managing resources, you must build an army of 250 warriors and 10 ships by turn 100.
+
+### First Steps 
+
+#### Getting Raw Resources
+
+1. Your village starts with a few buildings and a wall.
+2. You need to start accumulating basic resources: wood, ore, and food to craft weapons, warriors, and ships later
+3. Click and drag the lumberyard building from the right panel to an empty space within your walls.
+4. The ghost of the building will appear with a number indicating how many turns are left until it is built. The orange outline indicates that the building is currently being worked on. 
+
+#### Building More Buildings
+1. With more builder's huts, you can build more buildings at once.
+2. Click and drag the builder's hut from the right panel (hammer icon) to an empty space within your walls.
+
+#### Advanced Resources
+The buildings which produce Aadvanced resources such as weapons, warriors, and ships can have their production boosted by other buildings.
+
+1. Click and drag a blacksmith building (axe icon) to an empty space within your walls.
+2. Notice the blue lines indicating which buildings boost the blacksmith's production.
+3. The boost amount is a multiplier on the base production rate of the blacksmith based on its proximity to the boosting buildings.
+
 ### Controls
 
 - "H" = Show Help Screen
@@ -44,6 +116,12 @@ python main.py
 Click + drag on a building from the far-right panel to an empty space within your walls.
 
 If the construction fails, a message will appear in the center to tell you why.
+
+Common reasons for construction failure are:
+- Not enough resources
+- Shipyard not along the river
+- Outside of the wall
+- Building overlaps with another building
 
 ### Turn Management
 

@@ -114,10 +114,8 @@ class BuildingHoverPanel:
         if self.village.building_panel.help:
             # Add some explanation text off to the side
             help_text = [
-                "This panel shows the details of the",
-                "building you are hovering over.",
                 "You can disable, enable, or demolish",
-                "the building. The blue lines show which ",
+                "buildings. The blue lines show which ",
                 "buildings are boosting this building.",
                 "Disable a building to conserve the resource",
                 "it consumes, so you can use it elsewhere.",
