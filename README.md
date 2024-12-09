@@ -1,4 +1,5 @@
 # Invasion of London: Forkbeard's Call
+![Thumbnail](assets/misc/thumbnail.png)
 https://github.com/Elan456/viking-village-builder
 
 ## Setup instructions
