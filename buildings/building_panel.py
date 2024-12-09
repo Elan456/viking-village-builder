@@ -272,6 +272,9 @@ class BuildingPanel:
         pygame.draw.rect(temp_surface, (50, 50, 50, 200), (0, 0, self.width, self.height))
 
         # Draw each building, one after the other vertically
+
+        
+        builders_hut_y = 0
         
         for i, building in enumerate(self.buildings):
             # Get x for centering it
@@ -285,7 +288,11 @@ class BuildingPanel:
                 else:
                     temp_surface.blit(building[1], (x, i * defines.GRID_SIZE * 4))
 
+            if building[0] == "buildershut":
+                builders_hut_y = i * defines.GRID_SIZE * 4
+
         surface.blit(temp_surface, (self.x, self.y))
+
 
         # Draw the selected building centered on the mouse
         if self.selected_building is not None:
@@ -314,3 +321,9 @@ class BuildingPanel:
             help_text_surface = defines.HELP_FONT.render(help_text, True, defines.HELP_COLOR)
             surface.blit(help_text_surface, (self.x - help_text_surface.get_width(), 0))
             pygame.draw.line(surface, defines.HELP_COLOR, (self.x - help_text_surface.get_width() // 2, self.y), (self.x, DISPLAY_HEIGHT // 2), 5)
+
+            # Draw an arrow explaining that they should build a builder's hut to be able to build more buildings
+            help_text = "Build a builder's hut to do more simultaneous constructions"
+            help_text_surface = defines.HELP_FONT.render(help_text, True, defines.HELP_COLOR)
+            surface.blit(help_text_surface, (self.x - help_text_surface.get_width() - 50, DISPLAY_HEIGHT // 2 - 50))
+            pygame.draw.line(surface, defines.HELP_COLOR, (self.x - help_text_surface.get_width() // 2, DISPLAY_HEIGHT // 2), (self.x + 25, self.y + builders_hut_y + defines.GRID_SIZE), 5)

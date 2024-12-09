@@ -141,7 +141,7 @@ A resource will turn red if buildings are unable to produce because of a lack of
 
 ### Crafting Dependencies
 
-Production | Cost
+Production | Cost / Boost Buildings
 --- | ---
 ![warrior](assets/resources/warrior.png) | ![weapons](assets/resources/axe.png), ![food](assets/resources/food.png)
 ![ship](assets/resources/ship.png) | ![wood](assets/resources/wood.png), ![ore](assets/resources/ore.png)
