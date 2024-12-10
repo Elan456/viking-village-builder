@@ -182,20 +182,26 @@ Medieval Building Assets: [Medieval Fantasy RPG Tileset](https://ventilatore.itc
 ### Final Project Milestone (11/21 - 12/9)
 
 #### Notable Changes / Additions 
-1. Add procedurally generated clouds that move 
-2. Perlin noise background images
-3. Fix deprived resource detection
-4. Add a lore scroll
-5. Fix leaves dropping at the wrong times
-6. Change the river color to be more subtle
-7. Add more int casting to prevent random.randint errors
-8. Improve the paths / borders around the buildings
-9. Put the building's icon on it's asset in the main screen, so it's easier to see what it is
-10. Show the boost buildings when hovering over a building
-11. Add a help screen (press H)
-12. Add background music from Love Springs
-13. Make the main resource panel much larger
-14. Add red color when projection is less than the win condition
+1. Fix draw order of war power and villagers
+2. Add an FPS counter
+3. Add a proper caption and icon to the window
+4. Fix the end game layers
+5. Add a builder's hut help hint
+6. Add icons to the README
+7. Add procedurally generated clouds that move 
+8. Perlin noise background images
+9. Fix deprived resource detection
+10. Add a lore scroll
+11. Fix leaves dropping at the wrong times
+12. Change the river color to be more subtle
+13. Add more int casting to prevent random.randint errors
+14. Improve the paths / borders around the buildings
+15. Put the building's icon on it's asset in the main screen, so it's easier to see what it is
+16. Show the boost buildings when hovering over a building
+17. Add a help screen (press H)
+18. Add background music from Love Springs
+19. Make the main resource panel much larger
+20. Add red color when projection is less than the win condition
 
 
 ### Milestone 3 (10/31 - 11/20)
