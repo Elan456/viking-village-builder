@@ -1,4 +1,13 @@
 import pygame 
+import asyncio
+import pyquadtree  # type: ignore # noqa
+
+# /// script
+# dependencies = [
+#  "e-pyquadtree",
+#  "pygame",
+# ]
+# ///
 
 from village.village import Village
 from events.event_handler import EventHandler
@@ -6,7 +15,7 @@ from config.defines import DISPLAY_WIDTH, DISPLAY_HEIGHT, FULL_SCREEN
 from events.announcements import announcement_handler
 from game.start_menu import StartMenu
 from game.lore_scroll import LoreScroll
-from config.defines import FONT_PATH
+from config.defines import FONT_PATH, IS_WEB
 
 pygame.init()
 pygame.font.init()
@@ -26,8 +35,9 @@ class Game:
 
         self.fps_font = pygame.font.Font(FONT_PATH, 12)
 
-    def start(self):
+    async def start(self):
         while True:
+            await asyncio.sleep(0)
             frame_rate = self.clock.get_fps()
             if self.event_handler.tick(frame_rate) == None:
                 break
@@ -49,5 +59,7 @@ class Game:
 
 
 if __name__ == "__main__":
-    StartMenu().start()
-    Game().start()
+    if not IS_WEB:
+        StartMenu().start()
+    game = Game()
+    asyncio.run(game.start())

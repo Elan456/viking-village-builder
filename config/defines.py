@@ -1,6 +1,7 @@
 import pygame 
 import platform 
 import os
+import sys 
 
 pygame.init()
 
@@ -29,6 +30,21 @@ else:
     DISPLAY_WIDTH = 1920
     DISPLAY_HEIGHT = 1080
     FULL_SCREEN = True
+
+IS_WEB = False
+if sys.platform == "emscripten":
+    print("Running in browser")
+    DISPLAY_WIDTH = 1800
+    DISPLAY_HEIGHT = 1000
+    FULL_SCREEN = False
+
+    CALM_PATH = "assets/audio/calm.ogg"
+    SCARY_PATH = "assets/audio/scary.ogg"
+
+    IS_WEB = True
+else:
+    CALM_PATH = "assets/audio/calm.mp3"
+    SCARY_PATH = "assets/audio/scary.mp3"
 
 RIVER_TOP_CELL = 0
 RIVER_BOTTOM_CELL = 3

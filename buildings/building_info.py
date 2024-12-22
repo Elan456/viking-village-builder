@@ -32,10 +32,10 @@ def load_icons():
             circle_radius = int(GRID_SIZE * 1.25)
             
             
-            pygame.gfxdraw.aacircle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 255))
-            pygame.gfxdraw.aacircle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
-            pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
-            pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 128))
+            # pygame.gfxdraw.aacircle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 255))
+            # pygame.gfxdraw.aacircle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
+            # pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, circle_radius, (0, 0, 0, 255))
+            # pygame.gfxdraw.filled_circle(circle, circle_radius, circle_radius, int(circle_radius * .9), (0, 0, 0, 128))
             
             circle.blit(image, (0.25 * GRID_SIZE, 0.25 * GRID_SIZE))
             images[building] = circle
