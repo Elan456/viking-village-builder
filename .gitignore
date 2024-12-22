@@ -5,6 +5,6 @@
 *.pyc
 *.egg-info
 *-pygbag.???
-*.apk
 /build/web-cache
+/build
 /dist
