@@ -29,7 +29,7 @@ else:
     os.environ['SDL_VIDEO_X11_DPI_AWARE'] = "1"  # Enable DPI scaling
     DISPLAY_WIDTH = 1920
     DISPLAY_HEIGHT = 1080
-    FULL_SCREEN = True
+    FULL_SCREEN = False
 
 IS_WEB = False
 if sys.platform == "emscripten":

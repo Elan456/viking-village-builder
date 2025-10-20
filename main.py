@@ -1,13 +1,6 @@
 import pygame 
 import asyncio
-import pyquadtree  # type: ignore # noqa
-
-# /// script
-# dependencies = [
-#  "e-pyquadtree",
-#  "pygame",
-# ]
-# ///
+from fastquadtree import QuadTree
 
 from village.village import Village
 from events.event_handler import EventHandler

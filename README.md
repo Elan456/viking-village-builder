@@ -65,9 +65,9 @@ Visit the GitHub repository at [viking-village-builder](https://github.com/Elan4
 python -m pip install -r requirements.txt
 ```
 
-This should install pygame and e-pyquadtree.
+This should install pygame and fastquadtree
 
-> e-pyquadtree is a quadtree data structure package written by me, check it out on GitHub: https://github.com/Elan456/pyquadtree
+> fastquadtree is a quadtree data structure package written by me, check it out on GitHub: https://github.com/Elan456/fastquadtree
 
 ### 3. Running the game 
 
@@ -170,7 +170,7 @@ Medieval Building Assets: [Medieval Fantasy RPG Tileset](https://ventilatore.itc
 
 ### Tooling
 - [Pygame](https://www.pygame.org/news) for the game engine
-- [e-pyquadtree](https://github.com/Elan456/pyquadtree) for the quadtree optimizations
+- [fastquadtree](https://github.com/Elan456/fastquadtree) for the quadtree optimizations
 - [Tiled](https://www.mapeditor.org/) for the map editor
 - [GIMP](https://www.gimp.org/) for image editing
 - [Audacity](https://www.audacityteam.org/) for audio editing
