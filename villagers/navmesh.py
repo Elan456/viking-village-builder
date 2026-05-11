@@ -3,7 +3,7 @@ from config import defines
 from config.defines import GRID_SIZE
 import random
 
-from fastquadtree import RectQuadTree, QuadTree
+from fastquadtree import RectQuadTreeObjects, QuadTreeObjects
 import copy
 
 
@@ -47,7 +47,7 @@ class NavMesh:
         buildings_to_check = self.building_quadtree.query((min(x0, x1) - 2 * GRID_SIZE,
                                                            min(y0, y1) -  2 * GRID_SIZE,
                                                            max(x0, x1) +  2 * GRID_SIZE,
-                                                           max(y0, y1) +  2 * GRID_SIZE), as_items=True)
+                                                           max(y0, y1) +  2 * GRID_SIZE))
         # Add in the 5 nearest buildings to the query
         # buildings_to_check = self.building_quadtree.nearest_neighbors(point1, number_of_neighbors=5)
         # buildings_to_check += self.building_quadtree.nearest_neighbors(point2, number_of_neighbors=5)
@@ -103,9 +103,9 @@ class NavMesh:
         Generates a quadtree which holds all the buildings for
         quick lookup for can_see 
         """
-        self.building_quadtree = RectQuadTree((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
+        self.building_quadtree = RectQuadTreeObjects((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
                                            -defines.WORLD_HEIGHT * .25 * defines.GRID_SIZE,
-                                           defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE), 8, track_objects=True)
+                                           defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE), 8)
 
         for building in self.village.buildings + [c.building for c in self.village.builder_manager.construction_queue]:
             # Add each corner of the building to the quadtree
@@ -127,9 +127,9 @@ class NavMesh:
         self.generate_building_quadtree()
 
         self.nodes = []
-        self.nodes_quadtree = QuadTree((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
+        self.nodes_quadtree = QuadTreeObjects((-defines.WORLD_WIDTH * .25 * defines.GRID_SIZE,
                                          -defines.WORLD_HEIGHT * .25 * defines.GRID_SIZE,
-                                         defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE), 8, track_objects=True)
+                                         defines.WORLD_WIDTH * defines.GRID_SIZE, defines.WORLD_HEIGHT * defines.GRID_SIZE), 8)
 
         # Adds some basic nodes to the navmesh
         for x in range(int(-defines.WORLD_WIDTH * defines.GRID_SIZE * .25),
@@ -164,7 +164,7 @@ class NavMesh:
         # For every node, add all the nodes it can see as neighbors
         total_neighbors = 0
         for i, node in enumerate(self.nodes):
-            for other_element in self.nodes_quadtree.nearest_neighbors((node.x, node.y), k=10, as_items=True):
+            for other_element in self.nodes_quadtree.nearest_neighbors((node.x, node.y), k=10):
                 other_node = other_element.obj
                 other_point = other_element.geom
                 if node == other_node:
@@ -193,8 +193,8 @@ class NavMesh:
         """
 
         # Find the nodes closest to the start and end points that can be seen
-        start = self.nodes_quadtree.nearest_neighbors(start_pnt, k=1, as_items=True)[0].obj
-        end = self.nodes_quadtree.nearest_neighbors(end_pnt, k=1, as_items=True)[0].obj
+        start = self.nodes_quadtree.nearest_neighbors(start_pnt, k=1)[0].obj
+        end = self.nodes_quadtree.nearest_neighbors(end_pnt, k=1)[0].obj
 
         if end is None: 
             raise ValueError("No end node found in navmesh")
