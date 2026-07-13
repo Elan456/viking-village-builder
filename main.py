@@ -49,10 +49,11 @@ class Game:
             pygame.display.flip()
             self.clock.tick(30)
 
-
+async def main():
+    game = Game()
+    await game.start()
 
 if __name__ == "__main__":
     if not IS_WEB:
         StartMenu().start()
-    game = Game()
-    asyncio.run(game.start())
+    asyncio.run(main())
