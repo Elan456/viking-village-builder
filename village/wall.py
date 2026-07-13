@@ -44,6 +44,23 @@ class Wall(pygame.sprite.Sprite):
         }
 
         self.wall_cost_multiplier = 2.2
+        self._cost_icon_cache = {}
+        self._cost_text_cache = {}
+
+    def _get_cost_icon(self, resource):
+        icon = self._cost_icon_cache.get(resource)
+        if icon is None:
+            icon = pygame.transform.scale(get_icon(resource), (20, 20))
+            self._cost_icon_cache[resource] = icon
+        return icon
+
+    def _get_cost_text(self, resource, amount):
+        key = (resource, amount)
+        text = self._cost_text_cache.get(key)
+        if text is None:
+            text = self.upgrade_button_font.render(str(amount), True, (0, 0, 0))
+            self._cost_text_cache[key] = text
+        return text
 
     def draw(self, surface: pygame.Surface):
         """
@@ -53,16 +70,14 @@ class Wall(pygame.sprite.Sprite):
         self.upgrade_button.move(
             -defines.camera_x - self.thickness, -defines.camera_y - self.upgrade_button.height - self.thickness
         )
-        
+
         for wall in self.walls:
             pygame.draw.rect(surface, self.color, (wall.x - defines.camera_x, wall.y - defines.camera_y, wall.width, wall.height))
 
-        # Draw next to the button the icons and amount of resources needed to upgrade the wall
         for i, (resource, amount) in enumerate(self.upgrade_cost.items()):
-            icon = get_icon(resource)
-            icon = pygame.transform.scale(icon, (20, 20))
+            icon = self._get_cost_icon(resource)
             surface.blit(icon, (self.upgrade_button.x + self.upgrade_button.width + i * 100, self.upgrade_button.y + 5))
-            text = self.upgrade_button_font.render(str(amount), True, (0, 0, 0))
+            text = self._get_cost_text(resource, amount)
             surface.blit(text, (self.upgrade_button.x + self.upgrade_button.width + 20 + i * 100, self.upgrade_button.y + 5))
 
     def update(self):

@@ -104,6 +104,10 @@ class Tree(pygame.sprite.Sprite):
         pass
 
     def draw(self, screen):
-        screen.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
+        sx = self.x - defines.camera_x
+        sy = self.y - defines.camera_y
+        if sx + 64 < 0 or sy + 112 < 0 or sx > defines.DISPLAY_WIDTH or sy > defines.DISPLAY_HEIGHT:
+            return
+        screen.blit(self.image, (sx, sy))
 
     

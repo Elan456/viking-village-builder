@@ -61,31 +61,58 @@ class Building(pygame.sprite.Sprite):
 
         :param surface: The surface to draw the building on
         """
+        cam_x = defines.camera_x
+        cam_y = defines.camera_y
+        sx = self.x - cam_x
+        sy = self.y - cam_y
+
+        # Skip fully off-screen buildings
+        if (
+            sx + self.rect.width < 0
+            or sy + self.rect.height < 0
+            or sx > defines.DISPLAY_WIDTH
+            or sy > defines.DISPLAY_HEIGHT
+        ):
+            return
+
         # Get the background color from the world and make it a bit darker for the pad of the building
         background_color = self.village.world.background_color
-        darker_color = tuple([max(0, color - 50) for color in background_color])
+        darker_color = tuple(max(0, color - 50) for color in background_color)
 
         # Get the bound for the ground pad but truncate based if the wall is really close
         x_min = max(self.village.wall.x, self.x - defines.GRID_SIZE)
         y_min = max(self.village.wall.y, self.y - defines.GRID_SIZE)
-        
+
         # Also watch out for the river
         y_min = max(defines.RIVER_BOTTOM_CELL * GRID_SIZE, y_min)
-        x_max = min(self.village.wall.x + self.village.wall.width * GRID_SIZE, self.x + self.rect.width + defines.GRID_SIZE)
-        y_max = min(self.village.wall.y + self.village.wall.height * GRID_SIZE, self.y + self.rect.height + defines.GRID_SIZE)
+        x_max = min(
+            self.village.wall.x + self.village.wall.width * GRID_SIZE,
+            self.x + self.rect.width + defines.GRID_SIZE,
+        )
+        y_max = min(
+            self.village.wall.y + self.village.wall.height * GRID_SIZE,
+            self.y + self.rect.height + defines.GRID_SIZE,
+        )
 
-        pygame.draw.rect(surface, darker_color, (x_min - defines.camera_x, y_min - defines.camera_y, x_max - x_min, y_max - y_min), GRID_SIZE)
+        pygame.draw.rect(
+            surface,
+            darker_color,
+            (x_min - cam_x, y_min - cam_y, x_max - x_min, y_max - y_min),
+            GRID_SIZE,
+        )
 
-        # print(camera_x, camera_y)
         if not self.being_demolished:
-            surface.blit(self.image, (self.x - defines.camera_x, self.y - defines.camera_y))
+            surface.blit(self.image, (sx, sy))
 
-        # Draw a grey rectangle if the building is disabled
         if self.disabled:
-            pygame.draw.rect(surface, (150, 150, 150), (self.x - defines.camera_x, self.y - defines.camera_y, self.rect.width, self.rect.height), 5)
+            pygame.draw.rect(
+                surface,
+                (150, 150, 150),
+                (sx, sy, self.rect.width, self.rect.height),
+                5,
+            )
 
-        # Draw the icon
-        surface.blit(self.icon, (self.x - defines.camera_x, self.y - defines.camera_y))
+        surface.blit(self.icon, (sx, sy))
     def update(self):
         """
         Updates the building's state. 

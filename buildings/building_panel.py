@@ -60,13 +60,16 @@ class BuildingPanel:
 
             scale = 3*defines.GRID_SIZE / image.get_height()
             image = pygame.transform.scale(image, (int(image.get_width() * scale), int(image.get_height() * scale)))
+            try:
+                image = image.convert_alpha()
+            except pygame.error:
+                pass
             highlighted_image = image.copy()
             pygame.draw.rect(highlighted_image, (0, 255, 0), (0, 0, image.get_width(), image.get_height()), 5)
 
             # Can't afford image
             not_afford_image = image.copy()
             pygame.draw.rect(not_afford_image, (100, 0, 0), (0, 0, image.get_width(), image.get_height()), 5)
-
 
             self.buildings.append((building, image, highlighted_image, not_afford_image))
 

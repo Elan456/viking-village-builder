@@ -8,3 +8,4 @@
 /build/web-cache
 /build
 /dist
+*.zip

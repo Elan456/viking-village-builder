@@ -1,4 +1,4 @@
-import pygame 
+import pygame
 import asyncio
 from fastquadtree import QuadTree
 
@@ -9,6 +9,7 @@ from events.announcements import announcement_handler
 from game.start_menu import StartMenu
 from game.lore_scroll import LoreScroll
 from config.defines import FONT_PATH, IS_WEB
+from utils.perf import convert_loaded_surfaces
 
 pygame.init()
 pygame.font.init()
@@ -18,19 +19,28 @@ pygame.display.set_icon(pygame.image.load("assets/resources/axe.png"))
 
 class Game:
     def __init__(self) -> None:
-        self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT), pygame.FULLSCREEN if FULL_SCREEN else 0)
+        flags = 0
+        if FULL_SCREEN:
+            flags |= pygame.FULLSCREEN
+        self.screen = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGHT), flags)
         # Enable alpha channel for transparency
         self.screen.set_alpha(None)
+
+        convert_loaded_surfaces()
+
         self.event_handler = EventHandler()
         self.village = Village(self.event_handler)
         self.lore_scroll = LoreScroll(self.event_handler)
         self.clock = pygame.time.Clock()
 
         self.fps_font = pygame.font.Font(FONT_PATH, 12)
+        self._fps_cache_value = None
+        self._fps_cache_surf = None
 
     async def start(self):
         while True:
-            await asyncio.sleep(0)
+            await asyncio.sleep(1/240)
+
             frame_rate = self.clock.get_fps()
             if self.event_handler.tick(frame_rate) == None:
                 break
@@ -47,7 +57,7 @@ class Game:
 
 
             pygame.display.flip()
-            self.clock.tick(30)
+            self.clock.tick(60)
 
 async def main():
     game = Game()

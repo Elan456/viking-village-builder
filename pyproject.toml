@@ -1,0 +1,22 @@
+[project]
+name = "viking-village-builder"
+version = "0.1.0"
+description = "Invasion of London: Forkbeard's Call — a Viking village builder game"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "pygame-ce>=2.2.0",
+    "fastquadtree>=2.1.1",
+    "pillow>=10.3.0",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = []
+
+[tool.pygodide]
+canvas-width = 1800
+canvas-height = 1000

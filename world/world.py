@@ -78,10 +78,26 @@ class World:
         self.background_color = (0, 0, 0)
         self.background_surfaces = generate_backgrounds()
 
-        # Scale each one to the full size
+        # Scale each one to the full size, then convert for fast blits
         for i, background in enumerate(self.background_surfaces):
-            self.background_surfaces[i] = pygame.transform.scale(background, (defines.WORLD_WIDTH * extra_scale * defines.GRID_SIZE,
-                                                                            defines.WORLD_HEIGHT * extra_scale * defines.GRID_SIZE))
+            scaled = pygame.transform.scale(
+                background,
+                (
+                    int(defines.WORLD_WIDTH * extra_scale * defines.GRID_SIZE),
+                    int(defines.WORLD_HEIGHT * extra_scale * defines.GRID_SIZE),
+                ),
+            )
+            try:
+                self.background_surfaces[i] = scaled.convert()
+            except pygame.error:
+                self.background_surfaces[i] = scaled
+
+        self._bg_offset_x = (
+            defines.WORLD_WIDTH * defines.GRID_SIZE * 0.25 + 100
+        )
+        self._bg_offset_y = (
+            defines.WORLD_HEIGHT * defines.GRID_SIZE * 0.25 + 100
+        )
 
     def on_new_turn(self):
         # Reset the floaters to make the river look different each time
@@ -172,14 +188,20 @@ class World:
     def draw_background(self, surface: pygame.Surface, turn: int):
         self.month = (turn % 12) // 2
         self.background_color = defines.BACKGROUND_COLORS[self.month]
-      
-        # print("drawing background with dimensions", self.background_surfaces[self.month].get_width(), self.background_surfaces[self.month].get_height())
-        surface.blit(self.background_surfaces[self.month], (0 - defines.camera_x - defines.WORLD_WIDTH * defines.GRID_SIZE * .25 - 100,
-                                                            0 - defines.camera_y - defines.WORLD_HEIGHT * defines.GRID_SIZE * .25 - 100))
-        # print("Backsurface colors: ", self.background_surfaces[self.month].get_at((50, 50)))
 
-        # pygame.draw.rect(surface, self.background_color, (0 - defines.camera_x, 0 - defines.camera_y, defines.DISPLAY_WIDTH, defines.DISPLAY_HEIGHT))
-        # pygame.draw.circle(surface, (255, 0, 0), (defines.DISPLAY_WIDTH // 2, defines.DISPLAY_HEIGHT // 2), 10)
+        bg = self.background_surfaces[self.month]
+        dest_x = int(-defines.camera_x - self._bg_offset_x)
+        dest_y = int(-defines.camera_y - self._bg_offset_y)
+
+        # Only blit the on-screen region of the large background
+        src_x = max(0, -dest_x)
+        src_y = max(0, -dest_y)
+        blit_x = max(0, dest_x)
+        blit_y = max(0, dest_y)
+        width = min(bg.get_width() - src_x, defines.DISPLAY_WIDTH - blit_x)
+        height = min(bg.get_height() - src_y, defines.DISPLAY_HEIGHT - blit_y)
+        if width > 0 and height > 0:
+            surface.blit(bg, (blit_x, blit_y), (src_x, src_y, width, height))
 
     def draw_grid(self, surface: pygame.Surface):
         min_x = self.village.wall.x 
@@ -198,5 +220,15 @@ class World:
         self.update_floating_objects()
         self.update_ripples()
         self.draw_river(surface)
+
+        cam_x = defines.camera_x
+        cam_y = defines.camera_y
+        view_w = defines.DISPLAY_WIDTH
+        view_h = defines.DISPLAY_HEIGHT
+        # Tree sprites are 64x112 — pad cull margin
         for tree in self.trees:
-            tree.draw(surface)
+            sx = tree.x - cam_x
+            sy = tree.y - cam_y
+            if sx + 64 < 0 or sy + 112 < 0 or sx > view_w or sy > view_h:
+                continue
+            surface.blit(tree.image, (sx, sy))

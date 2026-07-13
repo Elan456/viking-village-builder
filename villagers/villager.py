@@ -1,11 +1,12 @@
-import pygame 
+import pygame
 import random
-from config import defines 
+from config import defines
 from .navmesh import Node
-import json 
+import json
 from utils.utils import long_text, longTextnewLines
 
 ALL_VILLAGERS = ["farmer", "miner", "lumberjack", "blacksmith", "shipwright", "builder", "hersir"]
+
 
 class Villager(pygame.sprite.Sprite):
 
@@ -18,10 +19,44 @@ class Villager(pygame.sprite.Sprite):
     frame_width = defines.GRID_SIZE * 2
     frame_height = defines.GRID_SIZE * 2
 
-    # Scale all the images by 2x 
+    # Scale all the images by 2x
     for name in ALL_VILLAGERS:
         idle_ss[name] = pygame.transform.scale(idle_ss[name], (frame_width * 4, frame_height))
         walk_ss[name] = pygame.transform.scale(walk_ss[name], (frame_width * 6, frame_height))
+
+    # name -> action -> facing(0/1) -> list of frame surfaces
+    frames = None
+
+    @classmethod
+    def prepare_frames(cls):
+        """Slice and flip animation frames once (call after display convert)."""
+        cls.frames = {}
+        for name in ALL_VILLAGERS:
+            idle_sheet = cls.idle_ss[name].convert_alpha()
+            walk_sheet = cls.walk_ss[name].convert_alpha()
+            cls.idle_ss[name] = idle_sheet
+            cls.walk_ss[name] = walk_sheet
+
+            idle_right = []
+            for i in range(4):
+                frame = idle_sheet.subsurface(
+                    (i * cls.frame_width, 0, cls.frame_width, cls.frame_height)
+                ).copy()
+                idle_right.append(frame)
+            idle_left = [pygame.transform.flip(f, True, False) for f in idle_right]
+
+            walk_right = []
+            for i in range(6):
+                frame = walk_sheet.subsurface(
+                    (i * cls.frame_width, 0, cls.frame_width, cls.frame_height)
+                ).copy()
+                walk_right.append(frame)
+            walk_left = [pygame.transform.flip(f, True, False) for f in walk_right]
+
+            cls.frames[name] = {
+                "idle": (idle_right, idle_left),
+                "walk": (walk_right, walk_left),
+            }
 
     def __init__(self, my_building) -> None:
         super().__init__()
@@ -36,7 +71,7 @@ class Villager(pygame.sprite.Sprite):
         self.current_action = "idle"  # idle, walk
         self.walk_time = 600  # How long to spend walking (frames)
         self.idle_time = 100
-        self.current_time = 0 # Counts down to zero and then switches actions
+        self.current_time = 0  # Counts down to zero and then switches actions
         self.frame_tick = 0
 
         self.blurt_tick = random.randint(500, 2000)
@@ -46,10 +81,12 @@ class Villager(pygame.sprite.Sprite):
         self.facing = 0  # 0 = right, 1 = left
 
         self.current_destination_index = 0
-        self.path = [] # Sequence of points to walk to
+        self.path = []  # Sequence of points to walk to
 
         self.speed = 1
         self.lost = False
+
+        self._blank = pygame.Surface((Villager.frame_width, Villager.frame_height), pygame.SRCALPHA)
 
     def handle_blurt(self):
         self.blurt_tick -= 1
@@ -57,47 +94,32 @@ class Villager(pygame.sprite.Sprite):
             self.blurt_message = random.choice(Villager.blurts[self.name])
             self.blurt_message = longTextnewLines(self.blurt_message, 20)
 
-            
         if self.blurt_tick < -100:
             self.blurt_tick = random.randint(500, 2000)
 
     def draw_blurt(self, surface):
-        # Add a light gray rectangle behind the text (opacity 128)
         if self.blurt_message is not None:
-            long_text(surface, (self.x - defines.camera_x, self.y - 20 - defines.camera_y), self.blurt_message, (0, 0, 0), self.blurt_font, 20, align="center",
-                      rect_color=(128, 128, 128, 255),
-                      border_color=(0, 0, 0, 255))
+            long_text(
+                surface,
+                (self.x - defines.camera_x, self.y - 20 - defines.camera_y),
+                self.blurt_message,
+                (0, 0, 0),
+                self.blurt_font,
+                20,
+                align="center",
+                rect_color=(128, 128, 128, 255),
+                border_color=(0, 0, 0, 255),
+            )
 
     def get_image(self):
-        if self.name is None:
-            return pygame.Surface((Villager.frame_width, Villager.frame_height))
-        if self.current_action == "idle":
-            base_image = Villager.idle_ss[self.name]
-            x = (int(self.frame_tick) % 4) * Villager.frame_width
-            y = 0
-            width = Villager.frame_width
-            # When facing left, flip the image
-            if self.facing == 1:
-                base_image = pygame.transform.flip(base_image, True, False)
-                x += Villager.frame_width / 2
-                width /= 2
-                
-            return base_image.subsurface((x, y, width, Villager.frame_height))
+        if self.name is None or Villager.frames is None:
+            return self._blank
+        action = self.current_action if self.current_action in ("idle", "walk") else "idle"
+        facing_frames = Villager.frames[self.name][action][self.facing]
+        n = len(facing_frames)
+        idx = int(self.frame_tick) % n
+        return facing_frames[idx]
 
-        elif self.current_action == "walk":
-            # (50x50) with 6 frames
-            base_image = Villager.walk_ss[self.name]
-            x = (int(self.frame_tick) % 6) * Villager.frame_width
-            y = 0
-            width = Villager.frame_width
-            # When facing left, flip the image
-            if self.facing == 1:
-                base_image = pygame.transform.flip(base_image, True, False)
-                x += Villager.frame_width / 2
-                width /= 2
-            return base_image.subsurface((x, y, width, Villager.frame_height))
-
-        
     def start_walking(self):
         self.current_action = "walk"
         if self.destination is None:
@@ -116,7 +138,7 @@ class Villager(pygame.sprite.Sprite):
             self.current_action = "idle"
             self.current_time = self.idle_time
             self.destination = None
-        
+
     def update(self):
         if self.name is None:
             self.name = self.building.get_villager_name()
@@ -164,38 +186,46 @@ class Villager(pygame.sprite.Sprite):
 
         path = [Node(self.x, self.y)] + self.path
         for i in range(len(path) - 1):
-            pygame.draw.line(surface, (255, 0, 0), (path[i].x - defines.camera_x, path[i].y - defines.camera_y), (path[i + 1].x - defines.camera_x, path[i + 1].y - defines.camera_y), 8)
+            pygame.draw.line(
+                surface,
+                (255, 0, 0),
+                (path[i].x - defines.camera_x, path[i].y - defines.camera_y),
+                (path[i + 1].x - defines.camera_x, path[i + 1].y - defines.camera_y),
+                8,
+            )
 
-        # Draw an open red circle at the destination
         if self.destination is not None:
-            pygame.draw.circle(surface, (255, 0, 0), (self.destination[0] - defines.camera_x, self.destination[1] - defines.camera_y), 20, 2)
-
+            pygame.draw.circle(
+                surface,
+                (255, 0, 0),
+                (self.destination[0] - defines.camera_x, self.destination[1] - defines.camera_y),
+                20,
+                2,
+            )
 
     def draw(self, surface):
         surface.blit(self.get_image(), (self.x - defines.camera_x, self.y - defines.camera_y))
-        # self.draw_path(surface)
 
         if self.lost:
-            # Draw a red X over the villager
-            pygame.draw.line(surface, (255, 0, 0), (self.x - 10 - defines.camera_x, self.y - 10 - defines.camera_y), (self.x + 10 - defines.camera_x, self.y + 10 - defines.camera_y), 3)
+            pygame.draw.line(
+                surface,
+                (255, 0, 0),
+                (self.x - 10 - defines.camera_x, self.y - 10 - defines.camera_y),
+                (self.x + 10 - defines.camera_x, self.y + 10 - defines.camera_y),
+                3,
+            )
 
         if self.blurt_tick < 0:
             self.draw_blurt(surface)
 
     def get_random_building_edge(self, building):
-        """
-        If a building is 3x3 from (0, 0) to (2, 2) this function could return (0, 1) or (2, 0) etc. (but multiplied by GRID_SIZE)
-        """
         x = random.choice([-1, building.get_cell_width()]) * defines.GRID_SIZE
         y = random.choice([-1, building.get_cell_height() - 1]) * defines.GRID_SIZE
         x += building.x
         y += building.y
         return x, y
-    
+
     def get_random_building_by_type(self, building_type):
-        """
-        Get a random building of the given type
-        """
         random_order = self.village.buildings.copy()
         random.shuffle(random_order)
         for building in random_order:
@@ -206,20 +236,17 @@ class Villager(pygame.sprite.Sprite):
     def choose_destination(self):
         self.current_destination_index += 1
         if self.name == "farmer":
-            # Farmers will walk around their own farm
             return self.get_random_building_edge(self.building)
-        
+
         elif self.name == "miner":
             self.current_destination_index %= 2
-            # Miners will walk to the ore cluster at cell (10, 5)
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
                 return 0, defines.WORLD_HEIGHT * defines.GRID_SIZE
-            
+
         elif self.name == "lumberjack":
             self.current_destination_index %= 2
-            # Lumberjacks will walk to the forest at cell (-10, 5)
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
@@ -227,11 +254,9 @@ class Villager(pygame.sprite.Sprite):
                 if tree is None:
                     return self.get_random_building_edge(self.building)
                 return tree.x + 32, tree.y + 112
-            
+
         elif self.name == "blacksmith":
             self.current_destination_index %= 3
-
-            # Goes between the lumberjack, miner and blacksmith
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
@@ -244,10 +269,9 @@ class Villager(pygame.sprite.Sprite):
                 if mine is None:
                     return self.get_random_building_edge(self.building)
                 return self.get_random_building_edge(mine)
-            
+
         elif self.name == "shipwright":
             self.current_destination_index %= 3
-            # Shipwrights will walk to the lumbermill and the river
             if self.current_destination_index == 0:
                 return self.get_random_building_edge(self.building)
             elif self.current_destination_index == 1:
@@ -257,10 +281,7 @@ class Villager(pygame.sprite.Sprite):
                 return self.get_random_building_edge(lumbermill)
             elif self.current_destination_index == 2:
                 return defines.WORLD_WIDTH / 2 * defines.GRID_SIZE, defines.GRID_SIZE * 4
-            
+
         else:
             self.current_destination_index %= 1
             return self.get_random_building_edge(self.building)
-
-
-

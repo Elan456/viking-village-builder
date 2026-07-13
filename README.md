@@ -62,10 +62,10 @@ Visit the GitHub repository at [viking-village-builder](https://github.com/Elan4
 > Note: You may need to install Python 3.8 or higher to run the game. You can download it from https://www.python.org/downloads/
 
 ```sh
-python -m pip install -r requirements.txt
+python -m pip install .
 ```
 
-This should install pygame and fastquadtree
+This should install pygame-ce, fastquadtree, and pillow
 
 > fastquadtree is a quadtree data structure package written by me, check it out on GitHub: https://github.com/Elan456/fastquadtree
 
